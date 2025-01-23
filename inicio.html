@@ -6,7 +6,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <title>Migrators</title>
   </head>
   <body>
@@ -64,35 +66,55 @@
           </div>
         </div>
       </section>
-    </main>
 
-    <!--Seccion de FAQs-->
-    <section id="faqs" class="faqs">
-      <h2>Preguntas Frecuentes</h2>
-      <div class="faq-item">
-        <button class="faq-question">¿Cómo obtengo mi CPF?</button>
-        <div class="faq-answer">
-          <p>Para obtener tu CPF (Cadastro de Pessoas Físicas) en Brasil, puedes seguir estos pasos:
+      <!-- Sección del Mapa -->
+      <section id="mapa-interactivo">
+        <h2>Puntos de Atención para Migrantes</h2>
+        <p>Explora los puntos de atención y apoyo disponibles para migrantes en Brasil a través del mapa interactivo.</p>
+        <div class="map-container">
+          <div id="map"></div>
+          <!-- Barra de búsqueda al lado derecho -->
+          <div id="busqueda-ciudad">
+            <h3>Buscar Ciudad</h3>
+            <input type="text" id="search-city" placeholder="Escribe el nombre de una ciudad..." />
+          </div>
+        </div>
+      </section>
+      <section id="dropdown-direcciones">
+        <h3>Direcciones de Puntos de Atención</h3>
+        <select id="direcciones-dropdown">
+          <option value="">Selecciona un punto de atención</option>
+        </select>
+      </section>
+      
+
+      <!-- Sección de FAQs -->
+      <section id="faqs" class="faqs">
+        <h2>Preguntas Frecuentes</h2>
+        <div class="faq-item">
+          <button class="faq-question">¿Cómo obtengo mi CPF?</button>
+          <div class="faq-answer">
+            <p>Para obtener tu CPF (Cadastro de Pessoas Físicas) en Brasil, puedes seguir estos pasos:</p>
             <ol>
               <li><strong>Online:</strong> Visita el sitio web de la Receita Federal y completa el formulario en línea. Necesitarás tus documentos de identidad.</li>
               <li><strong>Presencial:</strong> Dirígete a una agencia de la Receita Federal, Banco do Brasil, Caixa Econômica Federal, o Correios con tus documentos de identidad.</li>
             </ol>
-          </p>
+          </div>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">¿Cuánto tiempo toma procesar mi RNE?</button>
-        <div class="faq-answer">
-          <p>El tiempo para procesar el Registro Nacional de Extranjeros (RNE) puede variar, pero generalmente toma entre 6 a 12 meses. Es recomendable seguir las instrucciones de la Policía Federal y asegurarte de proporcionar todos los documentos requeridos para evitar retrasos.</p>
+        <div class="faq-item">
+          <button class="faq-question">¿Cuánto tiempo toma procesar mi RNE?</button>
+          <div class="faq-answer">
+            <p>El tiempo para procesar el Registro Nacional de Extranjeros (RNE) puede variar, pero generalmente toma entre 6 a 12 meses. Es recomendable seguir las instrucciones de la Policía Federal y asegurarte de proporcionar todos los documentos requeridos para evitar retrasos.</p>
+          </div>
         </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">¿Puedo trabajar mientras espero mis documentos?</button>
-        <div class="faq-answer">
-          <p>Sí, en algunos casos puedes trabajar mientras esperas tus documentos, pero esto depende del tipo de visa y autorización que tengas. Es importante verificar las regulaciones específicas de tu visa y consultar con la Policía Federal o un asesor legal para obtener información precisa.</p>
+        <div class="faq-item">
+          <button class="faq-question">¿Puedo trabajar mientras espero mis documentos?</button>
+          <div class="faq-answer">
+            <p>Sí, en algunos casos puedes trabajar mientras esperas tus documentos, pero esto depende del tipo de visa y autorización que tengas. Es importante verificar las regulaciones específicas de tu visa y consultar con la Policía Federal o un asesor legal para obtener información precisa.</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <footer class="footer">
       <div class="footer-container">
@@ -123,6 +145,7 @@
       </div>
     </footer>
     
+    <script src="js/mapa.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
