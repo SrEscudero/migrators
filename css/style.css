@@ -398,6 +398,7 @@ a {
   margin: 20px auto;
   max-width: 1200px;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 /* Centrar el Título y la Descripción */
@@ -422,7 +423,9 @@ a {
 /* Estilo del Mapa */
 #map {
   flex: 3;
-  height: 450px; /* Ajusta la altura según sea necesario */
+  height: 450px;
+  width: 100%; /* Ajusta el ancho al 100% del contenedor */
+  max-width: 100%; /* Asegura que no exceda el tamaño del contenedor */
   border-radius: 10px;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
 }
@@ -436,6 +439,7 @@ a {
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Incluye padding y bordes en el ancho total */
 }
 
 #search-city {
@@ -491,16 +495,59 @@ a {
   .map-container {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
 
   #map {
     width: 100%;
-    height: 300px; /* Ajusta la altura en pantallas pequeñas */
+    height: 350px; /* Ajusta la altura para tablets */
+    max-width: 100%;
   }
 
   #busqueda-ciudad {
     width: 100%;
     margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  #map {
+    height: 150px; /* Ajusta la altura para pantallas medianas */
+  }
+
+  #mapa-interactivo h2 {
+    font-size: 1.8rem;
+  }
+
+  #mapa-interactivo p {
+    font-size: 0.9rem;
+  }
+
+  #dropdown-direcciones h3 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-container {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  #map {
+    height: 250px; /* Altura para pantallas pequeñas */
+  }
+
+  #busqueda-ciudad {
+    padding: 15px;
+  }
+
+  #search-city {
+    font-size: 0.9rem;
+  }
+
+  #dropdown-direcciones h3 {
+    font-size: 1.2rem;
   }
 }
 
