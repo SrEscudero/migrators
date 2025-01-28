@@ -1,151 +1,182 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <title>Migrators</title>
-  </head>
-  <body>
-    <header class="header">
-      <a href="inicio.html" class="logo-container">
-        <img class="logo" src="midia/icons/logo_trans.png" alt="Logo de Migrators" />
-      </a>
-      <nav class="nav">
-        <ul class="nav-links">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>Migrators</title>
+</head>
+
+<body>
+  <header class="header">
+    <a href="inicio.html" class="logo-container">
+      <img class="logo" src="midia/icons/logo_trans.png" alt="Logo de Migrators" />
+    </a>
+    <!-- Navegación -->
+    <nav class="nav">
+      <ul class="nav-links">
+        <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#politica-privacidad">Política de Privacidad</a></li>
+        <li><a href="#terminos-uso">Términos de Uso</a></li>
+      </ul>
+      <a href="#acceder" class="btn-acceder">Accesar</a>
+    </nav>
+
+    <!-- Botón de Menú Hamburguesa -->
+    <div class="menu-toggle" id="menu-toggle">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Contenido Principal -->
+    <div class="slogan-container">
+      <div class="slogan-text">
+        <h1 class="slogan">Caminemos juntos hacia un nuevo comienzo,con confianza y esperanza.</h1>
+        <p>Migrators es una plataforma dedicada a ofrecer orientación e información esencial a los migrantes venezolanos
+          que llegan a Brasil. Nuestro objetivo es facilitar los procesos de documentación, integración y adaptación,
+          asegurando que cada paso sea claro y accesible.</p>
+      </div>
+      <div class="slogan-image">
+        <img src="midia/images/bandera-brasil.jpg" alt="Bandera de Brasil" class="sombra-3d" />
+      </div>
+    </div>
+
+    <section class="interactive-carousel">
+      <h2>Nuestros Servicios</h2>
+      <div class="carousel-container">
+        <div class="carousel-item active" data-title="Asesoría para trámites legales">
+          <img src="midia/images/asesoria-tramites (2).jpg" alt="Tramites Legales" class="sombra-3d" />
+          <h3>Asesoría para trámites legales</h3>
+          <p>Te ayudamos con documentos esenciales<br />como CPF, RNE, y más.</p>
+        </div>
+        <div class="carousel-item" data-title="Guía para encontrar empleo">
+          <img src="midia/images/guia-de-trabajo.jpg" alt="Guía para empleo" class="sombra-3d" />
+          <h3>Guía para encontrar empleo</h3>
+          <p>Consejos y recursos para insertarte<br />en el mercado laboral brasileño.</p>
+        </div>
+        <div class="carousel-item" data-title="Adaptarte a la cultura brasileña">
+          <img src="midia/images/cultura.jpg" alt="Cultura brasileña" class="sombra-3d" />
+          <h3>Consejos para adaptarte a la cultura brasileña</h3>
+          <p>Aprende sobre idioma, costumbres<br />y cómo sentirte en casa.</p>
+        </div>
+      </div>
+    </section>
+
+<!-- Carrusel de Noticias -->
+<section class="noticias-carousel" id="noticias-container">
+  <h2>Últimas Noticias</h2>
+  
+  <div class="noticias-carousel-wrapper">
+    <!-- Botón de desplazamiento a la izquierda -->
+    <button class="noticias-carousel-control left" id="prev-btn" aria-label="Anterior">←</button>
+
+    <!-- Contenedor de noticias (Slider) -->
+    <div class="noticias-carousel-container" id="noticias-track">
+      <!-- Noticias generadas dinámicamente desde JS -->
+    </div>
+
+    <!-- Botón de desplazamiento a la derecha -->
+    <button class="noticias-carousel-control right" id="next-btn" aria-label="Siguiente">→</button>
+  </div>
+</section>
+
+
+    <!-- Sección de Mapa -->
+    <div class="map-container">
+      <div id="map"></div>
+      <!-- Contenedor de búsqueda y dropdown -->
+      <div id="busqueda-ciudad">
+        <h3>Buscar Ciudad</h3>
+        <input type="text" id="search-city" placeholder="Escribe el nombre de una ciudad..." />
+        <!-- Dropdown debajo del campo de búsqueda -->
+        <div id="dropdown-direcciones">
+          <h3>Puntos de Atención</h3>
+          <select id="direcciones-dropdown">
+            <option value="">Selecciona un punto de atención</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de FAQs -->
+    <section id="faqs" class="faqs">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-item">
+        <button class="faq-question">¿Cómo obtengo mi CPF?</button>
+        <div class="faq-answer">
+          <p>Para obtener tu CPF (Cadastro de Pessoas Físicas) en Brasil, puedes seguir estos pasos:</p>
+          <ol>
+            <li><strong>Online:</strong> Visita el sitio web de la Receita Federal y completa el formulario en línea.
+              Necesitarás tus documentos de identidad.</li>
+            <li><strong>Presencial:</strong> Dirígete a una agencia de la Receita Federal, Banco do Brasil, Caixa
+              Econômica Federal, o Correios con tus documentos de identidad.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">¿Cuánto tiempo toma procesar mi RNE?</button>
+        <div class="faq-answer">
+          <p>El tiempo para procesar el Registro Nacional de Extranjeros (RNE) puede variar, pero generalmente toma
+            entre 6 a 12 meses. Es recomendable seguir las instrucciones de la Policía Federal y asegurarte de
+            proporcionar todos los documentos requeridos para evitar retrasos.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">¿Puedo trabajar mientras espero mis documentos?</button>
+        <div class="faq-answer">
+          <p>Sí, en algunos casos puedes trabajar mientras esperas tus documentos, pero esto depende del tipo de visa y
+            autorización que tengas. Es importante verificar las regulaciones específicas de tu visa y consultar con la
+            Policía Federal o un asesor legal para obtener información precisa.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>Sobre Nosotros</h3>
+        <p>Migrators es una plataforma dedicada a ofrecer orientación e información esencial a los migrantes venezolanos
+          que llegan a Brasil.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Enlaces Útiles</h3>
+        <ul>
           <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
           <li><a href="#contacto">Contacto</a></li>
           <li><a href="#politica-privacidad">Política de Privacidad</a></li>
           <li><a href="#terminos-uso">Términos de Uso</a></li>
         </ul>
-        <a href="#acceder" class="btn-acceder">Accesar</a>
-      </nav>
-
-      <!-- Botón de Menú Hamburguesa -->
-      <div class="menu-toggle" id="menu-toggle">
-        <div></div>
-        <div></div>
-        <div></div>
       </div>
-    </header>
-
-    <main>
-      <!-- Contenido Principal -->
-      <div class="slogan-container">
-        <div class="slogan-text">
-          <h1 class="slogan">Caminemos juntos hacia un nuevo comienzo,con confianza y esperanza.</h1>
-          <p>Migrators es una plataforma dedicada a ofrecer orientación e información esencial a los migrantes venezolanos que llegan a Brasil. Nuestro objetivo es facilitar los procesos de documentación, integración y adaptación, asegurando que cada paso sea claro y accesible.</p>
-        </div>
-        <div class="slogan-image">
-          <img src="midia/images/bandera-brasil.jpg" alt="Bandera de Brasil" class="sombra-3d" />
-        </div>
-      </div>      
-
-      <section class="interactive-carousel">
-        <h2>Nuestros Servicios</h2>
-        <div class="carousel-container">
-          <div class="carousel-item active" data-title="Asesoría para trámites legales">
-            <img src="midia/images/asesoria-tramites (2).jpg" alt="Tramites Legales" class="sombra-3d"/>
-            <h3>Asesoría para trámites legales</h3>
-            <p>Te ayudamos con documentos esenciales<br/>como CPF, RNE, y más.</p>
-          </div>
-          <div class="carousel-item" data-title="Guía para encontrar empleo">
-            <img src="midia/images/guia-de-trabajo.jpg" alt="Guía para empleo" class="sombra-3d"/>
-            <h3>Guía para encontrar empleo</h3>
-            <p>Consejos y recursos para insertarte<br/>en el mercado laboral brasileño.</p>
-          </div>
-          <div class="carousel-item" data-title="Adaptarte a la cultura brasileña">
-            <img src="midia/images/cultura.jpg" alt="Cultura brasileña" class="sombra-3d"/>
-            <h3>Consejos para adaptarte a la cultura brasileña</h3>
-            <p>Aprende sobre idioma, costumbres<br/>y cómo sentirte en casa.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sección del Mapa -->
-      <section id="mapa-interactivo">
-        <h2>Puntos de Atención para Migrantes</h2>
-        <p>Explora los puntos de atención y apoyo disponibles para migrantes en Brasil a través del mapa interactivo.</p>
-        <div class="map-container">
-          <div id="map"></div>
-          <!-- Barra de búsqueda al lado derecho -->
-          <div id="busqueda-ciudad">
-            <h3>Buscar Ciudad</h3>
-            <input type="text" id="search-city" placeholder="Escribe el nombre de una ciudad..." />
-          </div>
-        </div>
-      </section>
-      <section id="dropdown-direcciones">
-        <h3>Direcciones de Puntos de Atención</h3>
-        <select id="direcciones-dropdown">
-          <option value="">Selecciona un punto de atención</option>
-        </select>
-      </section>
-      
-
-      <!-- Sección de FAQs -->
-      <section id="faqs" class="faqs">
-        <h2>Preguntas Frecuentes</h2>
-        <div class="faq-item">
-          <button class="faq-question">¿Cómo obtengo mi CPF?</button>
-          <div class="faq-answer">
-            <p>Para obtener tu CPF (Cadastro de Pessoas Físicas) en Brasil, puedes seguir estos pasos:</p>
-            <ol>
-              <li><strong>Online:</strong> Visita el sitio web de la Receita Federal y completa el formulario en línea. Necesitarás tus documentos de identidad.</li>
-              <li><strong>Presencial:</strong> Dirígete a una agencia de la Receita Federal, Banco do Brasil, Caixa Econômica Federal, o Correios con tus documentos de identidad.</li>
-            </ol>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">¿Cuánto tiempo toma procesar mi RNE?</button>
-          <div class="faq-answer">
-            <p>El tiempo para procesar el Registro Nacional de Extranjeros (RNE) puede variar, pero generalmente toma entre 6 a 12 meses. Es recomendable seguir las instrucciones de la Policía Federal y asegurarte de proporcionar todos los documentos requeridos para evitar retrasos.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">¿Puedo trabajar mientras espero mis documentos?</button>
-          <div class="faq-answer">
-            <p>Sí, en algunos casos puedes trabajar mientras esperas tus documentos, pero esto depende del tipo de visa y autorización que tengas. Es importante verificar las regulaciones específicas de tu visa y consultar con la Policía Federal o un asesor legal para obtener información precisa.</p>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-section">
-          <h3>Sobre Nosotros</h3>
-          <p>Migrators es una plataforma dedicada a ofrecer orientación e información esencial a los migrantes venezolanos que llegan a Brasil.</p>
-        </div>
-        <div class="footer-section">
-          <h3>Enlaces Útiles</h3>
-          <ul>
-            <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-            <li><a href="#politica-privacidad">Política de Privacidad</a></li>
-            <li><a href="#terminos-uso">Términos de Uso</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Síguenos</h3>
-          <ul class="social-links">
-            <li><a href="#"><img src="midia/icons/facebook-icon.png" alt="Facebook"></a></li>
-            <li><a href="#"><img src="midia/icons/twitter-icon.png" alt="Twitter"></a></li>
-            <li><a href="#"><img src="midia/icons/instagram-icon.png" alt="Instagram"></a></li>
-          </ul>
-        </div>
+      <div class="footer-section">
+        <h3>Síguenos</h3>
+        <ul class="social-links">
+          <li><a href="#"><img src="midia/icons/facebook-icon.png" alt="Facebook"></a></li>
+          <li><a href="#"><img src="midia/icons/twitter-icon.png" alt="Twitter"></a></li>
+          <li><a href="#"><img src="midia/icons/instagram-icon.png" alt="Instagram"></a></li>
+        </ul>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Migrators. Todos los derechos reservados.</p>
-      </div>
-    </footer>
-    
-    <script src="js/mapa.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Migrators. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="js/noticias.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
 </html>

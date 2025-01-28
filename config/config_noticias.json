@@ -1,0 +1,9 @@
+{
+    "newsApiUrl": "https://newsapi.org/v2/everything",
+    "apiKey": "0daff4450ef2444c894a0cd9e7ec008c",
+    "query": "migrantes OR migración OR documentación de migrantes en Brasil",
+    "backupQuery": "integración OR refugiados OR derechos humanos",
+    "language": "es",
+    "pageSize": 15,
+    "updateIntervalHours": 1
+}

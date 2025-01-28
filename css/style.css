@@ -1,445 +1,271 @@
 /* Estilos Generales */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #f9f9f9;
-    line-height: 1.5;
-    color: #333;
-    padding-top: 60px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  line-height: 1.5;
+  color: #333;
+  padding-top: 60px;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
-.sombra3d {
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
-  border-radius: 10px; /* Bordes redondeados */
+img {
+  max-width: 100%;
+  height: auto;
 }
-
-.sombra-3d {
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
-    border-radius: 10px; /* Bordes redondeados */
-    transition: transform 0.3s ease; /* Transición suave para la animación */
-}
-  
-  .sombra-3d:hover {
-    transform: perspective(1000px) rotateY(10deg) rotateX(10deg); /* Efecto 3D al pasar el mouse */
-}
-  
 
 /* Header */
 .header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-    max-width: 150px;
-    height: auto;
+  max-width: 150px;
+  height: auto;
 }
 
+/* Navegación */
 .nav {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .nav-links {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li {
-    margin: 0 15px;
+  margin: 0 15px;
 }
 
 .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: color 0.3s;
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s;
 }
 
 .nav-links a:hover {
-    color: #000;
+  color: #000;
 }
 
 .btn-acceder {
-    background-color: #000;
-    color: #fff;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 8.5px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: background-color 0.3s;
+  background-color: #000;
+  color: #fff;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 8.5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
 }
 
 .btn-acceder:hover {
-    background-color: #333333;
+  background-color: #333333;
 }
 
-/* Menu Hamburguesa */
+/* Menú Hamburguesa */
 .menu-toggle {
-    display: none; /* Oculto por defecto */
-    flex-direction: column;
-    cursor: pointer;
-    gap: 4px;
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
 }
 
 .menu-toggle div {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    border-radius: 5px;
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 5px;
 }
 
-/* Cuando se ve el menú desplegado */
-.nav-links.active {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
+/* Responsividad para el Header */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex; /* Mostrar el menú hamburguesa en móviles */
+  }
+
+  .nav {
     position: absolute;
     top: 60px;
     right: 0;
     width: 100%;
-    padding: 20px;
+    background-color: #fff;
     border-top: 1px solid #ddd;
-}
-
-/* Estilos Responsivos */
-@media (max-width: 1024px) {
-    .nav {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    .nav-links {
-        display: flex;
-        list-style: none;
-        gap: 20px;
-        padding: 10px;
-    }
-
-    .btn-acceder {
-        display: none;
-    }
-
-    .menu-toggle {
-        display: flex;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        background-color: #fff;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 100%;
-        padding: 20px;
-        border-top: 1px solid #ddd;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .logo {
-        width: 130px;
-    }
-
-    .slogan {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .slogan-text p {
-        font-size: 1rem;
-        text-align: center;
-    }
-
-    .slogan-image img {
-        width: 220px;
-    }
-}
-
-@media (max-width: 600px) {
-    .slogan {
-        font-size: 1.2rem;
-    }
-
-    .slogan-text p {
-        font-size: 0.9rem;
-    }
-}
-
-/* Sección de Carrusel Interactivo */
-.interactive-carousel {
-    text-align: center;
-    padding: 20px;
-    margin-bottom: 50px;
-}
-
-.carousel-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    position: relative;
-    overflow: hidden;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.carousel-item {
-    flex: 1;
-    background: #f9f9f9;
-    border: 0.5px solid #ddd;
-    border-radius: 10px;
-    text-align: center;
-    padding: 15px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.carousel-item img {
-    width: 100px;
-    height: auto;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    object-fit: cover;
-}
-
-.interactive-carousel h2 {
-  font-size: 2rem; 
-  margin-bottom: 20px; 
-  color: #333; 
-}
-
-.carousel-item h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.carousel-item p {
-    font-size: 0.9rem;
-    display: none; /* Oculto inicialmente */
-}
-
-.carousel-item.active {
-    flex: 3; /* Se expande al ser activo */
-}
-
-.carousel-item.active p {
-    display: block; /* Muestra el texto adicional */
-}
-
-.carousel-item:not(.active) {
-    flex: 1; /* Otros ítems permanecen pequeños */
-    filter: brightness(0.9); /* Reduce brillo para destacar el activo */
-}
-
-/* Contenedor General */
-.slogan-container {
-    display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
-    margin: 20px auto;
-    max-width: 1200px;
-    padding: 20px;
-    margin-bottom: 50px;
-}
+    display: none; /* Ocultar el menú por defecto en móviles */
+  }
 
-.slogan-text {
-    flex: 1;
-}
+  .nav.active {
+    display: flex; /* Mostrar el menú cuando está activo */
+  }
 
-.slogan-text .slogan {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #333;
-}
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 
-.slogan-text p {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.5;
-}
+  .nav-links li {
+    margin: 10px 0;
+  }
 
-.slogan-image {
-    flex-shrink: 0;
-    text-align: right;
-}
-
-.slogan-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 25px;
-}
-
-/* Ajustar el menú de navegación para dispositivos móviles */
-@media (max-width: 600px) {
-    .nav-links {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .nav-links li {
-        margin: 10px 0;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .slogan {
-        font-size: 1.2rem;
-    }
-
-    .slogan-text p {
-        font-size: 0.9rem;
-    }
-
-    .carousel-container {
-        flex-direction: column;
-    }
-
-    .carousel-item {
-        width: 100%;
-        margin-bottom: 20px;
-    }
+  .btn-acceder {
+    margin-top: 10px;
+  }
 }
 
 /* Contenedor del Slogan */
 .slogan-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px; /* Espacio entre los bloques */
-    margin: 20px auto;
-    max-width: 1200px;
-    padding: 20px;
-    flex-wrap: wrap; /* Permite que los bloques se ajusten en pantallas pequeñas */
-}
-
-.slogan-text {
-    flex: 1; /* El eslogan ocupa el espacio necesario */
-}
-
-.slogan-text .slogan {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.slogan-text p {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.5;
-}
-
-.slogan-image {
-    flex-shrink: 0; /* Evita que la imagen se reduzca */
-    max-width: 50%; /* La imagen ocupa hasta el 50% del ancho */
-    text-align: right; /* Alinea la imagen a la derecha */
-}
-
-.slogan-image img {
-    max-width: 60%; /* La imagen es responsiva */
-    height: auto;
-    border-radius: 25px; /* Bordes redondeados para estilo */
-}
-
-/* Estilos Responsivos */
-@media (max-width: 768px) {
-    .slogan-container {
-        flex-direction: column; /* Los bloques se apilan verticalmente */
-        text-align: center; /* Texto centrado en pantallas pequeñas */
-    }
-
-    .slogan-image {
-        max-width: 100%; /* La imagen ocupa el 100% del ancho */
-        text-align: center; /* Imagen centrada */
-    }
-}
-
-/* Estilo del Contenedor del Mapa y la Barra de Búsqueda */
-.map-container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   gap: 20px;
   margin: 20px auto;
   max-width: 1200px;
   padding: 20px;
-  box-sizing: border-box;
 }
 
-/* Centrar el Título y la Descripción */
-#mapa-interactivo {
+.slogan-text {
   text-align: center;
-  padding: 20px;
-  margin-bottom: 50px;
 }
 
-#mapa-interactivo h2 {
+.slogan-text .slogan {
   font-size: 2rem;
   margin-bottom: 10px;
   color: #333;
 }
 
-#mapa-interactivo p {
+.slogan-text p {
   font-size: 1rem;
-  margin-bottom: 20px;
   color: #555;
+  line-height: 1.5;
 }
 
-/* Estilo del Mapa */
-#map {
-  flex: 3;
-  height: 450px;
-  width: 100%; /* Ajusta el ancho al 100% del contenedor */
-  max-width: 100%; /* Asegura que no exceda el tamaño del contenedor */
+.slogan-image {
+  max-width: 100%;
+  text-align: center;
+}
+
+.slogan-image img {
+  border-radius: 25px;
+}
+
+/* Carrusel Interactivo */
+.interactive-carousel {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+.carousel-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.carousel-item {
+  flex: 1 1 100%;
+  background: #f9f9f9;
+  border: 0.5px solid #ddd;
   border-radius: 10px;
-  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
+  text-align: center;
+  padding: 25px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
-/* Estilo de la Barra de Búsqueda */
-#busqueda-ciudad {
+.carousel-item img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.carousel-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.carousel-item p {
+  font-size: 0.9rem;
+  display: none;
+}
+
+.carousel-item.active {
+  flex: 3;
+  position: relative;
+  z-index: 1;
+}
+
+.carousel-item.active p {
+  display: block;
+  transform: scale(1.1);
+}
+
+.carousel-item:not(.active) {
   flex: 1;
+  filter: brightness(0.9);
+}
+
+/* Mapa Interactivo */
+.map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+#map {
+  height: 300px;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+#busqueda-ciudad {
+  width: 100%;
   text-align: center;
   padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box; /* Incluye padding y bordes en el ancho total */
 }
 
 #search-city {
@@ -457,11 +283,10 @@ a {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilo de la Sección de Dropdown de Direcciones */
 #dropdown-direcciones {
-  text-align: center;
+  text-align: left;
   margin: 40px auto;
-  max-width: 800px;
+  max-width: 300px;
   padding: 20px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -469,15 +294,13 @@ a {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-#dropdown-direcciones h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
 #direcciones-dropdown {
   width: 100%;
   padding: 10px;
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -490,372 +313,477 @@ a {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos Responsivos */
-@media (max-width: 1024px) {
+/* FAQs */
+.faqs {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+}
+
+.faqs h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.faq-question {
+  width: 100%;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+  background-color: #f1f1f1;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: #fff;
+  padding: 0 15px;
+  border-radius: 0 0 10px 10px;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px;
+  padding: 15px;
+}
+
+.faq-answer p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.faq-answer ol {
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+
+.faq-answer ol li {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+/* Footer */
+.footer {
+  background-color: #f8f8f8;
+  border-top: 1px solid #ddd;
+  padding: 15px 0; /* Reducido el padding */
+  text-align: center;
+  font-size: 0.85rem; /* Tamaño de fuente más pequeño */
+  color: #666;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Reducido el espacio entre secciones */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-section {
+  text-align: center;
+}
+
+.footer-section h3 {
+  font-size: 1rem; /* Tamaño de fuente más pequeño */
+  margin-bottom: 5px;
+  color: #333; /* Color más oscuro para los títulos */
+}
+
+.footer-section p,
+.footer-section ul {
+  font-size: 0.85rem; /* Tamaño de fuente más pequeño */
+  line-height: 1.4;
+  margin: 0; /* Eliminado el margen por defecto */
+  max-width: 300px; /* Ancho máximo para el texto */
+  text-align: justify;
+  word-break: break-word; /* Ajuste de palabras */
+  margin: 0 auto; /* Centrado del texto */
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 5px;
+}
+
+.footer-section ul li a {
+  color: #444;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  text-align: center;
+}
+
+.footer-section ul li a:hover {
+  color: #1d1d1d;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 5px;
+  font-size: 0.75rem; /* Tamaño de fuente más pequeño */
+  color: #999; /* Color más suave */
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  gap: 10px; /* Espaciado uniforme entre íconos */
+}
+
+.social-links li {
+  margin-right: 0; /* Eliminado el margen derecho */
+}
+
+.social-links li img {
+  width: 20px; /* Íconos más pequeños */
+  height: 20px; /* Íconos más pequeños */
+  filter: invert(0.5); /* Color más suave por defecto */
+  transition: filter 0.3s ease;
+}
+
+.social-links li img:hover {
+  filter: invert(0.7); /* Efecto hover más sutil */
+}
+
+/* Media Queries para Responsividad */
+@media (min-width: 768px) {
+  .slogan-container {
+      flex-direction: row;
+      text-align: left;
+  }
+
+  .slogan-image {
+      max-width: 40%;
+  }
+
+  .carousel-item {
+      flex: 1 1 45%;
+  }
+
   .map-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+      flex-direction: row;
   }
 
   #map {
-    width: 100%;
-    height: 350px; /* Ajusta la altura para tablets */
-    max-width: 100%;
+      height: 450px;
   }
 
   #busqueda-ciudad {
-    width: 100%;
-    margin-top: 20px;
+      width: 30%;
+  }
+
+  .footer-container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+  }
+
+  .footer-section {
+      text-align: left;
   }
 }
 
+@media (min-width: 1024px) {
+  .carousel-item {
+      flex: 1 1 30%;
+  }
+}
+
+
+/* Estilos para el Carrusel de Noticias */
+.noticias-carousel {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  max-width: 90%;
+  overflow: hidden;
+  position: relative;
+}
+
+.noticias-carousel h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+.noticias-carousel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 15px;
+  padding: 10px;
+  justify-content: flex-start;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+}
+
+.noticias-carousel .noticia {
+  flex: 0 0 auto;
+  width: 300px;
+  scroll-snap-align: start;
+  background: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 350px;
+  text-align: center;
+}
+
+.noticias-carousel .noticia img {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.noticias-carousel .noticia h3 {
+  font-size: 1rem;
+  margin-top: 10px;
+  color: #222;
+  text-align: center;
+  width: 100%;
+}
+
+.noticias-carousel .noticia p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 8px 0;
+  line-height: 1.4;
+  text-align: justify;
+  flex-grow: 1;
+  min-height: 60px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.noticias-carousel .noticia a {
+  display: block;
+  margin-top: auto;
+  padding: 8px 12px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  bottom: 10px;
+}
+
+.noticias-carousel .noticia a:hover {
+  background-color: #0056b3;
+}
+
+/* Controles del carrusel */
+.noticias-carousel .noticias-carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  z-index: 2;
+  display: block;
+}
+
+.noticias-carousel .noticias-carousel-control.left {
+  left: 10px;
+}
+
+.noticias-carousel .noticias-carousel-control.right {
+  right: 10px;
+}
+
+.noticias-carousel .noticias-carousel-control:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Responsividad */
 @media (max-width: 768px) {
-  #map {
-    height: 150px; /* Ajusta la altura para pantallas medianas */
+  .noticias-carousel h2 {
+    font-size: 1.5rem;
   }
-
-  #mapa-interactivo h2 {
-    font-size: 1.8rem;
+  .noticias-carousel .noticia {
+    width: 250px;
+    min-height: 320px;
   }
-
-  #mapa-interactivo p {
-    font-size: 0.9rem;
-  }
-
-  #dropdown-direcciones h3 {
-    font-size: 1.3rem;
+  .noticias-carousel .noticia img {
+    height: 150px;
   }
 }
 
 @media (max-width: 480px) {
-  .map-container {
-    padding: 10px;
-    gap: 15px;
-  }
-
-  #map {
-    height: 250px; /* Altura para pantallas pequeñas */
-  }
-
-  #busqueda-ciudad {
-    padding: 15px;
-  }
-
-  #search-city {
-    font-size: 0.9rem;
-  }
-
-  #dropdown-direcciones h3 {
+  .noticias-carousel h2 {
     font-size: 1.2rem;
+  }
+  .noticias-carousel .noticia {
+    width: 220px;
+    min-height: 300px;
+  }
+  .noticias-carousel .noticia img {
+    height: 120px;
   }
 }
 
-.faqs {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd;
-  }
-  
-  .faqs h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-  }
-  
-  .faq-item {
-    margin-bottom: 10px;
-  }
-  
-  .faq-question {
-    width: 100%;
-    padding: 15px;
-    text-align: left;
-    font-size: 1.2rem;
-    font-weight: bold;
-    background-color: #fff;
-    border: none;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    outline: none;
-    transition: background-color 0.3s ease;
-  }
-  
-  .faq-question:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    background-color: #fff;
-    padding: 0 15px;
-  }
-  
-  .faq-item.active .faq-answer {
-    max-height: 200px; /* Ajusta según sea necesario */
-    padding: 15px;
-  }
-  
-  .faq-answer p {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.6;
-  }
-  
-  .faq-answer ol {
-    padding-left: 20px;
-    list-style-type: decimal;
-  }
-  
-  .faq-answer ol li {
-    margin-bottom: 10px;
-    color: #444;
-  }
 
-/* Estilos para el Footer */
-.footer {
-    background-color: #f9f9f9;
-    color: #444;
-    padding: 10px 0; /* Reducir el padding */
-  }
-  
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px; /* Reducir el ancho máximo */
-    margin: 0 auto;
-    padding: 0 15px; /* Reducir el padding */
-  }
-  
-  .footer-section {
-    flex: 1;
-    padding: 0 10px; /* Reducir el padding */
-  }
-  
-  .footer-section h3 {
-    font-size: 1.1rem; /* Reducir el tamaño de la fuente */
-    margin-bottom: 5px; /* Reducir el margen inferior */
-  }
-  
-  .footer-section p,
-  .footer-section ul {
-    font-size: 0.9rem;
-    line-height: 1.4; /* Reducir el line-height */
-  }
-  
-  .footer-section ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .footer-section ul li {
-    margin-bottom: 5px; /* Reducir el margen inferior */
-  }
-  
-  .footer-section ul li a {
-    color: #444;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-section ul li a:hover {
-    color: #1d1d1d;
-  }
-  
-  .footer-bottom {
-    text-align: center;
-    padding: 5px; /* Reducir el padding */
-    font-size: 0.8rem;
-  }
-  
-  .social-links {
-    display: flex;
-    list-style: none;
-    padding: 0;
-  }
-  
-  .social-links li {
-    margin-right: 5px; /* Reducir el margen derecho */
-  }
-  
-  .social-links li img {
-    width: 24px;
-    height: 24px;
-    filter: invert(0); /* Asegurar que los iconos sean negros */
-    transition: filter 0.3s ease;
-  }
-  
-  .social-links li img:hover {
-    filter: invert(0.7);
-  }
-  
-/* Centralizar Contenido */
+/* Sección "Sobre Nosotros" y "Nuestro Equipo" */
 .contenido-centralizado {
-    text-align: center;
-    margin: 20px auto; /* Ajusta el margen según sea necesario */
-    max-width: 800px; /* Ajusta el ancho máximo según sea necesario */
-  }
-  
-  /* Sección "Sobre Nosotros" */
-  .sobre-nosotros {
-    padding: 20px 20px; /* Reducir padding */
-  }
-  
-  /* Sección "Nuestro Equipo" */
-  .nuestro-equipo {
-    padding: 20px 20px; /* Reducir padding */
-    background-color: #f9f9f9; /* Color de fondo opcional */
-  }
-  
+  text-align: center;
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 0 20px; /* Añadir padding para evitar que el contenido toque los bordes */
+}
+
+.sobre-nosotros,
+.nuestro-equipo {
+  padding: 20px;
+}
+
+.nuestro-equipo {
+  background-color: #f9f9f9;
+}
+
+.equipo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 0 auto;
+  max-width: 1000px;
+  flex-wrap: wrap; /* Permitir que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.descripcion-equipo {
+  flex: 2;
+  text-align: left;
+  min-width: 300px; /* Evitar que el texto sea demasiado estrecho */
+}
+
+.foto-equipo {
+  flex: 1;
+  text-align: center;
+  min-width: 200px; /* Asegurar un tamaño mínimo para la imagen */
+}
+
+.foto-equipo img {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 15px;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.foto-equipo img:hover {
+  transform: perspective(1000px) rotateY(10deg) rotateX(10deg);
+}
+
+.sobre-nosotros h1 {
+  font-size: 3rem;
+  margin-bottom: 20px; /* Añadir espacio debajo del título */
+}
+
+.nuestro-equipo h2 {
+  font-size: 2rem;
+  margin-bottom: 20px; /* Añadir espacio debajo del título */
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 1024px) {
   .equipo-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* Alinear elementos al centro */
-    gap: 20px; /* Ajustar gap */
-    margin: 0 auto; /* Centralizar el contenedor */
-    max-width: 1000px; /* Ancho máximo */
-  }
-  
-  .descripcion-equipo {
-    flex: 2;
-    text-align: left; /* Alineación a la izquierda */
-  }
-  
-  .foto-equipo {
-    flex: 1;
-    text-align: center;
-  }
-  
-  .foto-equipo img {
-    width: 100%; /* Ajustar el tamaño */
-    max-width: 200px; /* Ancho máximo */
-    border-radius: 15px; /* Bordes más cuadrados */
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); /* Sombra 3D */
-    transition: transform 0.3s ease; /* Transición suave para la animación */
-  }
-  
-  .foto-equipo img:hover {
-    transform: perspective(1000px) rotateY(10deg) rotateX(10deg); /* Efecto 3D al pasar el mouse */
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
   }
 
+  .descripcion-equipo {
+      text-align: center; /* Centrar el texto en pantallas medianas */
+  }
+
+  .foto-equipo {
+      order: -1; /* Mover la imagen arriba en pantallas medianas */
+  }
+}
+
+@media (max-width: 768px) {
   .sobre-nosotros h1 {
-    font-size: 3rem;
+      font-size: 2.5rem; /* Reducir el tamaño del título en pantallas pequeñas */
   }
 
   .nuestro-equipo h2 {
-    font-size: 2rem;
+      font-size: 1.8rem; /* Reducir el tamaño del título en pantallas pequeñas */
   }
-  
-  /* Estilos Responsivos */
-  @media (max-width: 1024px) {
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-  
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 20px;
-      padding: 10px;
-    }
-  
-    .btn-acceder {
-      display: none;
-    }
-  
-    .menu-toggle {
-      display: flex;
-    }
-  
-    .equipo-container {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-  
-    .foto-equipo {
-      order: -1; /* Cambiar orden en pantallas pequeñas */
-    }
-  
-    .foto-equipo img {
-      max-width: 200px; /* Ajustar tamaño en pantallas pequeñas */
-    }
+
+  .descripcion-equipo {
+      min-width: 100%; /* Ocupar todo el ancho en pantallas pequeñas */
   }
-  
-  @media (max-width: 768px) {
-    .nav-links {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      background-color: #fff;
-      position: absolute;
-      top: 60px;
-      right: 0;
-      width: 100%;
-      padding: 20px;
-      border-top: 1px solid #ddd;
-    }
-  
-    .nav-links.active {
-      display: flex;
-    }
-  
-    .logo {
-      width: 130px;
-    }
-  
-    .slogan {
-      font-size: 1.5rem;
-      text-align: center;
-    }
-  
-    .slogan-text p {
-      font-size: 1rem;
-      text-align: center;
-    }
-  
-    .slogan-image img {
-      width: 220px;
-    }
-  
-    .equipo-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .foto-equipo {
-      order: -1;
-    }
-  
-    .descripcion-equipo {
-      text-align: center;
-    }
+
+  .foto-equipo img {
+      max-width: 150px; /* Reducir el tamaño de la imagen en pantallas pequeñas */
   }
-  
-  @media (max-width: 600px) {
-    .slogan {
-      font-size: 1.2rem;
-    }
-  
-    .slogan-text p {
-      font-size: 0.9rem;
-    }
-  
-    .equipo-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .foto-equipo {
-      order: -1;
-    }
-  
-    .descripcion-equipo {
-      text-align: center;
-    }
+}
+
+@media (max-width: 480px) {
+  .sobre-nosotros h1 {
+      font-size: 2rem; /* Reducir aún más el tamaño del título en móviles */
   }
+
+  .nuestro-equipo h2 {
+      font-size: 1.5rem; /* Reducir aún más el tamaño del título en móviles */
+  }
+
+  .foto-equipo img {
+      max-width: 120px; /* Reducir aún más el tamaño de la imagen en móviles */
+  }
+}

@@ -1,61 +1,136 @@
-// Inicializar el mapa de OpenStreetMap centrado en Brasil
-var map = L.map('map').setView([-30.0331, -51.2300], 13); // Coordenadas iniciales
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+// Variables para almacenar la configuración
+let config = {};
 
-// Crear un marcador de búsqueda para almacenar los puntos de la ciudad
-var markers = L.layerGroup().addTo(map);
+// Cargar la configuración desde el archivo JSON
+function cargarConfiguracion() {
+    return fetch('./config/config_mapa.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar la configuración');
+            }
+            return response.json();
+        })
+        .then(data => {
+            config = data; // Guardar la configuración cargada
+            console.log("Configuración cargada:", config);
+        })
+        .catch(error => {
+            console.error("Error al cargar la configuración: ", error);
+        });
+}
+
+// Inicializar el mapa de OpenStreetMap centrado en Brasil
+var map;
+var markers;
+var overlayBloqueo;
+
+function inicializarMapa() {
+    map = L.map('map').setView(config.map.initialView, config.map.initialZoom);
+    L.tileLayer(config.map.tileLayerURL).addTo(map);
+
+    // Crear un grupo de capas para los marcadores
+    markers = L.layerGroup().addTo(map);
+
+    // Capa de bloqueo
+    overlayBloqueo = L.layerGroup().addTo(map);
+
+    // Mensaje de bloqueo
+    var bloqueoMessage = L.divIcon({
+        className: 'bloqueo-message',
+        html: '<div class="bloqueo-overlay">Haz clic para desbloquear el mapa</div>',
+        iconSize: [map.getSize().x, map.getSize().y]
+    });
+
+    L.marker([0, 0], { icon: bloqueoMessage }).addTo(overlayBloqueo);
+
+    // Bloquear la interacción del mapa inicialmente
+    map.scrollWheelZoom.disable();
+    map.dragging.disable();
+    map.touchZoom.disable();
+
+    // Desbloquear el mapa al hacer clic
+    map.on('click', function () {
+        overlayBloqueo.clearLayers();
+        map.scrollWheelZoom.enable();
+        map.dragging.enable();
+        map.touchZoom.enable();
+    });
+}
 
 // Datos de los puntos de atención
 var puntos = [];
 
 // Función para cargar los datos desde el archivo JSON
 function cargarJson() {
-    fetch('../data/direcciones.json')
-        .then(response => response.json())
+    fetch(config.data.direccionesURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al cargar los datos');
+            }
+            return response.json();
+        })
         .then(data => {
             puntos = data; // Guardar los datos cargados
-            console.log("Datos cargados:", puntos); // Verifica si los datos se cargan correctamente
+            console.log("Datos cargados:", puntos);
         })
-        .catch(error => console.error("Error al cargar los puntos: ", error));
+        .catch(error => {
+            console.error("Error al cargar los puntos: ", error);
+        });
 }
 
 // Función para normalizar texto
 function normalizarTexto(texto) {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    return texto
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
 }
 
 // Función para obtener los puntos de una ciudad desde el JSON
 function obtenerPuntosDeCiudad(ciudad) {
-    return puntos.filter(punto => normalizarTexto(punto.ciudad) === normalizarTexto(ciudad));
+    return puntos.filter(punto => {
+        const ciudadCoincide = normalizarTexto(punto.ciudad) === normalizarTexto(ciudad);
+        const coordenadasValidas = !isNaN(punto.lat) && !isNaN(punto.lng);
+        return ciudadCoincide && coordenadasValidas;
+    });
 }
 
 // Función para buscar una ciudad y mostrar los puntos en el mapa
-function buscarCiudad(ciudad) {
-    if (ciudad.length < 3) return; // Evitar búsquedas de texto demasiado corto
+let fetchController = null;
+let lastSearch = '';
 
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${ciudad}&limit=1`)
+function buscarCiudad(ciudad) {
+    if (ciudad.length < 3) return;
+
+    if (fetchController) {
+        fetchController.abort(); // Cancelar la solicitud anterior
+    }
+
+    fetchController = new AbortController();
+
+    fetch(`${config.api.nominatimURL}${ciudad}&limit=${config.api.limit}`, {
+        signal: fetchController.signal
+    })
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
                 var lat = parseFloat(data[0].lat);
                 var lon = parseFloat(data[0].lon);
-                map.setView([lat, lon], 13); // Centrar el mapa en la ciudad
+                map.setView([lat, lon], 13);
 
-                // Limpiar puntos anteriores
                 markers.clearLayers();
 
-                // Obtener puntos filtrados de la ciudad
                 var puntosFiltrados = obtenerPuntosDeCiudad(ciudad);
-                console.log("Puntos filtrados:", puntosFiltrados); // Verifica los puntos filtrados
+                console.log("Puntos filtrados:", puntosFiltrados);
 
                 if (puntosFiltrados.length > 0) {
-                    // Agregar los puntos de atención al mapa
                     puntosFiltrados.forEach(punto => {
                         L.marker([punto.lat, punto.lng]).addTo(markers)
                             .bindPopup(`<b>${punto.nome}</b><br>${punto.endereco}`);
                     });
 
-                    // Actualizar el dropdown con los puntos de atención
                     actualizarDropdown(puntosFiltrados);
                 } else {
                     console.log(`No se encontraron puntos de atención en ${ciudad}.`);
@@ -65,15 +140,18 @@ function buscarCiudad(ciudad) {
                 console.log("Ciudad no encontrada. Intenta nuevamente.");
             }
         })
-        .catch(error => console.log("Error al buscar la ciudad: ", error));
+        .catch(error => {
+            if (error.name !== 'AbortError') {
+                console.log("Error al buscar la ciudad: ", error);
+            }
+        });
 }
 
 // Función para actualizar el dropdown con las direcciones
 function actualizarDropdown(puntosFiltrados) {
     const dropdown = document.getElementById('direcciones-dropdown');
-    dropdown.innerHTML = '<option value="">Selecciona un punto de atención</option>'; // Limpiar opciones previas
+    dropdown.innerHTML = '<option value="">Selecciona un punto de atención</option>';
 
-    // Agregar las opciones al dropdown
     puntosFiltrados.forEach((punto, index) => {
         const option = document.createElement('option');
         option.value = index;
@@ -84,19 +162,32 @@ function actualizarDropdown(puntosFiltrados) {
 
 // Manejar la entrada de búsqueda en el campo de texto
 let debouncerTimer;
-document.getElementById('search-city').addEventListener('input', function (event) {
-    const ciudad = event.target.value;
+const searchInput = document.getElementById('search-city');
 
-    if (ciudad.length > 2) {
+searchInput.addEventListener('input', function (event) {
+    const ciudad = event.target.value.trim();
+
+    if (ciudad.length > 2 && ciudad !== lastSearch) {
         clearTimeout(debouncerTimer);
 
         debouncerTimer = setTimeout(() => {
+            lastSearch = ciudad;
             buscarCiudad(ciudad);
-        }, 500);
-    } else {
+        }, 500); // Buscar después de 500ms de inactividad
+    } else if (ciudad.length <= 2) {
         clearTimeout(debouncerTimer);
-        markers.clearLayers(); // Limpiar el mapa si el texto es demasiado corto
+        markers.clearLayers();
         actualizarDropdown([]);
+    }
+});
+
+// Buscar al presionar Enter
+searchInput.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+        const ciudad = event.target.value.trim();
+        if (ciudad.length > 2) {
+            buscarCiudad(ciudad);
+        }
     }
 });
 
@@ -114,15 +205,20 @@ document.getElementById('direcciones-dropdown').addEventListener('change', funct
     }
 });
 
-// Cargar los datos del JSON al iniciar
-cargarJson();
+// Cargar la configuración y luego inicializar el mapa y cargar los datos
+cargarConfiguracion().then(() => {
+    inicializarMapa();
+    cargarJson();
+});
 
 // Recalcular el tamaño del mapa al cambiar el tamaño de la ventana
 window.addEventListener('resize', function () {
-    map.invalidate();
+    map.invalidateSize();
 });
 
-// Recalcular el tamaño del mapa al cambiar la pestaña  
-map.on('load', function () {
-    map.invalidateSize();
+// Recalcular el tamaño del mapa al cambiar la pestaña
+window.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+        map.invalidateSize();
+    }
 });
