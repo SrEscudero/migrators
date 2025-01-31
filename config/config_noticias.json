@@ -4,6 +4,6 @@
     "query": "migrantes OR migración OR documentación de migrantes en Brasil",
     "backupQuery": "integración OR refugiados OR derechos humanos",
     "language": "es",
-    "pageSize": 15,
+    "pageSize": 5,
     "updateIntervalHours": 1
 }

@@ -176,7 +176,7 @@ img {
 }
 
 .slogan-image img {
-  border-radius: 25px;
+  border-radius: 15px;
 }
 
 /* Carrusel Interactivo */
@@ -533,8 +533,8 @@ img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   max-width: 90%;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 .noticias-carousel h2 {
@@ -545,18 +545,34 @@ img {
   text-align: center;
 }
 
+/* Contenedor del carrusel */
+.noticias-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* Track de noticias */
 .noticias-carousel-container {
   display: flex;
+  gap: 15px;
+  padding: 10px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  gap: 15px;
-  padding: 10px;
-  justify-content: flex-start;
   scroll-behavior: smooth;
   white-space: nowrap;
+  scrollbar-width: none; /* Oculta el scrollbar en Firefox */
 }
 
+/* Oculta el scrollbar en Webkit (Chrome, Safari) */
+.noticias-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tarjetas de noticias */
 .noticias-carousel .noticia {
   flex: 0 0 auto;
   width: 300px;
@@ -570,9 +586,10 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
-  min-height: 350px;
+  height: auto; /* Permitir que la altura se ajuste al contenido */
+  min-height: 380px; /* Altura mínima para evitar cambios bruscos */
   text-align: center;
+  min-height: 350px;
 }
 
 .noticias-carousel .noticia img {
@@ -584,10 +601,17 @@ img {
 
 .noticias-carousel .noticia h3 {
   font-size: 1rem;
+  font-weight: bold;
   margin-top: 10px;
   color: #222;
   text-align: center;
   width: 100%;
+  white-space: normal;  /* Permitir que el texto pase a otra línea */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Máximo 2 líneas */
+  -webkit-box-orient: vertical;
 }
 
 .noticias-carousel .noticia p {
@@ -595,12 +619,13 @@ img {
   color: #555;
   margin: 8px 0;
   line-height: 1.4;
-  text-align: justify;
-  flex-grow: 1;
-  min-height: 60px;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  hyphens: auto;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-line-clamp: 3; /* Limitar a 3 líneas */
+  -webkit-box-orient: vertical;
+  height: auto;
 }
 
 .noticias-carousel .noticia a {
@@ -614,8 +639,6 @@ img {
   font-size: 0.85rem;
   text-align: center;
   width: 100%;
-  position: relative;
-  bottom: 10px;
 }
 
 .noticias-carousel .noticia a:hover {
@@ -623,7 +646,7 @@ img {
 }
 
 /* Controles del carrusel */
-.noticias-carousel .noticias-carousel-control {
+.noticias-carousel-control {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -633,20 +656,25 @@ img {
   padding: 10px;
   cursor: pointer;
   border-radius: 50%;
-  font-size: 1.2rem;
-  z-index: 2;
-  display: block;
+  font-size: 1.5rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+  width: 40px;
+  height: 40px;
 }
 
-.noticias-carousel .noticias-carousel-control.left {
-  left: 10px;
+.noticias-carousel-control.left {
+  left: 5px;
 }
 
-.noticias-carousel .noticias-carousel-control.right {
-  right: 10px;
+.noticias-carousel-control.right {
+  right: 5px;
 }
 
-.noticias-carousel .noticias-carousel-control:hover {
+.noticias-carousel-control:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -674,6 +702,13 @@ img {
   }
   .noticias-carousel .noticia img {
     height: 120px;
+  }
+
+  /* Ajuste de botones en pantallas pequeñas */
+  .noticias-carousel-control {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
   }
 }
 
