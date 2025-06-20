@@ -1,0 +1,12 @@
+{
+    "newsApiUrl": "https://newsapi.org/v2/everything",
+    "apiKey": "0daff4450ef2444c894a0cd9e7ec008c",
+    "query": "migrantes",
+    "backupQuery": "refugiados",
+    "language": "es",
+    "pageSize": 5,
+    "updateIntervalHours": 0.5,
+    "defaultImage": "default-image.jpg",
+    "carouselScrollStepPx": 300
+  }
+  

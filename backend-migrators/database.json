@@ -1,0 +1,42 @@
+{
+    "defaultEnv": "dev",
+    "dev": {
+        "driver": "mssql",
+        "user": {
+            "ENV": "DB_USER"
+        },
+        "password": {
+            "ENV": "DB_PASSWORD"
+        },
+        "server": {
+            "ENV": "DB_SERVER"
+        },
+        "database": {
+            "ENV": "DB_NAME"
+        },
+        "options": {
+            "encrypt": false,
+            "trustServerCertificate": true,
+            "enableArithAbort": true
+        }
+    },
+    "test": {
+        "driver": "mssql",
+        "user": {
+            "ENV": "DB_USER_TEST"
+        },
+        "password": {
+            "ENV": "DB_PASSWORD_TEST"
+        },
+        "server": {
+            "ENV": "DB_SERVER_TEST"
+        },
+        "database": {
+            "ENV": "DB_NAME_TEST"
+        },
+        "options": {
+            "encrypt": false,
+            "trustServerCertificate": true
+        }
+    }
+}

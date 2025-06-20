@@ -1,0 +1,14 @@
+[
+  {
+    "ip": "::ffff:192.168.3.24",
+    "visit_start": "2025-03-15T11:12:19.432Z",
+    "visit_end": null,
+    "duration_seconds": null
+  },
+  {
+    "ip": "::ffff:192.168.3.9",
+    "visit_start": "2025-03-15T11:13:06.473Z",
+    "visit_end": null,
+    "duration_seconds": null
+  }
+]

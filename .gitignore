@@ -1,0 +1,25 @@
+# Archivo .gitignore para el proyecto MIGRATORS
+
+# Dependencias de Node.js (en cualquier subcarpeta)
+node_modules/
+
+# Archivos de entorno (contienen secretos, NUNCA deben guardarse)
+.env
+.env.*
+
+# Archivos de log y temporales
+npm-debug.log*
+yarn-error.log
+pnpm-debug.log*
+
+# Archivos de build del frontend
+/front-migrators/dist
+/front-migrators/.vite
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración de editores
+.vscode/
+.idea/

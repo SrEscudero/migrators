@@ -1,0 +1,1 @@
+ALTER TABLE Noticias_Acciones_Historico ADD CONSTRAINT fk_historico_noticia_id FOREIGN KEY (noticia_id) REFERENCES Noticias(id) ON DELETE CASCADE;

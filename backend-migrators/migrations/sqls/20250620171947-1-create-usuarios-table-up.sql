@@ -1,0 +1,13 @@
+CREATE TABLE Usuarios (
+    id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Nombre NVARCHAR(255) NOT NULL,
+    Email NVARCHAR(255) NOT NULL UNIQUE,
+    password_hash NVARCHAR(255) NOT NULL,
+    Celular NVARCHAR(50) NULL,
+    rol NVARCHAR(50) NOT NULL DEFAULT 'cliente',
+    fecha_creacion DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    fecha_actualizacion DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    perm_gestionar_clientes BIT NOT NULL DEFAULT 0,
+    perm_publicar_noticias BIT NOT NULL DEFAULT 0,
+    perm_ver_estadisticas BIT NOT NULL DEFAULT 0
+);

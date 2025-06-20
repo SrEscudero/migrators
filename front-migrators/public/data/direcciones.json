@@ -1,0 +1,274 @@
+[
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Porto Alegre",
+        "lat": "-30.0481",
+        "lng": "-51.2149",
+        "nome": "Superintendência Regional de Polícia Federal (DELEMIG)",
+        "endereco": "Avenida Ipiranga, 1365 - Bairro Azenha, Porto Alegre - Rio Grande do Sul / CEP - 90160-093"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Bagé",
+        "lat": "-31.3243",
+        "lng": "-54.1012",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Av. Pres. Vargas, 350 - Getúlio Vargas, Bagé - RS, 96408-780"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Caxias do Sul",
+        "lat": "-29.1677",
+        "lng": "-51.1628",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Av. Júlio de Castilhos, 150 - 2º andar - Nossa Sra. de Lourdes, Caxias do Sul - RS, 95010-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Vitória do Palmar",
+        "lat": "-33.5282",
+        "lng": "-53.3716",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Gen. Canabarro, 330 - Coxilha, Santa Vitória do Palmar - RS, 96230-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Jaguarão",
+        "lat": "-32.5568",
+        "lng": "-53.3858",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Júlio de Castilhos, 1572, Jaguarão - RS, 96300-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Passo Fundo",
+        "lat": "-28.226028914628476",
+        "lng": "-52.388956892766394",
+        "nome": "Balcão do Migrante e Refugiado - Universidade de Passo Fundo (UPF)",
+        "endereco": "UPF Faculdade de Direito, RS, 99042-800"
+    },    
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Passo Fundo",
+        "lat": "-28.2536",
+        "lng": "-52.3938",
+        "nome": "Atendimento ao Imigrante Bourbon Passo Fundo",
+        "endereco": "Av. Brasil Leste, 200 - Entrada 2, Loja 45 - Petrópolis, Passo Fundo - RS, 99025-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Pelotas",
+        "lat": "-31.7562",
+        "lng": "-52.3873",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Avenida Duque de Caxias, 1049, Fragata - RS, CEP 96030-003"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Cruz do Sul",
+        "lat": "-29.7079",
+        "lng": "-52.4384",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Coronel Oscar Rafel Jost, 2117, Bairro Avenida, Santa Cruz do Sul - RS, CEP 96815-010"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Maria",
+        "lat": "-29.6824",
+        "lng": "-53.8096",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Vale Machado, 1361 - Centro - RS, CEP 97010-530"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santana do Livramento",
+        "lat": "-30.8861",
+        "lng": "-55.5305",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Silveira Martins, 1257 - Centro, Sant'Ana do Livramento - RS, 97573-625"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santo Ângelo",
+        "lat": "-28.3034",
+        "lng": "-54.2700",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Av. São João, 555 - Sobuski, Santo Ângelo - RS, 98801-640"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "São Borja",
+        "lat": "-28.6275",
+        "lng": "-56.0389",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Vereador Alberto R. Benevenuto, 3126 - Passo, São Borja - RS, 97670-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Uruguaiana",
+        "lat": "-29.7563",
+        "lng": "-57.0787",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. dos Andradas, 1878 - Santana, Uruguaiana - RS, 97502-360"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Vitória do Palmar",
+        "lat": "-33.5282",
+        "lng": "-53.3716",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Gen. Canabarro, 330 - Coxilha, Santa Vitória do Palmar - RS, 96230-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Jaguarão",
+        "lat": "-32.5568",
+        "lng": "-53.3858",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Júlio de Castilhos, 1572, Jaguarão - RS, 96300-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Pelotas",
+        "lat": "-31.7562",
+        "lng": "-52.3873",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Avenida Duque de Caxias, 1049, Fragata – RS, CEP 96030-003"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Cruz do Sul",
+        "lat": "-29.7079",
+        "lng": "-52.4384",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Coronel Oscar Rafel Jost, 2117, Bairro Avenida, Santa Cruz do Sul – RS, CEP 96815-010"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santa Maria",
+        "lat": "-29.6824",
+        "lng": "-53.8096",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Vale Machado, 1361 – Centro – RS, CEP 97010-530"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santana do Livramento",
+        "lat": "-30.8861",
+        "lng": "-55.5305",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. Silveira Martins, 1257 - Centro, Sant'Ana do Livramento - RS, 97573-625"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Santo Ângelo",
+        "lat": "-28.3034",
+        "lng": "-54.2700",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Av. São João, 555 - Sobuski, Santo Ângelo - RS, 98801-640"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "São Borja",
+        "lat": "-28.6275",
+        "lng": "-56.0389",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "Rua Vereador Alberto R. Benevenuto, 3126 - Passo, São Borja - RS, 97670-000"
+    },
+    {
+        "estado": "Rio Grande do Sul",
+        "ciudad": "Uruguaiana",
+        "lat": "-29.7563",
+        "lng": "-57.0787",
+        "nome": "Delegacia da Polícia Federal",
+        "endereco": "R. dos Andradas, 1878 - Santana, Uruguaiana - RS, 97502-360"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Florianópolis",
+        "lat": "-27.573049460622595",
+        "lng": "-48.53178651708454",
+        "nome": "Núcleo de Registro de Estrangeiros (NRE) - Superintendência Regional da PF",
+        "endereco": "Rua Paschoal Apóstolo Pítsica, 4744, Agronômica, Florianópolis/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Chapecó",
+        "lat": "-27.08818952440175",
+        "lng": "-52.61409439052819",
+        "nome": "Migração e Atendimento ao Estrangeiro - Chapecó",
+        "endereco": "Posto de Atendimento ao Estrangeiro (PAE) - Terminal Rodoviário - Rua Líbano, nº 111, Bairro Passo dos Fortes, Chapecó/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Criciúma",
+        "lat": "-28.678532205275932",
+        "lng": "-49.35984908085568",
+        "nome": "Migração e Atendimento ao Estrangeiro - Delegacia da PF em Criciúma",
+        "endereco": "Avenida Centenário, nº 4353 - Bairro Pio Corrêa, Criciúma/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Dionísio Cerqueira",
+        "lat": "-26.260674074624493",
+        "lng": "-53.632845401126254",
+        "nome": "Migração e Atendimento ao Estrangeiro - Delegacia da PF em Dionísio Cerqueira",
+        "endereco": "Rua Felipe Schmidt, nº 740, Centro, Dionísio Cerqueira"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Itajaí",
+        "lat": "-26.90568554538483",
+        "lng": "-48.655438520903616",
+        "nome": "Migração e Atendimento ao Estrangeiro - Delegacia da PF em Itajaí",
+        "endereco": "Rua Lauro Müller, nº 73, Centro, Itajaí/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Joinville",
+        "lat": "-26.252420949447767",
+        "lng": "-48.85270772487462",
+        "nome": "Migração e Atendimento ao Estrangeiro - Joinville",
+        "endereco": "Av. Rolf Wiest, nº 333, Bom Retiro, Joinville/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Lages",
+        "lat": "-27.800273061509355",
+        "lng": "-50.30857066291023",
+        "nome": "Migração e Atendimento ao Estrangeiro - Delegacia da PF em Lages",
+        "endereco": "Rua Artur Bernardes, nº 427, Bairro Conta Dinheiro, Lages/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Itajaí",
+        "lat": "-26.90364170231079",
+        "lng": "-48.66026430180621",
+        "nome": "Posto de Emissão de Passaporte e Atendimento a Estrangeiros de Itajaí",
+        "endereco": "Rua Samuel Heusi, 234 - Sala 19 A - Centro, Itajaí - SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Joinville",
+        "lat": "-26.253803650706345",
+        "lng": "-48.85251810150883",
+        "nome": "Unidade de Polícia de Imigração - PEP Garten Shopping",
+        "endereco": "Av. Rolf Wiest - Bom Retiro, Joinville - SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Chapecó",
+        "lat": "-27.09478117848303",
+        "lng": "-52.614041442328954",
+        "nome": "Delegacia de Polícia Federal",
+        "endereco": "Rua Sete de Setembro, 292-D, Presidente Médici, Chapecó/SC"
+    },
+    {
+        "estado": "Santa Catarina",
+        "ciudad": "Dionísio Cerqueira",
+        "lat": "-26.260662646550575",
+        "lng": "-53.63284482146135",
+        "nome": "Delegacia da Polícia Federal em Dionísio Cerqueira",
+        "endereco": "Rua Felipe Schmidt, 740 - Centro, Dionísio Cerqueira - SC"
+    }
+]

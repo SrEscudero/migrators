@@ -1,0 +1,1 @@
+ALTER TABLE Noticias_Acciones_Historico DROP CONSTRAINT fk_historico_noticia_id;

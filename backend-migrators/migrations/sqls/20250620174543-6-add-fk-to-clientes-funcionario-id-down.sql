@@ -1,0 +1,1 @@
+ALTER TABLE Clientes DROP CONSTRAINT fk_clientes_funcionario_id;

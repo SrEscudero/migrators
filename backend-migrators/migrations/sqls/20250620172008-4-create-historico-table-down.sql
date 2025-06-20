@@ -1,0 +1,1 @@
+DROP TABLE Noticias_Acciones_Historico;
