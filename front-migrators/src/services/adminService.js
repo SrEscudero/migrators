@@ -1,47 +1,17 @@
-// src/services/adminService.js
-import axios from 'axios';
+// src/services/adminService.js (CORREGIDO)
 
-const API_URL = import.meta.env.VITE_API_URL;
-const ADMIN_API_URL = `${API_URL}/api/admin`;
+import apiClient from './api.js'; // <-- CAMBIO
 
-/**
- * Obtiene el token del localStorage para autorizar peticiones.
- */
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    return token ? { Authorization: `Bearer ${token}` } : {};
-};
+const ADMIN_API_URL = '/api/admin'; // <-- CAMBIO
 
-/**
- * [CEO-only] Crea un nuevo usuario funcionario.
- * @param {object} funcionarioData - Datos del nuevo funcionario.
- * @returns {Promise<object>}
- */
+// [CEO-only] Crea un nuevo usuario funcionario.
 export async function crearFuncionario(funcionarioData) {
-    try {
-        const response = await axios.post(`${ADMIN_API_URL}/funcionarios`, funcionarioData, {
-            headers: getAuthHeaders(),
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error en el servicio al crear funcionario:", error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || 'Error al crear el funcionario.');
-    }
+  const response = await apiClient.post(`${ADMIN_API_URL}/funcionarios`, funcionarioData);
+  return response.data;
 }
 
-/**
- * [NUEVA FUNCIÓN AÑADIDA]
- * Obtiene la lista de todos los usuarios con rol 'funcionario'.
- * @returns {Promise<Array>}
- */
+// Obtiene la lista de todos los usuarios con rol 'funcionario'.
 export async function obtenerFuncionarios() {
-    try {
-        const response = await axios.get(`${ADMIN_API_URL}/funcionarios`, {
-            headers: getAuthHeaders(),
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error en el servicio al obtener funcionarios:", error.response?.data?.message || error.message);
-        throw new Error(error.response?.data?.message || 'Error al obtener los funcionarios.');
-    }
+  const response = await apiClient.get(`${ADMIN_API_URL}/funcionarios`);
+  return response.data;
 }

@@ -3,6 +3,7 @@
 import bcrypt from 'bcryptjs';
 import { connectDB, sql } from '../config/db.js';
 import { syncHubspotContact } from '../services/hubspotService.js';
+import logger from '../config/logger.js'; 
 
 const crearFuncionario = async (req, res) => {
     // 1. Extraemos 'permisos' del cuerpo de la petición.
@@ -54,7 +55,7 @@ const crearFuncionario = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error al crear funcionario:', error.message);
+        logger.error('Error al crear funcionario: %s', error.message);
         res.status(500).json({ message: 'Error en el servidor al crear el funcionario.' });
     }
 };
@@ -87,7 +88,7 @@ const listarClientes = async (req, res) => {
         const result = await request.query(query);
         res.status(200).json(result.recordset);
     } catch (error) {
-        console.error('Error al listar clientes:', error.message);
+        logger.error('Error al listar clientes: %s', error.message);
         res.status(500).json({ message: 'Error en el servidor al listar los clientes.' });
     }
 };

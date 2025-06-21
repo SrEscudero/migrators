@@ -1,0 +1,342 @@
+<span class="math-inline">{info.timestamp} [</span>{info.level}]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:25:27:2527 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:25:37:2537 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:36:56:3656 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 17:36:56:3656 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:36:56:3656 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 17:43:31:4331 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - POST - 192.168.3.30[39m
+2025-06-20 17:43:31:4331 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:63:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-06-20 17:46:22:4622 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 17:46:22:4622 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:46:22:4622 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 17:46:33:4633 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 17:46:33:4633 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 17:46:33:4633 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 17:46:51:4651 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 17:46:54:4654 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 17:47:04:474 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-20 17:47:04:474 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-20 17:54:35:5435 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 17:54:41:5441 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 17:55:03:553 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 17:55:07:557 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 17:55:07:557 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:12:05:125 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - POST - 192.168.3.30[39m
+2025-06-20 18:12:05:125 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:63:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-06-20 18:13:18:1318 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:14:53:1453 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 18:14:53:1453 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 18:14:53:1453 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 18:19:11:1911 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:19:48:1948 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:19:48:1948 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:19:52:1952 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:19:53:1953 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:20:55:2055 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:21:06:216 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:21:20:2120 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:21:24:2124 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:21:24:2124 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:25:25:2525 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:38:04:384 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 18:38:04:384 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 18:38:04:384 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 18:40:30:4030 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 18:42:54:4254 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 18:42:54:4254 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:40:16:4016 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 19:40:16:4016 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 19:40:16:4016 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 19:40:49:4049 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:41:27:4127 [[35mhttp[39m]: [35mRequest: POST /api/usuarios/login[39m
+2025-06-20 19:41:28:4128 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:41:28:4128 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:41:28:4128 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:41:28:4128 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:41:28:4128 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:41:39:4139 [[35mhttp[39m]: [35mRequest: GET /api/admin/clientes[39m
+2025-06-20 19:41:42:4142 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-20 19:41:52:4152 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:41:52:4152 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:41:52:4152 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:41:52:4152 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:41:52:4152 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:41:56:4156 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-20 19:42:42:4242 [[35mhttp[39m]: [35mRequest: POST /api/admin/funcionarios[39m
+2025-06-20 19:42:42:4242 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-20 19:43:18:4318 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 19:43:18:4318 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:43:52:4352 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 19:43:52:4352 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:43:52:4352 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: POST /api/usuarios/login[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:44:05:445 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:44:28:4428 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 19:44:28:4428 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:44:28:4428 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 19:44:45:4445 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:44:47:4447 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:45:32:4532 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:45:39:4539 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 19:45:57:4557 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-20 19:45:58:4558 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: POST /api/usuarios/login[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 19:46:51:4651 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 19:47:06:476 [[35mhttp[39m]: [35mRequest: GET /api/admin/clientes[39m
+2025-06-20 19:47:08:478 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-20 20:21:14:2114 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:21:15:2115 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:21:17:2117 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:22:37:2237 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:22:37:2237 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:22:38:2238 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:22:42:2242 [[35mhttp[39m]: [35mRequest: GET /api/forums/1/threads[39m
+2025-06-20 20:22:44:2244 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:28:48:2848 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 20:28:48:2848 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 20:28:48:2848 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 20:28:53:2853 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:28:54:2854 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:28:54:2854 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:28:57:2857 [[35mhttp[39m]: [35mRequest: GET /api/forums/1/threads[39m
+2025-06-20 20:28:58:2858 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:28:59:2859 [[35mhttp[39m]: [35mRequest: GET /api/forums/2/threads[39m
+2025-06-20 20:29:00:290 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:30:45:3045 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:30:46:3046 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:30:46:3046 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:31:52:3152 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:31:53:3153 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:31:53:3153 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:32:10:3210 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:32:11:3211 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:32:11:3211 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-20 20:32:27:3227 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:32:28:3228 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:32:45:3245 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:32:45:3245 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:50:25:5025 [[32minfo[39m]: [32mAttempting to connect to SQL Server...[39m
+2025-06-20 20:50:25:5025 [[32minfo[39m]: [32m🚀 Servidor backend corriendo en http://0.0.0.0:5000[39m
+2025-06-20 20:50:25:5025 [[32minfo[39m]: [32m✅ Conectado a SQL Server[39m
+2025-06-20 20:50:33:5033 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:50:38:5038 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:50:42:5042 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:50:43:5043 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: POST /api/usuarios/login[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-20 20:50:55:5055 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-20 20:51:02:512 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-20 20:51:03:513 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-20 20:51:03:513 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 09:04:00:40 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 09:04:01:41 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 09:04:16:416 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 09:04:17:417 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 09:04:29:429 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 09:04:30:430 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 09:04:30:430 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 09:04:48:448 [[35mhttp[39m]: [35mRequest: POST /api/forums/1/threads[39m
+2025-06-21 09:04:48:448 [[31merror[39m]: [31mError al crear el hilo: %s[39m
+2025-06-21 10:20:58:2058 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:20:59:2059 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:22:10:2210 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:22:12:2212 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:24:02:242 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:24:02:242 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:24:08:248 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:28:05:285 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:28:06:286 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:34:19:3419 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:34:19:3419 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:35:02:352 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:35:02:352 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:37:19:3719 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:37:19:3719 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:37:19:3719 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:37:19:3719 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:37:19:3719 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:37:30:3730 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:37:31:3731 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:37:31:3731 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:37:38:3738 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:37:38:3738 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:37:38:3738 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:37:38:3738 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:37:38:3738 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:37:44:3744 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:37:45:3745 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:37:50:3750 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:38:14:3814 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:38:14:3814 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:38:14:3814 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:38:14:3814 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:38:14:3814 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:41:29:4129 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:41:38:4138 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:41:38:4138 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:41:38:4138 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:41:38:4138 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:41:38:4138 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:43:54:4354 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:43:55:4355 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:43:56:4356 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:43:56:4356 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:43:56:4356 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:43:56:4356 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:43:56:4356 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:46:51:4651 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 10:46:52:4652 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 10:47:28:4728 [[35mhttp[39m]: [35mRequest: GET /api/admin/clientes[39m
+2025-06-21 10:47:28:4728 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-21 10:47:30:4730 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:49:30:4930 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:49:32:4932 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:49:32:4932 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 10:49:37:4937 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:49:38:4938 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:55:31:5531 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:58:32:5832 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:58:49:5849 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 10:58:50:5850 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 10:59:24:5924 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 10:59:24:5924 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:03:24:324 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:03:25:325 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:03:25:325 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:03:25:325 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:05:42:542 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:05:42:542 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:05:42:542 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:13:28:1328 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:14:07:147 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:14:07:147 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:14:07:147 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:15:36:1536 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:15:40:1540 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:15:40:1540 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:15:40:1540 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:17:15:1715 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:17:36:1736 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:17:37:1737 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:18:16:1816 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:18:16:1816 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:18:16:1816 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:18:16:1816 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:18:16:1816 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:18:56:1856 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:18:57:1857 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:18:59:1859 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:19:00:190 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:19:12:1912 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:19:12:1912 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:19:12:1912 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:19:12:1912 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:19:12:1912 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:19:17:1917 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:19:17:1917 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:19:17:1917 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:19:17:1917 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:19:17:1917 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:19:19:1919 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m
+2025-06-21 11:19:20:1920 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:19:20:1920 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:19:20:1920 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:19:20:1920 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:19:20:1920 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:20:03:203 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:20:03:203 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:20:37:2037 [[35mhttp[39m]: [35mRequest: GET /api/news[39m
+2025-06-21 11:20:37:2037 [[35mhttp[39m]: [35mRequest: GET /api/noticias/publicas[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: POST /api/usuarios/login[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:20:46:2046 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:27:33:2733 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:27:34:2734 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 11:30:54:3054 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 11:30:54:3054 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 11:30:54:3054 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 11:30:54:3054 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 11:30:54:3054 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 13:35:04:354 [[35mhttp[39m]: [35mRequest: POST /api/exit[39m
+2025-06-21 13:35:06:356 [[35mhttp[39m]: [35mRequest: GET /api/track-visit[39m
+2025-06-21 13:35:07:357 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 13:35:07:357 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 13:35:07:357 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 13:35:07:357 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 13:35:07:357 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 13:37:10:3710 [[35mhttp[39m]: [35mRequest: GET /api/admin/clientes[39m
+2025-06-21 13:37:11:3711 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-21 13:37:32:3732 [[35mhttp[39m]: [35mRequest: DELETE /api/noticias/2[39m
+2025-06-21 13:37:32:3732 [[35mhttp[39m]: [35mRequest: GET /api/noticias[39m
+2025-06-21 13:37:39:3739 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/estado[39m
+2025-06-21 13:37:39:3739 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/publicadas-por-fecha[39m
+2025-06-21 13:37:39:3739 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/destacadas[39m
+2025-06-21 13:37:39:3739 [[35mhttp[39m]: [35mRequest: GET /api/noticias/stats/autores[39m
+2025-06-21 13:37:40:3740 [[35mhttp[39m]: [35mRequest: GET /api/admin/clientes[39m
+2025-06-21 13:37:41:3741 [[35mhttp[39m]: [35mRequest: GET /api/admin/funcionarios[39m
+2025-06-21 13:37:44:3744 [[35mhttp[39m]: [35mRequest: GET /api/forums[39m

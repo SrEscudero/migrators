@@ -152,6 +152,15 @@ const menuItems = computed(() => {
     items.push({ text: "Listar Noticias", action: VIEW_OPTIONS.LISTAR, icon: "fas fa-list-alt" });
     items.push({ text: "Crear Noticia", action: VIEW_OPTIONS.PUBLICAR, icon: "fas fa-plus-circle" });
   }
+
+    // --- AÑADE ESTE NUEVO ÍTEM PARA EL FORO ---
+  items.push({ 
+    text: "Foro de la Comunidad", 
+    icon: "fas fa-comments",
+    isRoute: true,       // <-- Propiedad especial
+    route: '/foro'       // <-- La ruta de Vue Router a la que queremos ir
+  });
+
   return items;
 });
 

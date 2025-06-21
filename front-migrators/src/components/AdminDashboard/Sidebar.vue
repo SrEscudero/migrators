@@ -1,61 +1,42 @@
 <template>
-  <aside
-    :class="['sidebar', { collapsed: isCollapsed }]"
-    aria-label="Menú principal de navegación"
-  >
+  <aside :class="['sidebar', { collapsed: isCollapsed }]" aria-label="Menú principal de navegación">
     <div class="sidebar-header">
-      <router-link
-        to="/" :aria-label="isCollapsed && windowWidth >= 768 ? 'Logo pequeño' : 'Logo completo'"
-        class="logo-link"
-      >
+      <router-link to="/" :aria-label="isCollapsed && windowWidth >= 768 ? 'Logo pequeño' : 'Logo completo'"
+        class="logo-link">
         <transition name="fade" mode="out-in">
-          <img
-            v-if="isCollapsed && windowWidth >= 768"
-            src="@/assets/midia/icons/logo.png"
-            alt="Logo pequeño"
-            class="collapsed-logo"
-            key="collapsed"
-          /> <img
-            v-else
-            src="@/assets/midia/icons/logo_trans.png"
-            alt="Logo completo"
-            class="logo-image"
-            key="expanded"
-          /> </transition>
+          <img v-if="isCollapsed && windowWidth >= 768" src="@/assets/midia/icons/logo.png" alt="Logo pequeño"
+            class="collapsed-logo" key="collapsed" /> <img v-else src="@/assets/midia/icons/logo_trans.png"
+            alt="Logo completo" class="logo-image" key="expanded" />
+        </transition>
       </router-link>
     </div>
 
     <nav aria-label="Menú de navegación principal" class="menu-wrapper">
-      <ul class="menu-items"> <li
-          v-for="(item, index) in menuItems"
-          :key="index"
-          :class="{
-            active: item.action === selectedOptionInternal,
-            'has-notification': item.hasNotification
-          }"
-        >
-          <button
-            @click="handleSelectOption(item.action)"
-            @keydown.enter.space="handleSelectOption(item.action)"
-            class="menu-button"
+      <ul class="menu-items">
+        <li v-for="(item, index) in menuItems" :key="index"
+          :class="{ active: item.action === selectedOptionInternal && !item.isRoute }">
+          <router-link v-if="item.isRoute" :to="item.route" class="menu-button"
+            :aria-label="isCollapsed && windowWidth >= 768 ? item.text : null"
+            :title="isCollapsed && windowWidth >= 768 ? item.text : null">
+            <i :class="['menu-icon', item.icon]"></i>
+            <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
+          </router-link>
+
+          <button v-else @click="handleSelectOption(item.action)" class="menu-button"
             :aria-current="item.action === selectedOptionInternal ? 'page' : null"
             :aria-label="isCollapsed && windowWidth >= 768 ? item.text : null"
-            :title="isCollapsed && windowWidth >= 768 ? item.text : null"
-          > <i :class="['menu-icon', item.icon]"></i>
+            :title="isCollapsed && windowWidth >= 768 ? item.text : null">
+            <i :class="['menu-icon', item.icon]"></i>
             <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
-            <span v-if="item.hasNotification" class="notification-badge" aria-hidden="true"></span>
           </button>
         </li>
       </ul>
     </nav>
 
     <div class="sidebar-footer">
-      <button
-        @click="handleToggleSidebar"
-        class="collapse-btn"
-        :aria-expanded="!isCollapsed"
-        :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'"
-      > <i :class="isCollapsed && windowWidth >=768 ? 'fas fa-bars' : 'fas fa-chevron-left'"></i> </button>
+      <button @click="handleToggleSidebar" class="collapse-btn" :aria-expanded="!isCollapsed"
+        :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'"> <i
+          :class="isCollapsed && windowWidth >=768 ? 'fas fa-bars' : 'fas fa-chevron-left'"></i> </button>
     </div>
   </aside>
 </template>
@@ -67,14 +48,17 @@ import { debounce } from 'lodash';
 export default {
   name: "Sidebar",
   props: {
-    menuItems: { // [cite: 144]
+    menuItems: {
       type: Array,
       required: true,
-      validator: (items) => items.every(item =>
-        'text' in item && 'action' in item && 'icon' in item
-      )
+      validator: (items) => items.every(item => {
+        const hasBaseProps = 'text' in item && 'icon' in item;
+        const isActionItem = 'action' in item;
+        const isRouteItem = 'isRoute' in item && 'route' in item;
+        return hasBaseProps && (isActionItem || isRouteItem);
+      })
     },
-    isCollapsed: { // Propagada desde AdminDashboard
+    isCollapsed: {
       type: Boolean,
       required: true,
     }
@@ -85,14 +69,12 @@ export default {
     const windowWidth = ref(window.innerWidth);
 
     const shouldAutoCollapse = () => {
-      return windowWidth.value < 768; // Mobile breakpoint
+      return windowWidth.value < 768;
     };
 
     const handleSelectOption = (option) => {
       selectedOptionInternal.value = option;
       emit("select-option", option);
-
-      // Si estamos en móvil y el sidebar está abierto (como overlay), ciérralo.
       if (shouldAutoCollapse() && !props.isCollapsed) {
         emit("set-sidebar-collapsed", true);
       }
@@ -105,25 +87,17 @@ export default {
     const handleResize = debounce(() => {
       const oldWidth = windowWidth.value;
       windowWidth.value = window.innerWidth;
-
-      // Si cambiamos de desktop a móvil Y el sidebar estaba expandido
       if (oldWidth >= 768 && windowWidth.value < 768 && !props.isCollapsed) {
-         emit("set-sidebar-collapsed", true); // Forzar colapso (ocultar) en móvil
+         emit("set-sidebar-collapsed", true);
       }
-      // Si cambiamos de móvil a desktop Y el sidebar estaba "abierto" (que en móvil es overlay)
-      // podríamos querer que vuelva a un estado por defecto de desktop (ej. expandido o según localStorage)
-      // Esta lógica ya está en AdminDashboard al inicializar `isSidebarCollapsed`.
     }, 150);
 
     onMounted(() => {
       window.addEventListener('resize', handleResize);
-      handleResize(); // Initial check
-      // Forzar colapso inicial en móvil si no lo está ya
+      handleResize();
       if (shouldAutoCollapse() && !props.isCollapsed) {
-        // Da un tick para que el padre (AdminDashboard) pueda procesar el estado inicial de localStorage
-        // antes de que el hijo intente cambiarlo si es necesario.
         nextTick(() => {
-            if (shouldAutoCollapse() && !props.isCollapsed) { // Doble chequeo después del tick
+            if (shouldAutoCollapse() && !props.isCollapsed) {
                  emit("set-sidebar-collapsed", true);
             }
         });
@@ -133,11 +107,6 @@ export default {
     onBeforeUnmount(() => {
       window.removeEventListener('resize', handleResize);
     });
-
-    // Sincronizar selectedOptionInternal si cambia la ruta desde afuera (raro en este setup pero posible)
-    // watch(() => props.currentRouteAction, (newAction) => { // Si pasaras la acción actual como prop
-    //   selectedOptionInternal.value = newAction;
-    // });
 
     return {
       selectedOptionInternal,

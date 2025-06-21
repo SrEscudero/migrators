@@ -1,13 +1,11 @@
-import axios from 'axios';
+// src/services/noticiasService.js (CORREGIDO)
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/noticias`;
+import apiClient from './api.js'; // <-- CAMBIO
+
+const API_URL = '/api/noticias'; // <-- CAMBIO
 
 export const obtenerNoticias = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data || [];
-    } catch (error) {
-        console.error("❌ Error al obtener noticias Migrators:", error.message);
-        return [];
-    }
+  // El interceptor se encargará de cualquier error de red o del servidor
+  const response = await apiClient.get(`${API_URL}/publicas`);
+  return response.data || [];
 };

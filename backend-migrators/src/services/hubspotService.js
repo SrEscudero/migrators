@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+import logger from '../config/logger.js';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ const hubspotAPI = axios.create({
  */
 export const syncHubspotContact = async (contactData) => {
   if (!contactData || !contactData.email) {
-    console.error('[HubSpot Service] El email es requerido para sincronizar el contacto.');
+    logger.warn('[HubSpot Service] El email es requerido para sincronizar el contacto.');
     return;
   }
 
@@ -41,26 +42,26 @@ export const syncHubspotContact = async (contactData) => {
     });
 
     const properties = {
-        email: contactData.email,
-        firstname: contactData.firstname,
-        lastname: contactData.lastname || '', // HubSpot requiere a veces un valor, aunque sea vacío
-        phone: contactData.phone,
-        // Aquí puedes añadir más propiedades personalizadas que tengas en HubSpot
-        // ej: lead_source: 'Plataforma Migrators'
+      email: contactData.email,
+      firstname: contactData.firstname,
+      lastname: contactData.lastname || '', // HubSpot requiere a veces un valor, aunque sea vacío
+      phone: contactData.phone,
+      // Aquí puedes añadir más propiedades personalizadas que tengas en HubSpot
+      // ej: lead_source: 'Plataforma Migrators'
     };
 
     if (searchResponse.data.total > 0) {
       // 2. Si existe, lo actualizamos (PATCH)
       const contactId = searchResponse.data.results[0].id;
-      console.log(`[HubSpot Service] Actualizando contacto existente ID: ${contactId}`);
+      logger.info(`[HubSpot Service] Actualizando contacto existente ID: ${contactId}`);
       await hubspotAPI.patch(`/crm/v3/objects/contacts/${contactId}`, { properties });
     } else {
       // 3. Si no existe, lo creamos (POST)
-      console.log(`[HubSpot Service] Creando nuevo contacto para: ${contactData.email}`);
+      logger.info(`[HubSpot Service] Creando nuevo contacto para: ${contactData.email}`); // <-- CAMBIO
       await hubspotAPI.post('/crm/v3/objects/contacts', { properties });
     }
   } catch (error) {
     // Capturamos el error para que no detenga el flujo principal de la aplicación
-    console.error('❌ Error al sincronizar contacto con HubSpot:', error.response?.data || error.message);
+    logger.error('❌ Error al sincronizar contacto con HubSpot: %s', error.response?.data?.message || error.message); // <-- CAMBIO
   }
 };

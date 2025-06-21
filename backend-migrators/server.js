@@ -22,6 +22,10 @@ import newsRoutes from './src/routes/newsRoutes.js';
 import hubspotRoutes from './src/routes/hubspotRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
+import logger from './src/config/logger.js';
+import compression from 'compression';
+import forumRoutes from './src/routes/forumRoutes.js';
+
 
 // --- Import de Servicios ---
 import { logIP, getVisitorStats } from './src/services/visitorServices.js';
@@ -41,6 +45,7 @@ const PORT = process.env.PORT || 5000;
 // MIDDLEWARES
 // =================================================================
 
+app.use(compression());
 app.use(helmet());
 
 // --- Configuración CORS ---
@@ -71,9 +76,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
-// --- Logging de solicitudes ---
+// --- Logging de solicitudes con Winston ---
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  // Loguea la información de la petición entrante
+  logger.http(`Request: ${req.method} ${req.url}`);
   next();
 });
 
@@ -124,6 +130,7 @@ app.use('/api/usuarios', userRoutes);
 app.use('/api/noticias', noticiasRoutes);
 app.use('/api/news', newsRoutes); // Considera unificar /news y /noticias si son lo mismo
 app.use('/api/hubspot', hubspotRoutes);
+app.use('/api/forums', forumRoutes);
 
 // Ruta para subir imágenes
 app.post('/api/upload', upload.single('image'), (req, res) => {
@@ -206,17 +213,19 @@ cron.schedule('0 * * * *', async () => {
 
 // --- Manejo de errores global ---
 app.use((err, req, res, next) => {
-  console.error('🔥 Error global:', err.stack || err.message);
+  // Loguea el error completo, incluyendo el stack trace si está disponible
+  logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  logger.error(err.stack);
+
   res.status(err.status || 500).json({
     error: err.message || 'Error interno del servidor',
   });
 });
 
 // --- Iniciar servidor ---
-// Solo inicia el servidor si el archivo se ejecuta directamente
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Servidor backend corriendo en http://0.0.0.0:${PORT}`);
+    logger.info(`🚀 Servidor backend corriendo en http://0.0.0.0:${PORT}`);
   });
 }
 

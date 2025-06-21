@@ -2,6 +2,8 @@ import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import basicSsl from '@vitejs/plugin-basic-ssl' // 1. Importa el plugin
+import { visualizer } from 'rollup-plugin-visualizer'; // <-- 1. Importa
+
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -9,7 +11,8 @@ export default ({ mode }) => {
   return {
     plugins: [
       vue(),
-      basicSsl() // 2. Añade el plugin aquí
+      basicSsl(), 
+      visualizer({ open: true })
     ],
     server: {
       https: false, // 3. Habilita HTTPS

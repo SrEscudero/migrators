@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { connectDB, sql } from '../config/db.js';
-import { syncHubspotContact } from '../services/hubspotService.js'; // <-- 1. IMPORTAMOS EL SERVICIO
+import { syncHubspotContact } from '../services/hubspotService.js';
+import logger from '../config/logger.js';
 
 /**
  * Registra un nuevo usuario cliente y su perfil en la tabla Clientes
@@ -58,7 +59,7 @@ export const registerUser = async (req, res) => {
 
     } catch (error) {
         if (transaction) await transaction.rollback();
-        console.error('Error al registrar usuario:', error.message);
+        logger.error('Error al registrar usuario: %s', error.message);
         res.status(500).json({ message: 'Error del servidor al registrar el usuario.' });
     }
 };
@@ -112,7 +113,7 @@ export const loginUser = async (req, res) => {
             res.status(401).json({ message: 'Credenciales inválidas.' });
         }
     } catch (error) {
-        console.error('Error en el login:', error.message);
+        logger.error('Error en el login: %s', error.message);
         res.status(500).json({ message: 'Error del servidor durante el login.' });
     }
 };

@@ -2,6 +2,8 @@
 
 import sql from 'mssql';
 import dotenv from 'dotenv';
+import logger from './logger.js';
+
 
 dotenv.config();
 
@@ -19,28 +21,21 @@ const dbConfig = {
 
 let pool;
 
-/**
- * Establece y retorna un pool de conexiones a SQL Server.
- * Si el pool ya existe y está conectado, lo reutiliza.
- * Implementa reintentos en caso de fallo.
- */
 export const connectDB = async () => {
   try {
     if (pool && pool.connected) {
-      // console.log('✅ Pool de SQL Server ya está conectado.');
       return pool;
     }
-    console.log('Attempting to connect to SQL Server...');
+    logger.info('Attempting to connect to SQL Server...'); 
     pool = await sql.connect(dbConfig);
-    console.log('✅ Conectado a SQL Server');
+    logger.info('✅ Conectado a SQL Server'); 
     return pool;
   } catch (err) {
-    console.error('❌ Error al conectar con SQL Server:', err.message);
-    // Liberar el pool si la conexión falló para permitir un nuevo intento
+    logger.error('❌ Error al conectar con SQL Server: %s', err.message);
     pool = null; 
-    console.log('Reintentando conexión en 5 segundos...');
+    logger.warn('Reintentando conexión en 5 segundos...'); 
     setTimeout(connectDB, 5000);
-    throw err; // Relanzar el error para que la llamada inicial sepa que falló
+    throw err;
   }
 };
 
@@ -84,9 +79,9 @@ export async function registrarAccionHistorico(transactionRequest, noticiaId, ti
     requestLog.input('reg_hist_mes_referencia', sql.VarChar(7), mesReferencia);
 
     await requestLog.query(querySQL);
-    console.log(`HISTÓRICO REGISTRADO: Noticia ID ${noticiaId}, Acción: ${tipoAccion}`);
+    logger.info(`HISTÓRICO REGISTRADO: Noticia ID ${noticiaId}, Acción: ${tipoAccion}`); // <-- CAMBIO
   } catch (err) {
-    console.error(`Error al registrar acción '${tipoAccion}' para noticia ID ${noticiaId} en histórico:`, err.message);
+    logger.error(`Error al registrar acción '${tipoAccion}' para noticia ID ${noticiaId} en histórico: %s`, err.message); // <-- CAMBIO
     throw err; // Propagar el error para que la transacción principal pueda hacer rollback
   }
 }

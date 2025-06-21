@@ -1,27 +1,16 @@
-// Archivo: front-migrators/src/services/newsService.js
+// src/services/newsService.js (CORREGIDO)
 
-import axios from 'axios';
+import apiClient from './api.js'; // <-- CAMBIO
 
-// ¡CORREGIDO! Apunta a la ruta relativa que activará el proxy.
-const API_BASE_URL = '/api/news';
+const API_URL = '/api/news'; // <-- CAMBIO: Apunta al proxy de noticias externas
 
-export const fetchNews = async (filters = {}) => {
-  try {
-    const params = new URLSearchParams();
-    if (filters.query) {
-      params.append('q', filters.query);
-    }
-    if (filters.category) {
-      params.append('category', filters.category);
-    }
-
-    const requestUrl = `${API_BASE_URL}?${params.toString()}`;
-    console.log(`[Frontend Service] Petición a: ${requestUrl}`);
-
-    const response = await axios.get(requestUrl);
-    return response.data || [];
-  } catch (error) {
-    console.error('Error en newsService:', error.response?.data || error.message);
-    return [];
-  }
+// Obtiene noticias externas aplicando filtros
+export const getExternalNews = async (filters) => {
+  const response = await apiClient.get(API_URL, {
+    params: {
+      q: filters.query,
+      category: filters.category,
+    },
+  });
+  return response.data || [];
 };

@@ -1,0 +1,1 @@
+ALTER TABLE Threads DROP COLUMN views;

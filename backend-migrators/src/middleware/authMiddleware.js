@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { connectDB, sql } from '../config/db.js';
+import logger from '../config/logger.js';
 
 // ... La función 'protect' se mantiene exactamente igual ...
 export const protect = async (req, res, next) => {
@@ -26,7 +27,7 @@ export const protect = async (req, res, next) => {
             next();
 
         } catch (error) {
-            console.error(error);
+            logger.error('Error de verificación de token: %s', error.message);
             if (error.name === 'TokenExpiredError') {
                 return res.status(401).json({ message: 'Acceso no autorizado, el token ha expirado.' });
             }

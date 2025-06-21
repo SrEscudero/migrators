@@ -1,0 +1,40 @@
+// src/assets/scss/main.scss (VERSIÓN CORREGIDA Y FINAL)
+
+// 1. Configuración y herramientas de Bootstrap.
+// Este orden es importante.
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";         // <-- AÑADIMOS ESTA LÍNEA CLAVE
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+// 2. Layout y componentes base.
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/transitions";
+
+// 3. Componentes específicos que usas en tu proyecto.
+// Descomenta (quita el //) solo de los que necesites.
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/list-group";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/progress";
+@import "bootstrap/scss/spinners";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+
+// 4. API de utilidades (siempre al final).
+@import "bootstrap/scss/utilities/api";
