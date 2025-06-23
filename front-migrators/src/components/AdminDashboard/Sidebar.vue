@@ -5,8 +5,8 @@
         class="logo-link">
         <transition name="fade" mode="out-in">
           <img v-if="isCollapsed && windowWidth >= 768" src="@/assets/midia/icons/logo.png" alt="Logo pequeño"
-            class="collapsed-logo" key="collapsed" /> <img v-else src="@/assets/midia/icons/logo_trans.png"
-            alt="Logo completo" class="logo-image" key="expanded" />
+            class="collapsed-logo" key="collapsed" />
+          <img v-else src="@/assets/midia/icons/logo_trans.png" alt="Logo completo" class="logo-image" key="expanded" />
         </transition>
       </router-link>
     </div>
@@ -20,6 +20,7 @@
             :title="isCollapsed && windowWidth >= 768 ? item.text : null">
             <i :class="['menu-icon', item.icon]"></i>
             <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
+            <span v-if="item.badge" class="badge">{{ item.badge }}</span>
           </router-link>
 
           <button v-else @click="handleSelectOption(item.action)" class="menu-button"
@@ -28,6 +29,7 @@
             :title="isCollapsed && windowWidth >= 768 ? item.text : null">
             <i :class="['menu-icon', item.icon]"></i>
             <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
+            <span v-if="item.badge" class="badge">{{ item.badge }}</span>
           </button>
         </li>
       </ul>
@@ -35,8 +37,9 @@
 
     <div class="sidebar-footer">
       <button @click="handleToggleSidebar" class="collapse-btn" :aria-expanded="!isCollapsed"
-        :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'"> <i
-          :class="isCollapsed && windowWidth >=768 ? 'fas fa-bars' : 'fas fa-chevron-left'"></i> </button>
+        :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'">
+        <i :class="isCollapsed && windowWidth >=768 ? 'fas fa-bars' : 'fas fa-chevron-left'"></i>
+      </button>
     </div>
   </aside>
 </template>
@@ -119,268 +122,246 @@ export default {
 </script>
 
 <style scoped>
-/* Fallback variables if not globally defined */
 :root {
-  --sidebar-width: 250px;
+  --sidebar-width: 280px;
   --sidebar-collapsed-width: 80px;
-  --topbar-height: 70px; /* igual que --header-height */
+  --topbar-height: 70px;
   --footer-height: 70px;
   --transition-speed: 0.3s;
-  --primary-color: #3498db;
-  --hover-color: #f0f7ff;
-  --active-color: #e0e0e0;
-  --text-color-dark: #333333;
-  --icon-color: #6c757d;
-  --border-color: #e0e0e0;
-  --notification-color: #ff4757;
-  --sidebar-overlay-width: 280px; /* Ancho del sidebar cuando es overlay en móvil */
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --hover-color: #f1f5f9;
+  --active-color: #e0e7ff;
+  --text-color-dark: #1e293b;
+  --text-color-light: #64748b;
+  --icon-color: #64748b;
+  --border-color: #e2e8f0;
+  --notification-color: #ef4444;
+  --sidebar-bg: #ffffff;
+  --sidebar-overlay-width: 280px;
 }
-@media (max-width: 767.98px) {
-  :root {
-    --topbar-height: 60px;
-    --footer-height: 60px;
-  }
-}
-
 
 .sidebar {
-  position: fixed; /* [cite: 153] */
-  top: 0; /* [cite: 153] */
-  left: 0; /* [cite: 153] */
-  width: var(--sidebar-width); /* [cite: 152, 153] */
-  height: 100vh; /* [cite: 153] */
-  background-color: var(--background-light, #ffffff); /* [cite: 153] */
-  color: var(--text-color-dark, #333333); /* [cite: 153] */
-  transition: width var(--transition-speed) ease, transform var(--transition-speed) ease; /* [cite: 153] */
-  z-index: 1000; /* Debe estar por encima del contenido principal */ /* [cite: 153] */
-  display: flex; /* [cite: 153] */
-  flex-direction: column; /* [cite: 153] */
-  border-right: 1px solid var(--border-color, #e0e0e0); /* [cite: 153] */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--sidebar-bg);
+  color: var(--text-color-dark);
+  transition: all var(--transition-speed) ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar.collapsed { /* Solo en desktop */
-  width: var(--sidebar-collapsed-width); /* [cite: 154] */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
 }
 
 .sidebar-header {
-  display: flex; /* [cite: 154] */
-  justify-content: center; /* [cite: 154] */
-  align-items: center; /* [cite: 154] */
-  height: var(--topbar-height); /* Sincronizado con topbar */ /* [cite: 152, 154] */
-  background-color: var(--background-grey, #f8f9fa); /* [cite: 154] */
-  border-bottom: 1px solid var(--border-color, #e0e0e0); /* [cite: 155] */
-  flex-shrink: 0; /* [cite: 155] */
-  padding: 0 10px; /* Espacio para el logo */
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--topbar-height);
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo-link {
-  display: flex; /* [cite: 155] */
-  align-items: center; /* [cite: 155] */
-  justify-content: center; /* [cite: 155] */
-  width: 100%; /* [cite: 155] */
-  height: 100%; /* [cite: 155] */
-  text-decoration: none; /* [cite: 156] */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s ease;
 }
 
-.logo-image { /* Logo expandido */
-  max-width: 100%; /* [cite: 156] */
-  max-height: 40px; /* [cite: 156] */
-  object-fit: contain; /* [cite: 156] */
-  transition: opacity var(--transition-speed) ease; /* [cite: 156] */
+.logo-link:hover {
+  opacity: 0.9;
 }
 
-.collapsed-logo { /* Logo colapsado (solo desktop) */
-  width: 36px; /* [cite: 156] */
-  height: 36px; /* [cite: 157] */
-  object-fit: contain; /* [cite: 157] */
+.logo-image {
+  max-width: 80%;
+  max-height: 40px;
+  object-fit: contain;
+  transition: opacity var(--transition-speed) ease;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity calc(var(--transition-speed) / 2) ease; /* [cite: 157] */
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0; /* [cite: 157] */
+.collapsed-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
 }
 
 .menu-wrapper {
-  flex-grow: 1; /* [cite: 158] */
-  overflow-y: auto; /* [cite: 158] */
+  flex-grow: 1;
+  overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin; /* [cite: 158] */
-  scrollbar-color: var(--icon-color, #6c757d) transparent; /* [cite: 158] */
-  padding: 0.5rem 0;
-}
-.menu-wrapper::-webkit-scrollbar {
-  width: 5px; /* [cite: 159] */
-}
-.menu-wrapper::-webkit-scrollbar-thumb {
-  background-color: var(--icon-color, #6c757d); /* [cite: 159] */
-  border-radius: 3px; /* [cite: 159] */
+  padding: 1rem 0.5rem;
 }
 
 .menu-items {
-  list-style: none; /* [cite: 158] */
-  padding: 0; /* [cite: 158] */
-  margin: 0; /* [cite: 158] */
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .menu-items li {
-  position: relative; /* [cite: 159] */
-  margin: 4px 8px; /* [cite: 160] */
-  border-radius: 6px; /* [cite: 160] */
-  overflow: hidden; /* [cite: 160] */
+  position: relative;
+  margin: 0.25rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .menu-button {
-  display: flex; /* [cite: 160] */
-  align-items: center; /* [cite: 160] */
-  width: 100%; /* [cite: 160] */
-  padding: 10px 15px; /* Ajustado */ /* [cite: 160] */
-  background: transparent; /* [cite: 161] */
-  border: none; /* [cite: 161] */
-  color: var(--text-color-dark, #333333); /* [cite: 161] */
-  cursor: pointer; /* [cite: 161] */
-  text-align: left; /* [cite: 161] */
-  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; /* [cite: 161] */
-  border-radius: inherit; /* [cite: 161] */
-  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-color-dark);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-speed) ease;
+  border-radius: 0.5rem;
+  font-size: 0.925rem;
+  position: relative;
 }
 
 .menu-button:hover {
-  background-color: var(--hover-color, #f0f7ff); /* [cite: 162] */
-  color: var(--primary-color, #3498db);
+  background-color: var(--hover-color);
+  color: var(--primary-color);
 }
-.menu-button:focus-visible { /* [cite: 162] */
-  outline: 2px solid var(--primary-color, #3498db);
+
+.menu-button:focus-visible {
+  outline: 2px solid var(--primary-color);
   outline-offset: -2px;
 }
 
 .menu-items li.active .menu-button {
-  background-color: var(--active-color, #e0e0e0); /* [cite: 163] */
-  color: var(--primary-color, #3498db);
-  font-weight: 500; /* [cite: 163] */
+  background-color: var(--active-color);
+  color: var(--primary-color);
+  font-weight: 500;
 }
-.menu-items li.active .menu-button .menu-icon {
-  color: var(--primary-color, #3498db);
+
+.menu-items li.active .menu-icon {
+  color: var(--primary-color);
 }
 
 .menu-icon {
-  font-size: 1.1rem; /* Ajustado */ /* [cite: 163] */
-  margin-right: 12px; /* Ajustado */ /* [cite: 163] */
-  color: var(--icon-color, #6c757d); /* [cite: 164] */
-  transition: color var(--transition-speed) ease; /* [cite: 164] */
-  flex-shrink: 0; /* [cite: 164] */
-  width: 20px; /* Para alinear iconos */
+  font-size: 1.1rem;
+  margin-right: 1rem;
+  color: var(--icon-color);
+  transition: color var(--transition-speed) ease;
+  flex-shrink: 0;
+  width: 24px;
   text-align: center;
 }
-.sidebar.collapsed .menu-button { /* Solo desktop collapsed */
-    justify-content: center;
+
+.sidebar.collapsed .menu-button {
+  justify-content: center;
 }
-.sidebar.collapsed .menu-icon { /* Solo desktop collapsed */
+
+.sidebar.collapsed .menu-icon {
   margin-right: 0;
 }
 
 .menu-text {
-  transition: opacity var(--transition-speed) ease; /* [cite: 165] */
-  white-space: nowrap; /* [cite: 165] */
-  overflow: hidden; /* [cite: 165] */
-  text-overflow: ellipsis; /* [cite: 165] */
+  transition: all var(--transition-speed) ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex-grow: 1;
 }
-.sidebar.collapsed .menu-text { /* Solo desktop collapsed */
-  display: none; /* [cite: 165] */
+
+.badge {
+  background-color: var(--notification-color);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
 }
 
-.notification-badge {
-  position: absolute; /* [cite: 166] */
-  top: 8px; /* [cite: 166] */
-  right: 8px; /* [cite: 166] */
-  width: 8px; /* [cite: 166] */
-  height: 8px; /* [cite: 166] */
-  background-color: var(--notification-color, #ff4757); /* [cite: 166] */
-  border-radius: 50%; /* [cite: 166] */
-}
-.sidebar.collapsed .notification-badge { /* Solo desktop collapsed */
-  top: 12px; /* [cite: 167] */
-  right: 12px; /* [cite: 167] */
+.sidebar.collapsed .menu-text,
+.sidebar.collapsed .badge {
+  display: none;
 }
 
 .sidebar-footer {
-  display: flex; /* [cite: 167] */
-  justify-content: center; /* [cite: 167] */
-  align-items: center; /* [cite: 167] */
-  height: var(--footer-height); /* [cite: 168] */
-  background-color: var(--background-grey, #f8f9fa); /* [cite: 168] */
-  border-top: 1px solid var(--border-color, #e0e0e0); /* [cite: 168] */
-  flex-shrink: 0; /* [cite: 168] */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--footer-height);
+  border-top: 1px solid var(--border-color);
+  padding: 0 1rem;
 }
 
 .collapse-btn {
-  background: none; /* [cite: 168] */
-  border: none; /* [cite: 168] */
-  color: var(--icon-color, #6c757d); /* [cite: 168] */
-  font-size: 1.1rem; /* Ajustado */ /* [cite: 169] */
-  cursor: pointer; /* [cite: 169] */
-  padding: 10px; /* [cite: 169] */
-  border-radius: 50%; /* [cite: 169] */
-  transition: all var(--transition-speed) ease; /* [cite: 169] */
-  width: 40px; /* [cite: 169] */
-  height: 40px; /* [cite: 169] */
-  display: flex; /* [cite: 169] */
-  align-items: center; /* [cite: 169] */
-  justify-content: center; /* [cite: 170] */
-}
-.collapse-btn:hover {
-  background-color: var(--hover-color, #f0f7ff); /* [cite: 170] */
-  color: var(--primary-color, #3498db); /* [cite: 170] */
-  transform: scale(1.05); /* [cite: 170] */
-}
-.collapse-btn:focus-visible {
-  outline: 2px solid var(--primary-color, #3498db); /* [cite: 170] */
+  background: none;
+  border: none;
+  color: var(--icon-color);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all var(--transition-speed) ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* --- Responsiveness for Sidebar --- */
-@media (max-width: 767.98px) { /* Mobile breakpoint */
+.collapse-btn:hover {
+  background-color: var(--hover-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.collapse-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+}
+
+/* Mobile styles */
+@media (max-width: 767.98px) {
   .sidebar {
-    width: var(--sidebar-overlay-width); /* Ancho cuando es overlay y está abierto */ /* [cite: 171] */
-    transform: translateX(-100%); /* Oculto por defecto en móvil */
-    box-shadow: 3px 0 15px rgba(0,0,0,0.1); /* Sombra para efecto overlay */
-    /* --header-height & --footer-height are set globally for mobile */
+    width: var(--sidebar-overlay-width);
+    transform: translateX(-100%);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
   }
-  .sidebar:not(.collapsed) { /* Cuando está abierto (isCollapsed = false) en móvil */
+  
+  .sidebar:not(.collapsed) {
     transform: translateX(0);
   }
+  
   .sidebar.collapsed {
-    /* Cuando está colapsado (isCollapsed = true) en móvil, permanece oculto */
-    width: var(--sidebar-overlay-width); /* Mantiene el ancho para la transición */
     transform: translateX(-100%);
   }
-
-  .logo-image { /* Logo en móvil (siempre expandido dentro del sidebar overlay) */
-    max-width: 100px; /* [cite: 172] */
-    max-height: 36px;
-  }
-  /* .collapsed-logo no se usa en móvil según la lógica del template */
-
+  
   .menu-button {
-    padding: 10px 12px; /* [cite: 174] */
+    padding: 0.75rem 1rem;
   }
-  .menu-icon { /* En móvil, el texto siempre es visible si el sidebar está abierto */
-    font-size: 1rem; /* [cite: 175] */
-    margin-right: 12px; /* [cite: 175] */
+  
+  .menu-text {
+    display: block !important;
   }
-  .menu-text { /* Siempre visible en el sidebar overlay móvil */
-    display: block !important; /* Sobrescribe la regla de .sidebar.collapsed .menu-text */
-  }
-  .sidebar.collapsed .menu-text { /* Cuando el sidebar se "cierra" en móvil (vuelve a translateX(-100%)) */
-    display: none !important; /* Esto no debería ser necesario si está fuera de la pantalla */
-  }
-
-  /* Ocultar el botón de colapso del footer en móvil si el toggle está en el Topbar */
-  /* .sidebar-footer .collapse-btn { display: none; } */
 }
 
+/* Animations */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity calc(var(--transition-speed) / 2) ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

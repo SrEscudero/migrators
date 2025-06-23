@@ -1,27 +1,37 @@
 <template>
   <header :class="['topbar', { 'collapsed': isCollapsed }]">
-    <h1 class="title" v-if="!isCollapsedOnDesktop">Panel de Administración</h1>
-    <h1 class="title-collapsed" v-else>Admin</h1>
-    <div class="user-menu" v-click-outside="closeDropdown">
-      <button class="user-btn" :class="{ 'active': isDropdownOpen }" @click="toggleDropdown">
-        <i class="fas fa-user-circle"></i>
-        <span class="user-name" v-if="!isCollapsedOnDesktop">{{ user?.Nombre || 'Usuario' }}</span>
-        <i class="fas fa-caret-down dropdown-arrow"></i>
+    <div class="topbar-left">
+      <button class="sidebar-toggle-btn" @click="toggleMainSidebar" v-if="windowWidth < 768">
+        <i class="fas fa-bars"></i>
       </button>
-      <transition name="dropdown-animation">
-        <ul v-show="isDropdownOpen" class="dropdown-menu">
-          <li>
-            <router-link to="/perfil" class="dropdown-item" @click="closeDropdown">
-              <i class="fas fa-user-cog me-2"></i> Mi perfil
-            </router-link>
-          </li>
-          <li>
-            <button class="dropdown-item text-danger" @click="handleLogout">
-              <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
-            </button>
-          </li>
-        </ul>
-      </transition>
+      <h1 class="title" v-if="!isCollapsedOnDesktop">Panel de Administración</h1>
+      <h1 class="title-collapsed" v-else>Admin</h1>
+    </div>
+    
+    <div class="topbar-right">
+      <div class="user-menu" v-click-outside="closeDropdown">
+        <button class="user-btn" :class="{ 'active': isDropdownOpen }" @click="toggleDropdown">
+          <div class="user-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <span class="user-name" v-if="!isCollapsedOnDesktop">{{ user?.Nombre || 'Usuario' }}</span>
+          <i class="fas fa-caret-down dropdown-arrow"></i>
+        </button>
+        <transition name="dropdown-animation">
+          <ul v-show="isDropdownOpen" class="dropdown-menu">
+            <li>
+              <router-link to="/perfil" class="dropdown-item" @click="closeDropdown">
+                <i class="fas fa-user-cog me-2"></i> Mi perfil
+              </router-link>
+            </li>
+            <li>
+              <button class="dropdown-item text-danger" @click="handleLogout">
+                <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+              </button>
+            </li>
+          </ul>
+        </transition>
+      </div>
     </div>
   </header>
 </template>
@@ -67,325 +77,220 @@ const handleResize = () => { windowWidth.value = window.innerWidth; };
 onMounted(() => window.addEventListener('resize', handleResize));
 onBeforeUnmount(() => window.removeEventListener('resize', handleResize));
 
-// CORRECCIÓN CLAVE: La directiva necesita registrarse de esta forma
 const vco = vClickOutside.directive;
 </script>
 
 <style scoped>
-/* Fallback variables if not globally defined */
 :root {
   --topbar-height: 70px;
-  --sidebar-width: 250px;
+  --sidebar-width: 280px;
   --sidebar-collapsed-width: 80px;
   --transition-speed: 0.3s;
-  --primary-color: #3498db;
-  --hover-color: #f0f7ff;
-  --text-color-dark: #333333;
-  --icon-color: #6c757d;
-  --border-color: #e0e0e0;
-}
-
-@media (max-width: 767.98px) {
-  :root {
-    --topbar-height: 60px;
-  }
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --hover-color: #f1f5f9;
+  --text-color-dark: #1e293b;
+  --text-color-light: #64748b;
+  --icon-color: #64748b;
+  --border-color: #e2e8f0;
+  --dropdown-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .topbar {
   position: fixed;
-  text-align: center;
   top: 0;
-  /* [cite: 114] */
   left: var(--sidebar-width);
-  /* Default left for expanded sidebar */
-  /* [cite: 114] */
   width: calc(100% - var(--sidebar-width));
-  /* Default width for expanded sidebar */
-  /* [cite: 114] */
   height: var(--topbar-height);
-  /* [cite: 113, 114] */
-  background-color: var(--background-light, #ffffff);
-  /* [cite: 115] */
-  color: var(--text-color-dark, #333333);
-  /* [cite: 115] */
+  background-color: #ffffff;
+  color: var(--text-color-dark);
   display: flex;
-  /* [cite: 115] */
   align-items: center;
-  /* [cite: 115] */
   justify-content: space-between;
-  /* [cite: 115] */
-  padding: 0 20px;
-  /* [cite: 115] */
+  padding: 0 1.5rem;
   z-index: 999;
-  /* Lower than sidebar if sidebar is an overlay */
-  /* [cite: 115] */
-  transition: left var(--transition-speed) ease, width var(--transition-speed) ease;
-  /* [cite: 115] */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  /* [cite: 116] */
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
-  /* [cite: 116] */
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .topbar.collapsed {
-  /* When sidebar is collapsed on desktop */
   left: var(--sidebar-collapsed-width);
-  /* [cite: 116] */
   width: calc(100% - var(--sidebar-collapsed-width));
-  /* [cite: 117] */
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-toggle-btn {
-  color: var(--icon-color, #6c757d);
+  color: var(--icon-color);
   background: none;
   border: none;
   font-size: 1.2rem;
   padding: 0.5rem;
-  margin-right: 1rem;
-  /* Space between toggle and title */
   cursor: pointer;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .sidebar-toggle-btn:hover {
-  color: var(--primary-color, #3498db);
+  color: var(--primary-color);
+  background-color: var(--hover-color);
 }
 
-
-.title,
-.title-collapsed {
+.title, .title-collapsed {
   font-weight: 600;
-  /* [cite: 117] */
   margin: 0;
-  /* [cite: 117] */
   white-space: nowrap;
-  /* [cite: 117] */
   overflow: hidden;
-  /* [cite: 117] */
   text-overflow: ellipsis;
-  /* [cite: 117] */
 }
 
 .title {
-  font-size: 1.2rem;
-  /* [cite: 117] */
-  max-width: calc(100% - 250px);
-  /* Adjust based on user menu width */
-  /* [cite: 118] */
+  font-size: 1.25rem;
+  color: var(--text-color-dark);
 }
 
 .title-collapsed {
   font-size: 1.1rem;
-  /* [cite: 118] */
 }
-
 
 .user-menu {
   position: relative;
-  /* [cite: 119] */
 }
 
 .user-btn {
   display: flex;
-  /* [cite: 119] */
   align-items: center;
-  /* [cite: 119] */
   background: none;
-  /* [cite: 119] */
   border: none;
-  /* [cite: 119] */
-  color: var(--icon-color, #6c757d);
-  /* [cite: 119] */
+  color: var(--text-color-dark);
   cursor: pointer;
-  /* [cite: 119] */
-  padding: 8px 12px;
-  /* [cite: 119] */
-  border-radius: 20px;
-  /* [cite: 119] */
-  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-  /* [cite: 120] */
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  transition: all var(--transition-speed) ease;
+  gap: 0.5rem;
 }
 
-.user-btn:hover,
-.user-btn.active {
-  background-color: var(--hover-color, #f0f7ff);
-  /* [cite: 120] */
-  color: var(--primary-color, #3498db);
-  /* [cite: 120] */
+.user-btn:hover, .user-btn.active {
+  background-color: var(--hover-color);
 }
 
-.user-btn i {
-  font-size: 1.4rem;
-  /* [cite: 121] */
-}
-
-.user-btn .fa-user-circle {
-  margin-right: 8px;
-  /* [cite: 121] */
+.user-avatar i {
+  font-size: 1.75rem;
+  color: var(--primary-color);
 }
 
 .user-name {
-  font-size: 0.9rem;
-  /* [cite: 121] */
-  margin-right: 8px;
-  /* [cite: 121] */
-  max-width: 120px;
-  /* [cite: 122] */
+  font-size: 0.925rem;
+  max-width: 150px;
   white-space: nowrap;
-  /* [cite: 122] */
   overflow: hidden;
-  /* [cite: 122] */
   text-overflow: ellipsis;
-  /* [cite: 122] */
 }
 
 .dropdown-arrow {
   font-size: 0.9rem;
-  /* [cite: 122] */
   transition: transform var(--transition-speed) ease;
-  /* [cite: 122] */
 }
 
 .user-btn.active .dropdown-arrow {
   transform: rotate(180deg);
-  /* [cite: 122] */
 }
 
 .dropdown-menu {
   position: absolute;
-  /* [cite: 123] */
   right: 0;
-  /* [cite: 123] */
-  top: calc(100% + 8px);
-  /* [cite: 123] */
+  top: calc(100% + 0.5rem);
   min-width: 200px;
-  /* [cite: 123] */
-  background-color: var(--background-light, #ffffff);
-  /* [cite: 123] */
-  border-radius: 8px;
-  /* [cite: 123] */
-  box-shadow: var(--dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
-  /* [cite: 114, 123] */
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: var(--dropdown-shadow);
   list-style: none;
-  /* [cite: 124] */
-  padding: 8px 0;
-  /* [cite: 124] */
+  padding: 0.5rem 0;
   margin: 0;
-  /* [cite: 124] */
   z-index: 1000;
-  /* [cite: 124] */
+  border: 1px solid var(--border-color);
 }
 
 .dropdown-item {
   display: flex;
-  /* [cite: 124] */
   align-items: center;
-  /* [cite: 124] */
   width: 100%;
-  /* [cite: 124] */
-  padding: 10px 16px;
-  /* [cite: 125] */
+  padding: 0.75rem 1.25rem;
   background: none;
-  /* [cite: 125] */
   border: none;
-  /* [cite: 125] */
-  color: var(--text-color-dark, #333333);
-  /* [cite: 125] */
+  color: var(--text-color-dark);
   cursor: pointer;
-  /* [cite: 125] */
   text-align: left;
-  /* [cite: 125] */
-  font-size: 0.9rem;
-  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-  /* [cite: 125] */
+  font-size: 0.925rem;
+  transition: all var(--transition-speed) ease;
 }
 
 .dropdown-item:hover {
-  background-color: var(--hover-color, #f0f7ff);
-  /* [cite: 126] */
-  color: var(--primary-color, #3498db);
-  /* [cite: 126] */
+  background-color: var(--hover-color);
+  color: var(--primary-color);
 }
 
 .dropdown-item i {
   width: 20px;
-  /* [cite: 126] */
   text-align: center;
-  /* [cite: 127] */
-  /* margin-right is handled by me-2 bootstrap class in template */
+}
+
+.text-danger {
+  color: #ef4444;
+}
+
+.text-danger:hover {
+  color: #dc2626;
 }
 
 .dropdown-animation-enter-active,
 .dropdown-animation-leave-active {
   transition: all var(--transition-speed) ease;
-  /* [cite: 127] */
   transform-origin: top right;
-  /* [cite: 127] */
 }
 
 .dropdown-animation-enter-from,
 .dropdown-animation-leave-to {
   opacity: 0;
-  /* [cite: 127] */
   transform: scale(0.95);
-  /* [cite: 128] */
 }
 
-/* --- Responsiveness for Topbar --- */
 @media (max-width: 767.98px) {
-
-  /* Mobile breakpoint */
-  .topbar,
-  .topbar.collapsed {
-    /* Topbar always full width on mobile because sidebar is an overlay */
+  .topbar, .topbar.collapsed {
     left: 0 !important;
-    /* [cite: 128] */
     width: 100% !important;
-    padding: 0 10px;
-    /* [cite: 128] */
-    /* --topbar-height: 60px; // from global */
+    padding: 0 1rem;
   }
-
+  
   .title {
-    font-size: 1rem;
-    /* [cite: 129] */
-    max-width: calc(100% - 150px);
-    /* Account for toggle btn and user menu */
-    /* [cite: 129] */
+    font-size: 1.1rem;
   }
-
-  .title-collapsed {
-    /* This will be the one shown on mobile if logic for isCollapsedOnDesktop is used */
-    font-size: 1rem;
-    /* [cite: 130] */
-  }
-
+  
   .user-btn {
-    padding: 6px 8px;
-    /* [cite: 131] */
+    padding: 0.5rem;
   }
-
-  .user-btn i.fa-user-circle {
-    font-size: 1.3rem;
-    /* [cite: 132] */
-    margin-right: 0;
-    /* [cite: 132] */
-  }
-
+  
   .user-name {
     display: none;
-    /* [cite: 133] */
   }
-
-  .dropdown-menu {
-    min-width: 180px;
-    /* [cite: 134] */
-  }
-}
-
-/* Hide d-lg-none by default on larger screens if Bootstrap isn't fully loaded/working for it */
-@media (min-width: 992px) {
-  .d-lg-none {
-    display: none !important;
+  
+  .user-avatar i {
+    font-size: 1.5rem;
   }
 }
 </style>
