@@ -3,13 +3,13 @@
     <Topbar :is-collapsed="isSidebarCollapsed" @toggle-sidebar="toggleSidebar" />
 
     <div class="dashboard-body d-flex flex-grow-1">
-      <Sidebar 
-        ref="sidebarRef" 
-        :menu-items="menuItems" 
-        :is-collapsed="isSidebarCollapsed" 
+      <Sidebar
+        ref="sidebarRef"
+        :menu-items="menuItems"
+        :is-collapsed="isSidebarCollapsed"
         @select-option="selectOption"
-        @toggle-sidebar="toggleSidebar" 
-        @set-sidebar-collapsed="setSidebarCollapsedState" 
+        @toggle-sidebar="toggleSidebar"
+        @set-sidebar-collapsed="setSidebarCollapsedState"
       />
       <main ref="mainContentRef" :class="['main-content', { collapsed: isSidebarCollapsed }]">
         <div class="content-wrapper">
@@ -33,12 +33,12 @@
                   <i :class="noticiaEnEdicion.id ? 'fas fa-edit me-2' : 'fas fa-plus-circle me-2'"></i>
                   {{ noticiaEnEdicion.id ? 'Editar Noticia' : 'Crear Nueva Noticia' }}
                 </h3>
-                <NoticiaForm 
-                    ref="noticiaFormComponentRef" 
-                    :noticia="noticiaEnEdicion" 
+                <NoticiaForm
+                    ref="noticiaFormComponentRef"
+                    :noticia="noticiaEnEdicion"
                     @submit="submitNoticia"
-                    @save-draft="handleSaveDraft" 
-                    @reset="resetNoticiaForm" 
+                    @save-draft="handleSaveDraft"
+                    @reset="resetNoticiaForm"
                     @update:imageUrl="handleImageUpload"
                 />
               </section>
@@ -51,17 +51,17 @@
                   </div>
                   <p class="mt-2 text-muted">Cargando noticias...</p>
                 </div>
-                <NoticiasTable 
-                    v-else 
-                    :noticias="listaNoticias" 
+                <NoticiasTable
+                    v-else
+                    :noticias="listaNoticias"
                     :loading="isLoadingNoticias"
-                    @add="handleAddNewNoticiaFromTable" 
-                    @edit="handleEditNoticiaFromTable" 
+                    @add="handleAddNewNoticiaFromTable"
+                    @edit="handleEditNoticiaFromTable"
                     @delete="confirmDeleteNoticia"
-                    @bulk-delete="() => {}"
+                    @bulk-delete="confirmDeleteNoticiasMultiples"
                     @publish-draft="confirmPublishDraft"
-                    @feature="() => {}" 
-                    @view="handleViewNoticiaModal" 
+                    @feature="toggleNewsFeature"
+                    @view="handleViewNoticiaModal"
                 />
               </section>
 
@@ -69,7 +69,6 @@
                 <h3 class="section-header"><i class="fas fa-exclamation-triangle me-2"></i>Vista no encontrada</h3>
                 <p>La opción seleccionada no corresponde a una vista válida.</p>
               </section>
-              
               <div v-else class="loading-placeholder text-center py-5">
                   <div class="spinner-border" role="status"></div>
               </div>
@@ -83,8 +82,8 @@
                   <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>{{ noticiaParaVer.titulo }}</h5>
                   <button type="button" class="btn-close" @click="noticiaParaVer = null" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  </div>
+                <div class="modal-body" v-html="sanitizeHTML(renderMarkdown(noticiaParaVer.contenido))">
+                </div>
                 <div class="modal-footer bg-light-subtle">
                   <button type="button" class="btn btn-outline-secondary" @click="noticiaParaVer = null"><i class="fas fa-times me-2"></i>Cerrar</button>
                   <button type="button" class="btn btn-primary" @click="handleEditNoticiaFromModal(noticiaParaVer)"><i class="fas fa-edit me-2"></i>Editar Noticia</button>
@@ -124,12 +123,12 @@ const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
 const newsStore = useNewsStore();
-const { 
-  noticias: listaNoticias, noticiaEnEdicion, isLoading: isLoadingNoticias 
+const {
+  noticias: listaNoticias, noticiaEnEdicion, isLoading: isLoadingNoticias
 } = storeToRefs(newsStore);
-const { 
-  fetchNoticias, selectNoticiaForEdit, resetNoticiaForm, 
-  saveNoticia, deleteNoticia, setEditingNewsImageUrl, publishDraft, deleteMultipleNoticias 
+const {
+  fetchNoticias, selectNoticiaForEdit, resetNoticiaForm,
+  saveNoticia, deleteNoticia, setEditingNewsImageUrl, publishDraft, deleteMultipleNoticias, toggleNewsFeature
 } = newsStore;
 
 // --- ESTADO LOCAL DEL COMPONENTE ---
@@ -153,12 +152,11 @@ const menuItems = computed(() => {
     items.push({ text: "Crear Noticia", action: VIEW_OPTIONS.PUBLICAR, icon: "fas fa-plus-circle" });
   }
 
-    // --- AÑADE ESTE NUEVO ÍTEM PARA EL FORO ---
-  items.push({ 
-    text: "Foro de la Comunidad", 
+  items.push({
+    text: "Foro de la Comunidad",
     icon: "fas fa-comments",
-    isRoute: true,       // <-- Propiedad especial
-    route: '/foro'       // <-- La ruta de Vue Router a la que queremos ir
+    isRoute: true,
+    route: '/foro'
   });
 
   return items;
@@ -216,6 +214,8 @@ const confirmDeleteNoticia = (id) => {
     showCancelButton: true, confirmButtonColor: '#d33', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, eliminar',
   }).then((result) => { if (result.isConfirmed) { deleteNoticia(id); } });
 };
+
+// *** MÉTODO QUE MANEJA EL EVENTO DE LA TABLA ***
 const confirmDeleteNoticiasMultiples = (ids) => {
   if (!ids || ids.length === 0) {
     Swal.fire("Atención", "No hay noticias seleccionadas.", "info");
@@ -232,10 +232,12 @@ const confirmDeleteNoticiasMultiples = (ids) => {
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
-      deleteMultipleNoticias(ids); // Llama a la acción del store
+      // Llama a la acción del store para eliminar las noticias
+      deleteMultipleNoticias(ids);
     }
   });
 };
+
 const confirmPublishDraft = (id) => {
   const noticia = listaNoticias.value.find(n => n.id === id);
   Swal.fire({
@@ -254,12 +256,6 @@ const handleViewNoticiaModal = (noticia) => {
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 const sanitizeHTML = (html) => DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
 const renderMarkdown = (content) => md.render(content || "");
-const formatAdminDate = (dateString) => {
-  if (!dateString) return "N/A";
-  return new Intl.DateTimeFormat('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(dateString));
-};
-const getStatusBadgeClass = (status) => ({ publicado: "bg-success-subtle text-success-emphasis", borrador: "bg-warning-subtle text-warning-emphasis", archivado: "bg-secondary-subtle text-secondary-emphasis" }[status] || "bg-light text-dark");
-const getStatusText = (status) => ({ publicado: "Publicada", borrador: "Borrador", archivado: "Archivada" }[status] || "Desconocido");
 
 // --- HOOKS ---
 onMounted(() => {
@@ -271,6 +267,7 @@ onMounted(() => {
 .dashboard-container {
   height: 100vh;
   overflow: hidden;
+  background-color: #f8f9fa; /* Color de fondo general para el área del dashboard */
 }
 
 .dashboard-body {
@@ -280,96 +277,82 @@ onMounted(() => {
 
 .main-content {
   flex-grow: 1;
-  padding-top: 60px;
-  overflow-y: auto;
-  transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
-  position: relative;
+  /* La altura ahora será 100% del contenedor .dashboard-body */
+  height: 100%; 
+  overflow-y: auto; /* Mantenemos el scroll interno */
+  transition: margin-left 0.3s ease-in-out;
+  /* Añadimos padding-top para dejar espacio para el Topbar */
+  padding: calc(var(--topbar-height) + 1.5rem) 1.5rem 1.5rem 1.5rem;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
   .main-content {
     margin-left: 260px;
   }
-
   .main-content.collapsed {
     margin-left: 80px;
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 767.98px) {
   .main-content,
   .main-content.collapsed {
     margin-left: 0;
+    padding: 1rem;
   }
 }
 
-.modal-backdrop.show {
-  z-index: 1040;
+.content-wrapper {
+  max-width: 1400px; /* Ancho máximo para el contenido para que no se estire demasiado */
+  margin: 0 auto;
 }
 
-.modal-view-news {
-  z-index: 1050;
+.content-section {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
+.section-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Transiciones */
+.section-fade-enter-active,
+.section-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.section-fade-enter-from,
+.section-fade-leave-to {
+  opacity: 0;
+}
+
+/* Estilos para el modal y placeholders */
 .modal-content {
   border-radius: 0.5rem;
   border: none;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
 }
-
 .modal-header {
-  background-color: #0d6efd;
-  color: white;
   border-bottom: none;
-  padding: 1rem 1.5rem;
 }
-
-.modal-header .btn-close {
-  filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-.modal-title {
-  font-size: 1.25rem;
-}
-
 .modal-body {
-  padding: 1.5rem;
-  line-height: 1.6;
+  line-height: 1.7;
 }
-
-.modal-body p {
-  margin-bottom: 0.8rem;
+.loading-placeholder {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: #6c757d;
 }
 
-.modal-body p strong {
-  color: #343a40;
-}
 
-.modal-body p strong i.text-primary {
-  color: #0d6efd !important;
-}
 
-.modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #dee2e6;
-}
-
-.badge.fs-0-9rem {
-  font-size: 0.9rem;
-  padding: 0.4em 0.7em;
-}
-
-.markdown-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 0.3rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
-}
-
-.markdown-content p {
-  color: #343a40;
-}
 </style>

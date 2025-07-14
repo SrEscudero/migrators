@@ -3,7 +3,7 @@
 // =================================================================
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import cron from 'node-cron';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,10 +11,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import helmet from 'helmet'; 
-
+import cookieParser from 'cookie-parser'; // <--- CORRECCIÓN: Paquete importado
+import compression from 'compression';
 
 // --- Import de la configuración de DB ---
-import { connectDB } from './src/config/db.js';
+// CORRECCIÓN: Se importa 'sql' para que los Cron Jobs funcionen
+import { connectDB, sql } from './src/config/db.js';
 
 // --- Import de Rutas ---
 import noticiasRoutes from './src/routes/noticiasRoutes.js';
@@ -23,9 +25,7 @@ import hubspotRoutes from './src/routes/hubspotRoutes.js';
 import userRoutes from './src/routes/userRoutes.js';
 import adminRoutes from './src/routes/adminRoutes.js';
 import logger from './src/config/logger.js';
-import compression from 'compression';
 import forumRoutes from './src/routes/forumRoutes.js';
-
 
 // --- Import de Servicios ---
 import { logIP, getVisitorStats } from './src/services/visitorServices.js';
@@ -33,7 +33,7 @@ import { logIP, getVisitorStats } from './src/services/visitorServices.js';
 // =================================================================
 // CONFIGURACIÓN INICIAL
 // =================================================================
-dotenv.config();
+// dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,7 +59,13 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: true, // Esto refleja el origen de la petición, permitiéndola.
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -67,12 +73,12 @@ app.use(cors({
 
 // --- Middlewares para parsear el body y servir archivos estáticos ---
 app.use(express.json());
+app.use(cookieParser()); // <-- CORRECCIÓN: El servidor ahora usa el middleware para leer cookies
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 // --- Logging de solicitudes con Winston ---
 app.use((req, res, next) => {
-  // Loguea la información de la petición entrante
   logger.http(`Request: ${req.method} ${req.url}`);
   next();
 });
@@ -83,7 +89,7 @@ app.use((req, res, next) => {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, 'public', 'uploads');
-    fs.mkdirSync(uploadDir, { recursive: true }); // Asegura que el directorio exista
+    fs.mkdirSync(uploadDir, { recursive: true });
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
@@ -109,7 +115,6 @@ const upload = multer({
 // =================================================================
 connectDB().catch(err => console.error("Fallo inicial de conexión a DB:", err.message));
 
-
 // =================================================================
 // RUTAS DE LA APLICACIÓN
 // =================================================================
@@ -122,7 +127,7 @@ app.use('/api/usuarios', userRoutes);
 
 // --- Rutas existentes ---
 app.use('/api/noticias', noticiasRoutes);
-app.use('/api/news', newsRoutes); // Considera unificar /news y /noticias si son lo mismo
+app.use('/api/news', newsRoutes);
 app.use('/api/hubspot', hubspotRoutes);
 app.use('/api/forums', forumRoutes);
 
@@ -131,9 +136,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, error: 'No se subió ningún archivo' });
   }
-
-  const imageUrl = `/uploads/${req.file.filename}`; // Devolvemos solo la ruta relativa
-
+  const imageUrl = `/uploads/${req.file.filename}`;
   res.json({ success: true, url: imageUrl });
 });
 
@@ -157,7 +160,6 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
-
 // =================================================================
 // CRON JOB (TAREAS PROGRAMADAS)
 // =================================================================
@@ -165,7 +167,7 @@ cron.schedule('0 * * * *', async () => {
   console.log('🕒 Ejecutando cron job para eliminar borradores antiguos...');
   try {
     const pool = await connectDB();
-    const limitDate = new Date(Date.now() - 72 * 60 * 60 * 1000); // 72 horas atrás
+    const limitDate = new Date(Date.now() - 72 * 60 * 60 * 1000);
 
     const result = await pool.request()
       .input('limitDate', sql.DateTime, limitDate)
@@ -177,7 +179,6 @@ cron.schedule('0 * * * *', async () => {
   }
 });
 
-// Se ejecuta cada hora para archivar noticias expiradas.
 cron.schedule('0 * * * *', async () => {
   console.log('🕒 Ejecutando cron job para archivar noticias expiradas...');
   try {
@@ -205,23 +206,18 @@ cron.schedule('0 * * * *', async () => {
 // MANEJO DE ERRORES Y ARRANQUE DEL SERVIDOR
 // =================================================================
 
-// --- Manejo de errores global ---
 app.use((err, req, res, next) => {
-  // Loguea el error completo, incluyendo el stack trace si está disponible
   logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
   logger.error(err.stack);
-
   res.status(err.status || 500).json({
     error: err.message || 'Error interno del servidor',
   });
 });
 
-// --- Iniciar servidor ---
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '0.0.0.0', () => {
     logger.info(`🚀 Servidor backend corriendo en http://0.0.0.0:${PORT}`);
   });
 }
 
-// Exporta la app para que pueda ser utilizada por Supertest
 export default app;

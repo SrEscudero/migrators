@@ -24,10 +24,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="mainNavbar">
+      <div class="collapse navbar-collapse" id="mainNavbar" ref="navbarCollapseRef">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item" v-for="item in navItems" :key="item.route">
-            <router-link :to="item.route" class="nav-link position-relative">
+            <router-link :to="item.route" class="nav-link position-relative" @click="closeNavbar">
               {{ item.text }}
               <span class="active-indicator" aria-hidden="true"></span>
             </router-link>
@@ -40,6 +40,7 @@
               to="/acceder"
               class="btn btn-primary rounded-pill px-4"
               aria-label="Acceder a la cuenta"
+              @click="closeNavbar"
             >
               <i class="bi bi-box-arrow-in-right me-2"></i> Acceder
             </router-link>
@@ -59,7 +60,7 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
                 <li v-if="isAdmin">
-                  <router-link to="/admin" class="dropdown-item">
+                   <router-link to="/admin" class="dropdown-item" @click="closeNavbar">
                     <i class="fas fa-tachometer-alt fa-fw me-2"></i>Panel Admin
                   </router-link>
                 </li>
@@ -79,42 +80,57 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+// 1. IMPORTACIONES ADICIONALES DE VUE Y BOOTSTRAP
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { Collapse } from 'bootstrap'; // Importa la clase Collapse de Bootstrap
+
 import { useAuthStore } from '@/stores/authStore';
 import { storeToRefs } from 'pinia';
 import Swal from 'sweetalert2';
 import logo from '@/assets/midia/icons/logo_trans.png';
 
-// Variable local para efecto hover del logo
 const hoverLogo = ref(false);
 
-// 1. Instanciamos el store de autenticación
 const authStore = useAuthStore();
-
-// 2. Usamos storeToRefs para extraer propiedades del store manteniendo su reactividad.
 const { isAuthenticated, user, isAdmin } = storeToRefs(authStore);
-
-// 3. Las acciones (funciones) se pueden desestructurar directamente.
 const { logout } = authStore;
 
-// 4. Creamos una propiedad computada para los items de navegación.
-//    Esto añade dinámicamente el enlace al Admin Dashboard si el usuario es administrador.
 const navItems = computed(() => {
   const publicItems = [
     { text: 'Inicio', route: '/' },
     { text: 'Sobre Nosotros', route: '/sobre-nosotros' },
     { text: 'Noticias', route: '/noticias' },
   ];
-
-  // Ya no es necesario añadir 'Admin' aquí si lo queremos en el menú de usuario,
-  // pero lo dejamos por si prefieres tenerlo en la barra principal también.
-  // Si solo lo quieres en el dropdown, puedes quitar este bloque 'if'.
-  if (isAdmin.value) {
-    // publicItems.push({ text: 'Admin', route: '/admin' });
-  }
-
   return publicItems;
 });
+
+// 2. LÓGICA PARA MANEJAR EL MENÚ RESPONSIVE
+const navbarCollapseRef = ref(null); // Ref para el elemento del DOM
+let bsCollapse = null; // Variable para guardar la instancia de Bootstrap
+
+onMounted(() => {
+  if (navbarCollapseRef.value) {
+    // Inicializa la instancia de Collapse de Bootstrap cuando el componente se monta
+    bsCollapse = new Collapse(navbarCollapseRef.value, {
+      toggle: false // Importante: no lo abras al cargar la página
+    });
+  }
+});
+
+onBeforeUnmount(() => {
+  // Destruye la instancia al desmontar el componente para evitar fugas de memoria
+  if (bsCollapse) {
+    bsCollapse.dispose();
+  }
+});
+
+const closeNavbar = () => {
+  // Si la instancia de Bootstrap existe y el menú está visible, lo oculta
+  if (bsCollapse && navbarCollapseRef.value.classList.contains('show')) {
+    bsCollapse.hide();
+  }
+};
+// FIN DE LA LÓGICA PARA EL MENÚ
 
 const handleLogout = () => {
   Swal.fire({
@@ -122,13 +138,14 @@ const handleLogout = () => {
     text: "¿Estás seguro de que quieres salir?",
     icon: 'question',
     showCancelButton: true,
-    confirmButtonColor: '#1D3557', // Azul oscuro
-    cancelButtonColor: '#6c757d', // Gris
+    confirmButtonColor: '#1D3557',
+    cancelButtonColor: '#6c757d',
     confirmButtonText: 'Sí, salir',
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
-      logout(); // Llama a la acción de logout del store, que también redirige
+      closeNavbar(); // Cierra el menú si estuviera abierto
+      logout();
     }
   });
 };
@@ -143,14 +160,12 @@ const handleLogout = () => {
   --active-indicator-height: 3px;
 }
 
-/* Navbar general */
 .navbar {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   transition: box-shadow 0.3s ease;
 }
 
-/* Logo */
 .logo {
   width: 150px;
   height: auto;
@@ -161,7 +176,6 @@ const handleLogout = () => {
   transform: scale(1.05);
 }
 
-/* Enlaces de navegación */
 .nav-link {
   font-family: 'Poppins', sans-serif;
   font-weight: 550;
@@ -209,7 +223,6 @@ const handleLogout = () => {
   opacity: 0.5;
 }
 
-/* Botones y Menú de Usuario */
 .btn {
   font-weight: 500;
   transition: var(--nav-link-transition);
@@ -248,7 +261,6 @@ const handleLogout = () => {
   border: none;
 }
 
-/* Responsividad */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     padding-top: 1rem;

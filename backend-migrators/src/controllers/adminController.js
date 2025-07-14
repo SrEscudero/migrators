@@ -209,6 +209,115 @@ const actualizarClienteAdmin = async (req, res) => {
     }
 };
 
+/**
+ * [NUEVO] Elimina a un cliente y su usuario asociado.
+ */
+const eliminarClienteAdmin = async (req, res) => {
+    const { clienteId } = req.params;
+
+    // Usaremos una transacción para asegurar que ambas eliminaciones (Cliente y Usuario)
+    // se completen con éxito o ninguna lo haga.
+    const transaction = new sql.Transaction(await connectDB());
+    try {
+        await transaction.begin();
+
+        // Eliminar primero de la tabla Clientes
+        const deleteClienteRequest = new sql.Request(transaction);
+        await deleteClienteRequest.input('clienteId', sql.Int, clienteId)
+            .query('DELETE FROM Clientes WHERE usuario_id = @clienteId');
+
+        // Luego, eliminar de la tabla Usuarios
+        const deleteUsuarioRequest = new sql.Request(transaction);
+        const result = await deleteUsuarioRequest.input('clienteId', sql.Int, clienteId)
+            .query('DELETE FROM Usuarios WHERE Id = @clienteId');
+
+        if (result.rowsAffected[0] === 0) {
+            await transaction.rollback();
+            return res.status(404).json({ message: 'Cliente no encontrado.' });
+        }
+
+        await transaction.commit();
+        res.status(200).json({ message: 'Cliente eliminado correctamente.' });
+
+    } catch (error) {
+        if (transaction) await transaction.rollback();
+        logger.error('Error al eliminar cliente por admin: %s', error.message);
+        res.status(500).json({ message: 'Error del servidor al eliminar el cliente.' });
+    }
+};
+
+/**
+ * [NUEVO] Actualiza los datos de un funcionario existente.
+ */
+const actualizarFuncionario = async (req, res) => {
+    const { funcionarioId } = req.params;
+    // Solo permitimos actualizar estos campos para evitar cambios no deseados
+    const { nombre, email, celular, permisos } = req.body;
+
+    if (!nombre || !email) {
+        return res.status(400).json({ message: 'El nombre y el email son obligatorios.' });
+    }
+
+    try {
+        const pool = await connectDB();
+        const result = await pool.request()
+            .input('id', sql.Int, funcionarioId)
+            .input('nombre', sql.NVarChar, nombre)
+            .input('email', sql.VarChar, email)
+            .input('celular', sql.VarChar, celular || null)
+            .input('perm_gestionar_clientes', sql.Bit, permisos?.gestionarClientes || false)
+            .input('perm_publicar_noticias', sql.Bit, permisos?.publicarNoticias || false)
+            .input('perm_ver_estadisticas', sql.Bit, permisos?.verEstadisticas || false)
+            .query(`
+                UPDATE Usuarios 
+                SET Nombre = @nombre, Email = @email, Celular = @celular, 
+                    perm_gestionar_clientes = @perm_gestionar_clientes,
+                    perm_publicar_noticias = @perm_publicar_noticias,
+                    perm_ver_estadisticas = @perm_ver_estadisticas,
+                    fecha_actualizacion = SYSDATETIMEOFFSET()
+                WHERE Id = @id AND rol = 'funcionario'
+            `);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Funcionario no encontrado.' });
+        }
+        
+        res.status(200).json({ message: 'Funcionario actualizado con éxito.' });
+    } catch (error) {
+        logger.error('Error al actualizar funcionario: %s', error.message);
+        res.status(500).json({ message: 'Error en el servidor al actualizar el funcionario.' });
+    }
+};
+
+/**
+ * [NUEVO] Elimina un funcionario (usuario con rol 'funcionario').
+ */
+const eliminarFuncionario = async (req, res) => {
+    const { funcionarioId } = req.params;
+    
+    // Medida de seguridad: No permitir que se elimine al usuario CEO principal
+    if (parseInt(funcionarioId, 10) === 1) { // Asumiendo que el CEO tiene ID 1
+        return res.status(403).json({ message: 'No se puede eliminar al administrador principal.' });
+    }
+
+    try {
+        const pool = await connectDB();
+        // Un funcionario no tiene datos en la tabla 'Clientes', así que solo borramos de 'Usuarios'
+        const result = await pool.request()
+            .input('id', sql.Int, funcionarioId)
+            .query("DELETE FROM Usuarios WHERE Id = @id AND rol = 'funcionario'");
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Funcionario no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Funcionario eliminado con éxito.' });
+    } catch (error) {
+        logger.error('Error al eliminar funcionario: %s', error.message);
+        res.status(500).json({ message: 'Error del servidor al eliminar el funcionario.' });
+    }
+};
+
 
 /**
  * [NUEVO CONTROLADOR AÑADIDO]
@@ -245,4 +354,7 @@ export {
     getFuncionarios, // <-- Se exporta la nueva función
     crearClienteAdmin,      // <-- NUEVO
     actualizarClienteAdmin, // <-- NUEVO
+    eliminarClienteAdmin ,
+    actualizarFuncionario, // <-- AÑADIR
+    eliminarFuncionario    // <-- AÑADIR
 };

@@ -31,3 +31,13 @@ export async function actualizarEstatusCliente(clienteId, estatus) {
   const response = await apiClient.patch(`${ADMIN_API_URL}/clientes/${clienteId}/estatus`, { estatus });
   return response.data;
 }
+
+
+/**
+ * [NUEVO] Elimina un cliente por su ID.
+ */
+export async function deleteCliente(clienteId) {
+  // El interceptor de Axios ya maneja el token y los errores.
+  const response = await apiClient.delete(`${ADMIN_API_URL}/clientes/${clienteId}`);
+  return response.data;
+}

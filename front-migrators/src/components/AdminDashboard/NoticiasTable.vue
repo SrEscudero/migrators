@@ -186,10 +186,14 @@
 <script>
 import { debounce } from 'lodash-es';
 import Swal from "sweetalert2";
+import StatePlaceholder from '@/components/shared/StatePlaceholder.vue'; // <-- AÑADIR IMPORTACIÓN
+import ActionButton from '@/components/shared/ActionButton.vue'; // <-- AÑADIR IMPORTACIÓN
+
+// Ya no necesitas las importaciones de Composition API aquí (ref, etc.)
 
 const STATUS_FILTER_OPTIONS = Object.freeze({
   ALL: "all",
-  PUBLISHED: "publicado", // Assuming 'publicado' is the value used in noticia.estado
+  PUBLISHED: "publicado",
   DRAFT: "borrador",
   ARCHIVED: "archivado",
 });
@@ -212,7 +216,11 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
+    },
+      components: {
+      StatePlaceholder, // <-- REGISTRAR COMPONENTE
+      ActionButton,   // <-- REGISTRAR COMPONENTE
+  },
   },
   emits: ['add', 'view', 'edit', 'delete', 'bulk-delete', 'feature', 'publish-draft'],
   data() {
@@ -225,9 +233,9 @@ export default {
       sortBy: SORT_BY_OPTIONS.FECHA_DESC,
       sortDirection: "desc",
       sortField: "fecha_publicacion",
-      selectedNoticias: [], // Stores full noticia objects
-      STATUS_FILTER_OPTIONS, // Expose to template
-      SORT_BY_OPTIONS      // Expose to template
+      selectedNoticias: [], // Almacenará los objetos de noticias completos
+      STATUS_FILTER_OPTIONS,
+      SORT_BY_OPTIONS
     };
   },
   computed: {
@@ -287,7 +295,7 @@ export default {
     },
     visiblePages() {
       const pages = [];
-      const range = 1; // How many pages to show around current page
+      const range = 1;
       const total = this.totalPages;
       const current = this.currentPage;
       if (total <= 1) return [];
@@ -295,11 +303,10 @@ export default {
       let start = Math.max(1, current - range);
       let end = Math.min(total, current + range);
 
-      // Adjust start/end if current page is near beginning or end
-      if (current <= range + 1) { // Near the beginning
+      if (current <= range + 1) {
         end = Math.min(1 + (range * 2), total);
       }
-      if (current >= total - range) { // Near the end
+      if (current >= total - range) {
         start = Math.max(1, total - (range * 2));
       }
 
@@ -321,7 +328,6 @@ export default {
       }
     },
     statusBadgeClass(status) {
-      // These could also be custom classes styled with CSS variables
       return {
         [STATUS_FILTER_OPTIONS.PUBLISHED]: 'bg-success text-white',
         [STATUS_FILTER_OPTIONS.DRAFT]: 'bg-warning text-dark',
@@ -356,39 +362,39 @@ export default {
         }
       });
     },
+    // *** MÉTODO CORREGIDO Y MOVIDO AQUÍ ***
     confirmBulkDelete() {
-      if (this.selectedNoticias.length === 0) return;
+      if (this.selectedNoticias.length === 0) {
+        Swal.fire('Atención', 'Debes seleccionar al menos una noticia para eliminar.', 'warning');
+        return;
+      }
+      
+      const idsToDelete = this.selectedNoticias.map(noticia => noticia.id);
+
       Swal.fire({
-        title: '¿Estás seguro?',
-        text: `¿Deseas eliminar ${this.selectedNoticias.length} noticias seleccionadas? Esta acción no se puede deshacer.`,
+        title: `¿Eliminar ${this.selectedNoticias.length} noticias?`,
+        text: "¡Esta acción no se puede revertir!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: 'var(--app-danger, #dc3545)',
-        cancelButtonColor: 'var(--app-secondary, #6c757d)',
-        confirmButtonText: 'Sí, eliminar todas',
-        cancelButtonText: 'Cancelar',
-         customClass: {
-          popup: 'swal-popup-custom',
-          confirmButton: 'swal-button-custom',
-          cancelButton: 'swal-button-custom'
-        }
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, ¡eliminar!',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          const ids = this.selectedNoticias.map(n => n.id);
-          this.$emit('bulk-delete', ids);
-          this.selectedNoticias = [];
+          // Emitimos el evento con el array de IDs para que el componente padre lo gestione
+          this.$emit('bulk-delete', idsToDelete);
+          // La limpieza de `this.selectedNoticias` se hará automáticamente por el `watch`
+          // cuando la prop `noticias` se actualice desde el padre.
         }
       });
     },
     toggleFeatured(noticia) {
       this.$emit('feature', { id: noticia.id, destacada: !noticia.destacada });
-      // Feedback should be handled by parent after successful API call
     },
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
-        // Deselect items from other pages when page changes
-        // this.selectedNoticias = this.selectedNoticias.filter(sn => this.paginatedNoticias.some(pn => pn.id === sn.id));
       }
     },
     prevPage() {
@@ -403,8 +409,8 @@ export default {
     resetFilters() {
       this.searchQuery = '';
       this.statusFilter = STATUS_FILTER_OPTIONS.ALL;
-      this.sortBy = SORT_BY_OPTIONS.FECHA_DESC; // Reset to default sort
-      this.applySorting(); // This will also call resetPage
+      this.sortBy = SORT_BY_OPTIONS.FECHA_DESC;
+      this.applySorting();
       this.selectedNoticias = [];
     },
     applySorting() {
@@ -422,9 +428,8 @@ export default {
         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
       } else {
         this.sortField = column;
-        this.sortDirection = 'desc'; // Default to descending for new column
+        this.sortDirection = 'desc';
       }
-      // Update the v-model 'sortBy' to reflect the change
       if (column === 'titulo') {
         this.sortBy = this.sortDirection === 'asc' ? SORT_BY_OPTIONS.TITULO_ASC : SORT_BY_OPTIONS.TITULO_DESC;
       } else if (column === 'fecha_publicacion') {
@@ -451,12 +456,12 @@ export default {
       const isChecked = event.target.checked;
       this.paginatedNoticias.forEach(noticiaEnPagina => {
         const indexInSelected = this.selectedNoticias.findIndex(n => n.id === noticiaEnPagina.id);
-        if (isChecked) { // Select all
-          if (indexInSelected === -1) { // if not already selected, add it
+        if (isChecked) {
+          if (indexInSelected === -1) {
             this.selectedNoticias.push(noticiaEnPagina);
           }
-        } else { // Deselect all
-          if (indexInSelected > -1) { // if selected, remove it
+        } else {
+          if (indexInSelected > -1) {
             this.selectedNoticias.splice(indexInSelected, 1);
           }
         }
@@ -464,16 +469,14 @@ export default {
     },
     handleSearchInput: debounce(function () {
       this.resetPage();
-    }, 350) // Slightly increased debounce time
+    }, 350)
   },
   watch: {
     noticias: {
-      handler(newNoticias, oldNoticias) {
-        // Keep selected items that are still in the main list
+      handler(newNoticias) {
         this.selectedNoticias = this.selectedNoticias.filter(selectedNoticia =>
           newNoticias.some(noticia => noticia.id === selectedNoticia.id)
         );
-        // Adjust current page if it becomes invalid after data change (e.g., deletion)
         if (this.currentPage > this.totalPages && this.totalPages > 0) {
           this.currentPage = this.totalPages;
         } else if (this.totalPages === 0 && this.filteredNoticias.length === 0) {
@@ -481,9 +484,9 @@ export default {
         }
       },
       deep: true,
-      immediate: true // Run on component mount as well
+      immediate: true
     },
-    pageSize() { // Already resets page, no need for immediate: true
+    pageSize() {
       this.resetPage();
     },
     statusFilter() {
@@ -491,7 +494,6 @@ export default {
     }
   },
   created() {
-    // Initialize sorting based on default sortBy value
     this.applySorting();
   }
 };

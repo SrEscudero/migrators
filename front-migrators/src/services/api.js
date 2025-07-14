@@ -1,62 +1,64 @@
-// src/services/api.js (Este archivo debe existir)
-
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useAuthStore } from '@/stores/authStore';
 
+// Crea la instancia de Axios
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
-  }
+  },
+  withCredentials: true, // Permite que Axios envíe y reciba cookies httpOnly
 });
 
-// Interceptor de Petición (añade el token a cada llamada)
+// Interceptor de Petición (Request)
+// Ya no es necesario para añadir el token, pero lo dejamos por si se necesita en el futuro.
 apiClient.interceptors.request.use(
   (config) => {
-    const authStore = useAuthStore();
-    const token = authStore.token;
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// Interceptor de Respuesta (maneja los errores globalmente)
+// Interceptor de Respuesta (Response)
+// Este interceptor maneja los errores de forma global.
 apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const authStore = useAuthStore();
-    
-    if (!error.response) {
-      Swal.fire('Error de Conexión', 'No se pudo conectar con el servidor.', 'error');
-      return Promise.reject(error);
-    }
-
-    const { status, data } = error.response;
-
-    switch (status) {
-      case 401:
+  (response) => {
+    // Si la respuesta es exitosa, simplemente la devuelve.
+    return response;
+  },
+  (error) => {
+    // Si el error es 401 (No autorizado), significa que la sesión expiró.
+    if (error.response && error.response.status === 401) {
+      const authStore = useAuthStore();
+      
+      // Solo ejecuta el logout si el usuario estaba previamente autenticado en el frontend.
+      // Esto evita bucles de logout si el error 401 ocurre por otras razones.
+      if (authStore.isAuthenticated) {
         Swal.fire({
           title: 'Sesión Expirada',
           text: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
           icon: 'warning',
-          timer: 3000,
-          timerProgressBar: true,
+          confirmButtonColor: '#1D3557',
         }).then(() => {
+          // Llama a la acción de logout del store, que limpiará el estado y redirigirá.
           authStore.logout();
         });
-        break;
-      case 403:
-        Swal.fire('Acceso Denegado', 'No tienes los permisos necesarios.', 'error');
-        break;
-      default:
-        Swal.fire('Ocurrió un Error', data.message || 'Error inesperado en el servidor.', 'error');
-        break;
+      }
+    } else {
+      // Para otros errores (500, 404, etc.), muestra un mensaje genérico.
+      const errorMessage = error.response?.data?.message || error.message || 'Ocurrió un error inesperado.';
+      Swal.fire({
+        title: 'Error',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonColor: '#d33',
+      });
     }
 
+    // Rechaza la promesa para que el error pueda ser capturado por el código que hizo la llamada.
     return Promise.reject(error);
   }
 );

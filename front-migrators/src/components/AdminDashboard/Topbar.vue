@@ -1,16 +1,24 @@
 <template>
   <header :class="['topbar', { 'collapsed': isCollapsed }]">
     <div class="topbar-left">
-      <button class="sidebar-toggle-btn" @click="toggleMainSidebar" v-if="windowWidth < 768">
+      <button 
+        class="sidebar-toggle-btn" 
+        @click="toggleMainSidebar" 
+        v-if="windowWidth < 768"
+      >
         <i class="fas fa-bars"></i>
       </button>
       <h1 class="title" v-if="!isCollapsedOnDesktop">Panel de Administración</h1>
       <h1 class="title-collapsed" v-else>Admin</h1>
     </div>
-    
     <div class="topbar-right">
-      <div class="user-menu" v-click-outside="closeDropdown">
-        <button class="user-btn" :class="{ 'active': isDropdownOpen }" @click="toggleDropdown">
+      <div class="user-menu" ref="userMenuRef">
+        <button 
+          ref="userBtnRef"
+          class="user-btn" 
+          :class="{ 'active': isDropdownOpen }" 
+          @click="toggleDropdown"
+        >
           <div class="user-avatar">
             <i class="fas fa-user-circle"></i>
           </div>
@@ -18,15 +26,26 @@
           <i class="fas fa-caret-down dropdown-arrow"></i>
         </button>
         <transition name="dropdown-animation">
-          <ul v-show="isDropdownOpen" class="dropdown-menu">
+          <ul 
+            v-show="isDropdownOpen" 
+            class="dropdown-menu"
+            @click.stop
+          >
             <li>
               <router-link to="/perfil" class="dropdown-item" @click="closeDropdown">
-                <i class="fas fa-user-cog me-2"></i> Mi perfil
+                <i class="fas fa-user-cog fa-fw me-2"></i> Mi Perfil
               </router-link>
             </li>
             <li>
+              <button class="dropdown-item" @click="handleThemeToggle">
+                <i class="fas fa-fw me-2" :class="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
+                <span>Tema: {{ theme === 'light' ? 'Oscuro' : 'Claro' }}</span>
+              </button>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
               <button class="dropdown-item text-danger" @click="handleLogout">
-                <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+                <i class="fas fa-sign-out-alt fa-fw me-2"></i> Cerrar sesión
               </button>
             </li>
           </ul>
@@ -39,8 +58,8 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
+import { useTheme } from '@/composables/useTheme';
 import Swal from 'sweetalert2';
-import vClickOutside from 'v-click-outside';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -53,31 +72,76 @@ const { user } = storeToRefs(authStore);
 
 const isDropdownOpen = ref(false);
 const windowWidth = ref(window.innerWidth);
+const { theme, toggleTheme } = useTheme();
 
-const toggleDropdown = () => { isDropdownOpen.value = !isDropdownOpen.value; };
-const closeDropdown = () => { isDropdownOpen.value = false; };
-const toggleMainSidebar = () => { emit('toggle-sidebar'); };
+const userMenuRef = ref(null);
+const userBtnRef = ref(null);
 
-const handleLogout = () => {
-  closeDropdown();
-  Swal.fire({
-    title: '¿Cerrar sesión?', text: "¿Estás seguro de que quieres salir?", icon: 'question',
-    showCancelButton: true, confirmButtonColor: '#1D3557', cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Sí, salir', cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      authStore.logout();
-    }
+const toggleDropdown = (event) => {
+  event.stopPropagation(); // Evita que el evento se propague al documento
+  isDropdownOpen.value = !isDropdownOpen.value; // Alterna el estado del dropdown
+};
+
+const closeDropdown = () => {
+  isDropdownOpen.value = false;
+};
+
+const handleThemeToggle = (event) => {
+  event.stopPropagation();
+  toggleTheme();
+  closeDropdown(); // Cierra el dropdown después de cambiar el tema
+};
+
+const handleLogout = async (event) => {
+  event.stopPropagation();
+  closeDropdown(); // Cierra el dropdown antes de mostrar el modal de confirmación
+  const result = await Swal.fire({
+    title: '¿Cerrar sesión?',
+    text: '¿Estás seguro de que deseas salir de tu cuenta?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, cerrar sesión',
+    cancelButtonText: 'Cancelar',
   });
+  if (result.isConfirmed) {
+    await authStore.logout();
+  }
+};
+
+const handleClickOutside = (event) => {
+  if (
+    isDropdownOpen.value &&
+    userMenuRef.value &&
+    !userMenuRef.value.contains(event.target) &&
+    !userBtnRef.value.contains(event.target) // Asegúrate de incluir el botón también
+  ) {
+    closeDropdown();
+  }
+};
+
+const toggleMainSidebar = () => { 
+  emit('toggle-sidebar'); 
+  closeDropdown();
 };
 
 const isCollapsedOnDesktop = computed(() => windowWidth.value >= 768 && props.isCollapsed);
 
-const handleResize = () => { windowWidth.value = window.innerWidth; };
-onMounted(() => window.addEventListener('resize', handleResize));
-onBeforeUnmount(() => window.removeEventListener('resize', handleResize));
+const handleResize = () => { 
+  windowWidth.value = window.innerWidth;
+  if (windowWidth.value >= 768) {
+    closeDropdown();
+  }
+};
 
-const vco = vClickOutside.directive;
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
@@ -128,6 +192,32 @@ const vco = vClickOutside.directive;
 .topbar-right {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--icon-color);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--hover-color);
+}
+
+.theme-toggle-btn .fa-sun {
+  color: #f1b44c;
 }
 
 .sidebar-toggle-btn {
@@ -151,7 +241,8 @@ const vco = vClickOutside.directive;
   background-color: var(--hover-color);
 }
 
-.title, .title-collapsed {
+.title,
+.title-collapsed {
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
@@ -185,7 +276,8 @@ const vco = vClickOutside.directive;
   gap: 0.5rem;
 }
 
-.user-btn:hover, .user-btn.active {
+.user-btn:hover,
+.user-btn.active {
   background-color: var(--hover-color);
 }
 
@@ -238,6 +330,7 @@ const vco = vClickOutside.directive;
   text-align: left;
   font-size: 0.925rem;
   transition: all var(--transition-speed) ease;
+  text-decoration: none;
 }
 
 .dropdown-item:hover {
@@ -251,44 +344,58 @@ const vco = vClickOutside.directive;
 }
 
 .text-danger {
-  color: #ef4444;
+  color: #ef4444 !important;
 }
 
 .text-danger:hover {
-  color: #dc2626;
+  color: #dc2626 !important;
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border-color);
 }
 
 .dropdown-animation-enter-active,
 .dropdown-animation-leave-active {
-  transition: all var(--transition-speed) ease;
+  transition: all 0.2s ease;
   transform-origin: top right;
 }
 
 .dropdown-animation-enter-from,
 .dropdown-animation-leave-to {
   opacity: 0;
-  transform: scale(0.95);
+  transform: scale(0.95) translateY(-10px);
+}
+
+.dropdown-animation-enter-to,
+.dropdown-animation-leave-from {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 @media (max-width: 767.98px) {
-  .topbar, .topbar.collapsed {
+  .topbar,
+  .topbar.collapsed {
     left: 0 !important;
     width: 100% !important;
     padding: 0 1rem;
   }
-  
+
   .title {
     font-size: 1.1rem;
   }
-  
+
   .user-btn {
     padding: 0.5rem;
   }
-  
+
   .user-name {
     display: none;
   }
-  
+
   .user-avatar i {
     font-size: 1.5rem;
   }

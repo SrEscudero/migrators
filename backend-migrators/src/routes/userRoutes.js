@@ -1,8 +1,18 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import rateLimit from 'express-rate-limit'; // <-- 1. IMPORTAMOS EL PAQUETE
+import rateLimit from 'express-rate-limit';
 
-import { loginUser, registerUser } from '../controllers/userController.js';
+// --- INICIO DE LA CORRECCIÓN ---
+// Se añade 'updateUserProfile' a la lista de importaciones.
+import { 
+    loginUser, 
+    registerUser, 
+    logoutUser, 
+    updateUserProfile 
+} from '../controllers/userController.js';
+// --- FIN DE LA CORRECCIÓN ---
+
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -29,21 +39,22 @@ const registerValidationRules = [
     body('celular').optional({ checkFalsy: true }).isMobilePhone('any', { strictMode: false }).withMessage('Debe ser un número de celular válido.').trim().escape()
 ];
 
-// --- 2. CONFIGURAMOS EL LÍMITE DE TASA PARA EL LOGIN ---
+// --- Límite de tasa para el login ---
 const loginLimiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutos
-	max: 15, // Limita cada IP a 15 peticiones por ventana de tiempo
-	standardHeaders: true, // Devuelve información del límite en las cabeceras `RateLimit-*`
-	legacyHeaders: false, // Deshabilita las cabeceras `X-RateLimit-*`
+	max: 15, 
+	standardHeaders: true, 
+	legacyHeaders: false, 
     message: { message: 'Demasiados intentos de inicio de sesión desde esta IP, por favor intente de nuevo en 15 minutos.' },
 });
 
-
-// --- Rutas Públicas ---
-router.post('/register', registerValidationRules, validate, registerUser);
-
-// --- 3. APLICAMOS EL LIMITADOR A LA RUTA DE LOGIN ---
+// --- RUTAS PÚBLICAS ---
 router.post('/login', loginLimiter, loginUser);
+router.post('/register', registerValidationRules, validate, registerUser);
+router.post('/logout', logoutUser);
 
+// --- RUTA PROTEGIDA PARA EL PERFIL ---
+// Ruta para que el usuario logueado actualice su propio perfil.
+router.put('/me', protect, updateUserProfile);
 
 export default router;

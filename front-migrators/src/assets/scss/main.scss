@@ -7,6 +7,8 @@
 @import "bootstrap/scss/maps";         // <-- AÑADIMOS ESTA LÍNEA CLAVE
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
+@import 'dashboard-layout';
+
 
 // 2. Layout y componentes base.
 @import "bootstrap/scss/root";

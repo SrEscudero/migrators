@@ -138,4 +138,67 @@ main {
   gap: 20px;
   padding: 20px;
 }
+
+/* Pega esto dentro de la etiqueta <style> en App.vue */
+
+/* Estilos para el modo oscuro */
+body.dark-mode {
+  --topbar-height: 70px;
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 80px;
+  --transition-speed: 0.3s;
+
+  /* Colores oscuros */
+  --bs-body-bg: #1a1a2e; /* Fondo principal oscuro */
+  --bs-body-color: #e0e0e0; /* Color de texto principal claro */
+  
+  --hover-color: #2e2e4f;
+  --text-color-dark: #f8f9fa; /* Texto claro */
+  --text-color-light: #a0a0a0; /* Texto gris claro */
+  --icon-color: #a0a0a0;
+  --border-color: #3a3a5a; /* Bordes más oscuros */
+  
+  --background-light: #21213a; /* Fondo de las tarjetas y componentes */
+  --background-grey: #1a1a2e;
+}
+
+/* Ajustes adicionales para componentes en modo oscuro */
+.dark-mode .bg-white {
+  background-color: var(--background-light) !important;
+}
+
+.dark-mode .text-dark {
+  color: var(--text-color-dark) !important;
+}
+
+.dark-mode .text-muted {
+  color: var(--text-color-light) !important;
+}
+
+.dark-mode .table {
+  color: var(--bs-body-color);
+}
+
+.dark-mode .table-light {
+    --bs-table-bg: #2e2e4f;
+    --bs-table-border-color: var(--border-color);
+}
+
+.dark-mode .modal-content {
+  background-color: var(--background-light);
+  border-color: var(--border-color);
+}
+
+.dark-mode .dropdown-menu {
+  background-color: #2e2e4f;
+  border-color: var(--border-color);
+}
+
+.dark-mode .dropdown-item {
+  color: var(--text-color-dark);
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: #3a3a5a;
+}
 </style>

@@ -1,24 +1,29 @@
 import express from 'express';
-import { crearFuncionario, listarClientes, asignarCliente, getFuncionarios, crearClienteAdmin, actualizarClienteAdmin } from '../controllers/adminController.js';
+import { 
+    crearFuncionario, 
+    listarClientes, 
+    asignarCliente, 
+    getFuncionarios, 
+    crearClienteAdmin, 
+    actualizarClienteAdmin, 
+    eliminarClienteAdmin, 
+    actualizarFuncionario, 
+    eliminarFuncionario 
+} from '../controllers/adminController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// --- RUTAS DE GESTIÓN DE PERSONAL (FUNCIONARIOS) ---
-// Crear y listar funcionarios sigue siendo solo para el CEO.
-router.post('/funcionarios', protect, authorize('ceo'), crearFuncionario);
 router.get('/funcionarios', protect, authorize('ceo'), getFuncionarios);
+router.post('/funcionarios', protect, authorize('ceo'), crearFuncionario);
+router.put('/funcionarios/:funcionarioId', protect, authorize('ceo'), actualizarFuncionario);
+router.delete('/funcionarios/:funcionarioId', protect, authorize('ceo'), eliminarFuncionario);
 
+router.get('/clientes', protect, authorize('perm_gestionar_clientes'), listarClientes);
+router.post('/clientes', protect, authorize('perm_gestionar_clientes'), crearClienteAdmin);
+router.put('/clientes/:clienteId', protect, authorize('perm_gestionar_clientes'), actualizarClienteAdmin);
+router.delete('/clientes/:clienteId', protect, authorize('perm_gestionar_clientes'), eliminarClienteAdmin);
 
-// --- RUTAS DE GESTIÓN DE CLIENTES ---
-// Para listar, crear o actualizar clientes, se necesita ser 'ceo' O tener el permiso específico.
-const canManageClients = authorize('ceo', 'perm_gestionar_clientes');
-
-router.get('/clientes', protect, canManageClients, listarClientes);
-router.post('/clientes', protect, canManageClients, crearClienteAdmin);
-router.put('/clientes/:clienteId', protect, canManageClients, actualizarClienteAdmin);
-
-// Asignar un cliente a un funcionario es una tarea de alto nivel, la dejamos solo para el CEO.
 router.patch('/clientes/:clienteId/asignar', protect, authorize('ceo'), asignarCliente);
 
 export default router;
