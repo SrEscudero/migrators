@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Encabezado (no se muestra en /admin) -->
-    <Header v-if="$route.path !== '/admin'" />
+    <Header v-if="!$route.meta.hideLayout" />
 
     <!-- Contenido principal -->
     <main>
@@ -21,7 +21,7 @@
     </main>
 
     <!-- Pie de página (no se muestra en /admin) -->
-    <Footer v-if="$route.path !== '/admin'" />
+    <Footer v-if="!$route.meta.hideLayout" />
   </div>
 </template>
 
@@ -52,7 +52,10 @@ export default {
     // Función para registrar la visita
     const trackVisit = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/track-visit`);
+        // AÑADIMOS la configuración para que sea un método POST
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/track-visit`, {
+          method: 'POST'
+        });
         if (!response.ok) throw new Error(`Error: ${response.status}`);
         const data = await response.json();
         console.log('✅ Visita registrada:', data);

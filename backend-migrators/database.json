@@ -18,7 +18,8 @@
             "encrypt": false,
             "trustServerCertificate": true,
             "enableArithAbort": true
-        }
+        },
+        "sql-file": true
     },
     "test": {
         "driver": "mssql",
@@ -37,6 +38,7 @@
         "options": {
             "encrypt": false,
             "trustServerCertificate": true
-        }
+        },
+        "sql-file": true
     }
 }

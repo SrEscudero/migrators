@@ -50,13 +50,13 @@
       <div class="content-card-body">
         <StatePlaceholder
           :loading="isLoading"
-          :error="errorState"
+          :error="error"
           :empty="!isLoading && filteredFuncionarios.length === 0"
           loading-title="Cargando funcionarios..."
           error-title="Error de Red"
-          error-text="No se pudieron cargar los funcionarios. Por favor, intenta de nuevo."
-          :show-retry-button="!!errorState"
-          @retry="fetchFuncionarios"
+          :error-text="error"
+          :show-retry-button="!!error"
+          @retry="funcionarioStore.fetchFuncionarios"
           empty-icon="fas fa-user-slash"
           :empty-title="searchQuery ? 'Sin resultados' : 'No hay funcionarios'"
           :empty-text="searchQuery ? 'No se encontraron funcionarios que coincidan.' : 'Puedes crear el primer funcionario usando el botón de arriba.'"
@@ -88,7 +88,7 @@
                         tooltip="Eliminar Funcionario"
                         variant="danger"
                         class="ms-2"
-                        @click="handleEliminar(func)"
+                        @click="funcionarioStore.deleteFuncionario(func)"
                       />
                   </td>
                 </tr>
@@ -103,102 +103,79 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import Swal from 'sweetalert2';
+import { storeToRefs } from 'pinia';
+import { useFuncionarioStore } from '@/stores/funcionarioStore.js';
 
-// ====> ¡AQUÍ ESTÁ LA CORRECCIÓN! <====
-// La ruta ahora apunta a la carpeta correcta `components/shared/`
 import BaseModal from '@/components/shared/BaseModal.vue';
 import StatePlaceholder from '@/components/shared/StatePlaceholder.vue';
 import ActionButton from '@/components/shared/ActionButton.vue';
-
 import FuncionarioForm from '@/components/AdminDashboard/FuncionarioForm.vue';
-import {
-  crearFuncionario,
-  obtenerFuncionarios,
-  actualizarFuncionario,
-  eliminarFuncionario
-} from '@/services/adminService';
 
-// --- El resto del script no cambia ---
-const listaFuncionarios = ref([]);
-const isLoading = ref(false);
-const errorState = ref(null);
+// --- LÓGICA DEL STORE ---
+const funcionarioStore = useFuncionarioStore();
+const { funcionarios, isLoading, error } = storeToRefs(funcionarioStore);
+
+// --- ESTADO LOCAL DEL COMPONENTE (VISTA) ---
 const isSaving = ref(false);
 const searchQuery = ref('');
-const filteredFuncionarios = computed(() => {
-  if (!searchQuery.value) return listaFuncionarios.value;
-  const queryLower = searchQuery.value.toLowerCase();
-  return listaFuncionarios.value.filter(func =>
-    (func.nombre && func.nombre.toLowerCase().includes(queryLower)) ||
-    (func.email && func.email.toLowerCase().includes(queryLower))
-  );
-});
 const mostrarFormulario = ref(false);
 const esEdicion = ref(false);
 const funcionarioSeleccionado = ref(null);
 const funcionarioFormRef = ref(null);
-const fetchFuncionarios = async () => {
-  isLoading.value = true;
-  errorState.value = null;
-  try {
-    listaFuncionarios.value = await obtenerFuncionarios();
-  } catch (error) {
-    errorState.value = error.message || 'Error desconocido';
-    listaFuncionarios.value = [];
-  } finally {
-    isLoading.value = false;
-  }
-};
+
+// --- COMPUTED PROPERTIES ---
+const filteredFuncionarios = computed(() => {
+  if (!searchQuery.value) return funcionarios.value;
+  const queryLower = searchQuery.value.toLowerCase();
+  return funcionarios.value.filter(func =>
+    (func.nombre?.toLowerCase().includes(queryLower)) ||
+    (func.email?.toLowerCase().includes(queryLower))
+  );
+});
+
+// --- MÉTODOS ---
 const handleGuardarFuncionario = async (funcionarioData) => {
   isSaving.value = true;
   try {
-    if (esEdicion.value) {
-      await actualizarFuncionario(funcionarioSeleccionado.value.id, funcionarioData);
-      Swal.fire('Actualizado', 'Funcionario actualizado.', 'success');
-    } else {
-      await crearFuncionario(funcionarioData);
-      Swal.fire('Creado', 'Funcionario registrado.', 'success');
+    const success = await funcionarioStore.saveFuncionario(
+      funcionarioData,
+      esEdicion.value,
+      funcionarioSeleccionado.value?.id
+    );
+    if (success) {
+      handleCerrarFormulario();
     }
-    handleCerrarFormulario();
-    await fetchFuncionarios();
-  } catch (error) {
-    Swal.fire('Error', error.response?.data?.message || 'No se pudo guardar.', 'error');
+  } catch (err) {
+    // El store y el interceptor ya manejan el error, no es necesario hacer nada aquí.
   } finally {
     isSaving.value = false;
   }
 };
-const handleEliminar = (funcionario) => {
-  Swal.fire({
-    title: '¿Seguro?', html: `Se eliminará a <strong>${funcionario.nombre}</strong>.`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#6c757d', confirmButtonText: 'Sí, eliminar', cancelButtonText: 'Cancelar'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await eliminarFuncionario(funcionario.id);
-        Swal.fire('Eliminado', 'El funcionario ha sido eliminado.', 'success');
-        await fetchFuncionarios();
-      } catch (error) {
-        Swal.fire('Error', error.response?.data?.message || 'No se pudo eliminar.', 'error');
-      }
-    }
-  });
-};
+
 const handleAbrirFormulario = (funcionario) => {
   esEdicion.value = !!funcionario;
   funcionarioSeleccionado.value = funcionario ? { ...funcionario } : null;
   mostrarFormulario.value = true;
 };
+
 const handleCerrarFormulario = () => {
   mostrarFormulario.value = false;
   funcionarioSeleccionado.value = null;
 };
+
 const submitFormulario = () => {
+  // Este método sigue siendo útil para conectar el botón del modal con el formulario interno
   if (funcionarioFormRef.value) {
     funcionarioFormRef.value.submit(); 
   }
 };
-onMounted(fetchFuncionarios);
+
+// --- CICLO DE VIDA ---
+onMounted(() => {
+  funcionarioStore.fetchFuncionarios();
+});
 </script>
 
 <style scoped>
-/* No se necesitan estilos aquí, ya que se heredan del archivo SCSS global */
+/* Estilos se heredan del SCSS global, no se necesita nada aquí */
 </style>

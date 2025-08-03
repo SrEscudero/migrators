@@ -10,20 +10,31 @@ import {
     actualizarFuncionario, 
     eliminarFuncionario 
 } from '../controllers/adminController.js';
+
+// --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+// Importamos la función desde el archivo que acabamos de crear.
+import { getVisitorHistory } from '../controllers/visitorController.js';
+
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// --- Rutas de Funcionarios ---
 router.get('/funcionarios', protect, authorize('ceo'), getFuncionarios);
 router.post('/funcionarios', protect, authorize('ceo'), crearFuncionario);
 router.put('/funcionarios/:funcionarioId', protect, authorize('ceo'), actualizarFuncionario);
 router.delete('/funcionarios/:funcionarioId', protect, authorize('ceo'), eliminarFuncionario);
 
+// --- Rutas de Clientes ---
 router.get('/clientes', protect, authorize('perm_gestionar_clientes'), listarClientes);
 router.post('/clientes', protect, authorize('perm_gestionar_clientes'), crearClienteAdmin);
 router.put('/clientes/:clienteId', protect, authorize('perm_gestionar_clientes'), actualizarClienteAdmin);
 router.delete('/clientes/:clienteId', protect, authorize('perm_gestionar_clientes'), eliminarClienteAdmin);
 
 router.patch('/clientes/:clienteId/asignar', protect, authorize('ceo'), asignarCliente);
+
+// --- Ruta para el Historial de Visitantes ---
+// Esta línea ahora funcionará porque `getVisitorHistory` está correctamente importado.
+router.get('/visitors', protect, authorize('ceo'), getVisitorHistory);
 
 export default router;

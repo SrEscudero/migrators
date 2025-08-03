@@ -4,37 +4,21 @@
 
     <div class="dashboard-body d-flex flex-grow-1">
       <Sidebar
-        ref="sidebarRef"
         :menu-items="menuItems"
         :is-collapsed="isSidebarCollapsed"
-        @select-option="selectOption"
         @toggle-sidebar="toggleSidebar"
         @set-sidebar-collapsed="setSidebarCollapsedState"
       />
       <main ref="mainContentRef" :class="['main-content', { collapsed: isSidebarCollapsed }]">
         <div class="content-wrapper">
-          <transition name="section-fade" mode="out-in">
-            <div :key="currentView" class="content-section-container">
-
-              <section v-if="currentView === VIEW_OPTIONS.ESTADISTICAS" class="content-section card-style">
-                <Estadisticas />
-              </section>
-
-              <section v-else-if="currentView === VIEW_OPTIONS.CLIENTES" class="content-section card-style">
-                <GestionClientes />
-              </section>
-
-              <section v-else-if="currentView === VIEW_OPTIONS.FUNCIONARIOS" class="content-section card-style">
-                <GestionFuncionarios />
-              </section>
-
-              <section v-else-if="currentView === VIEW_OPTIONS.PUBLICAR" class="content-section card-style">
+          
+          <div v-if="$route.name === 'AdminNoticias'" class="content-section-container">
+             <section class="content-section card-style">
                 <h3 class="section-header">
                   <i :class="noticiaEnEdicion.id ? 'fas fa-edit me-2' : 'fas fa-plus-circle me-2'"></i>
                   {{ noticiaEnEdicion.id ? 'Editar Noticia' : 'Crear Nueva Noticia' }}
                 </h3>
                 <NoticiaForm
-                    ref="noticiaFormComponentRef"
                     :noticia="noticiaEnEdicion"
                     @submit="submitNoticia"
                     @save-draft="handleSaveDraft"
@@ -43,19 +27,10 @@
                 />
               </section>
 
-              <section v-else-if="currentView === VIEW_OPTIONS.LISTAR" class="content-section card-style">
-                <h3 class="section-header"><i class="fas fa-list-alt me-2"></i>Listado de Noticias</h3>
-                <div v-if="isLoadingNoticias" class="loading-placeholder text-center py-5">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Cargando noticias...</span>
-                  </div>
-                  <p class="mt-2 text-muted">Cargando noticias...</p>
-                </div>
+              <section class="content-section card-style mt-4">
                 <NoticiasTable
-                    v-else
                     :noticias="listaNoticias"
                     :loading="isLoadingNoticias"
-                    @add="handleAddNewNoticiaFromTable"
                     @edit="handleEditNoticiaFromTable"
                     @delete="confirmDeleteNoticia"
                     @bulk-delete="confirmDeleteNoticiasMultiples"
@@ -64,16 +39,13 @@
                     @view="handleViewNoticiaModal"
                 />
               </section>
+          </div>
 
-              <section v-else-if="currentView" class="content-section card-style">
-                <h3 class="section-header"><i class="fas fa-exclamation-triangle me-2"></i>Vista no encontrada</h3>
-                <p>La opción seleccionada no corresponde a una vista válida.</p>
-              </section>
-              <div v-else class="loading-placeholder text-center py-5">
-                  <div class="spinner-border" role="status"></div>
-              </div>
-            </div>
-          </transition>
+          <router-view v-else v-slot="{ Component }">
+            <transition name="section-fade" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
 
           <div v-if="noticiaParaVer" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
             <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
@@ -82,8 +54,7 @@
                   <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>{{ noticiaParaVer.titulo }}</h5>
                   <button type="button" class="btn-close" @click="noticiaParaVer = null" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" v-html="sanitizeHTML(renderMarkdown(noticiaParaVer.contenido))">
-                </div>
+                <div class="modal-body" v-html="sanitizeHTML(renderMarkdown(noticiaParaVer.contenido))"></div>
                 <div class="modal-footer bg-light-subtle">
                   <button type="button" class="btn btn-outline-secondary" @click="noticiaParaVer = null"><i class="fas fa-times me-2"></i>Cerrar</button>
                   <button type="button" class="btn btn-primary" @click="handleEditNoticiaFromModal(noticiaParaVer)"><i class="fas fa-edit me-2"></i>Editar Noticia</button>
@@ -91,6 +62,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </main>
     </div>
@@ -98,159 +70,90 @@
 </template>
 
 <script setup>
-// Imports de Vue y librerías
-import { ref, onMounted, watch, reactive, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
+import { useRouter, useRoute } from 'vue-router';
 import Swal from "sweetalert2";
 import DOMPurify from "dompurify";
 import MarkdownIt from "markdown-it";
 
-// Stores de Pinia
 import { useAuthStore } from '@/stores/authStore';
 import { useNewsStore } from '@/stores/newsStore';
 import { storeToRefs } from 'pinia';
 
-// Componentes
-import Topbar from "../components/AdminDashboard/Topbar.vue";
-import Sidebar from "../components/AdminDashboard/Sidebar.vue";
-import Estadisticas from "../components/AdminDashboard/Estadisticas.vue";
-import GestionClientes from "./AdminDashboard/GestionClientes.vue";
-import GestionFuncionarios from "./AdminDashboard/GestionFuncionarios.vue";
-import NoticiaForm from "../components/AdminDashboard/NoticiasForm.vue";
-import NoticiasTable from "../components/AdminDashboard/NoticiasTable.vue";
+import Topbar from "@/components/AdminDashboard/Topbar.vue";
+import Sidebar from "@/components/AdminDashboard/Sidebar.vue";
+import NoticiaForm from "@/components/AdminDashboard/NoticiasForm.vue";
+import NoticiasTable from "@/components/AdminDashboard/NoticiasTable.vue";
 
-// --- STORES ---
+// --- STORES Y ROUTER ---
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
-
 const newsStore = useNewsStore();
-const {
-  noticias: listaNoticias, noticiaEnEdicion, isLoading: isLoadingNoticias
-} = storeToRefs(newsStore);
-const {
-  fetchNoticias, selectNoticiaForEdit, resetNoticiaForm,
-  saveNoticia, deleteNoticia, setEditingNewsImageUrl, publishDraft, deleteMultipleNoticias, toggleNewsFeature
-} = newsStore;
+const { noticias: listaNoticias, noticiaEnEdicion, isLoading: isLoadingNoticias } = storeToRefs(newsStore);
+const { fetchNoticias, selectNoticiaForEdit, resetNoticiaForm, saveNoticia, deleteNoticia, setEditingNewsImageUrl, publishDraft, deleteMultipleNoticias, toggleNewsFeature } = newsStore;
+const router = useRouter();
+const route = useRoute();
 
 // --- ESTADO LOCAL DEL COMPONENTE ---
-const sidebarRef = ref(null);
-const mainContentRef = ref(null);
-const noticiaFormComponentRef = ref(null);
+const isSidebarCollapsed = ref(window.innerWidth < 992);
 const noticiaParaVer = ref(null);
-const VIEW_OPTIONS = { ESTADISTICAS: "estadisticas", LISTAR: "listar", PUBLICAR: "publicar", CLIENTES: "clientes", FUNCIONARIOS: "funcionarios" };
 
-// --- LÓGICA DE NAVEGACIÓN Y MENÚ ---
+// --- LÓGICA DE NAVEGACIÓN Y MENÚ (ACTUALIZADA) ---
 const menuItems = computed(() => {
   const items = [];
   const currentUser = user.value;
   if (!currentUser) return [];
 
-  if (currentUser.rol === 'ceo' || currentUser.perm_ver_estadisticas) items.push({ text: "Estadísticas", action: VIEW_OPTIONS.ESTADISTICAS, icon: "fas fa-chart-line" });
-  if (currentUser.rol === 'ceo' || currentUser.perm_gestionar_clientes) items.push({ text: "Gestión de Clientes", action: VIEW_OPTIONS.CLIENTES, icon: "fas fa-users" });
-  if (currentUser.rol === 'ceo') items.push({ text: "Gestión de Funcionarios", action: VIEW_OPTIONS.FUNCIONARIOS, icon: "fas fa-user-shield" });
-  if (currentUser.rol === 'ceo' || currentUser.perm_publicar_noticias) {
-    items.push({ text: "Listar Noticias", action: VIEW_OPTIONS.LISTAR, icon: "fas fa-list-alt" });
-    items.push({ text: "Crear Noticia", action: VIEW_OPTIONS.PUBLICAR, icon: "fas fa-plus-circle" });
+  if (currentUser.rol === 'ceo' || currentUser.perm_ver_estadisticas) items.push({ text: "Estadísticas", routeName: 'AdminEstadisticas', icon: "fas fa-chart-line" });
+  if (currentUser.rol === 'ceo' || currentUser.perm_gestionar_clientes) items.push({ text: "Gestión de Clientes", routeName: 'AdminClientes', icon: "fas fa-users" });
+  if (currentUser.rol === 'ceo') {
+    items.push({ text: "Gestión de Funcionarios", routeName: 'AdminFuncionarios', icon: "fas fa-user-shield" });
+    items.push({ text: "Análisis de Visitantes", routeName: 'AdminVisitantes', icon: "fas fa-chart-area" });
   }
-
-  items.push({
-    text: "Foro de la Comunidad",
-    icon: "fas fa-comments",
-    isRoute: true,
-    route: '/foro'
-  });
-
+  if (currentUser.rol === 'ceo' || currentUser.perm_publicar_noticias) {
+    items.push({ text: "Gestión de Noticias", routeName: 'AdminNoticias', icon: "fas fa-newspaper" });
+  }
+  items.push({ text: "Foro de la Comunidad", isRoute: true, route: '/foro', icon: "fas fa-comments" });
   return items;
 });
 
-const currentView = ref(null);
-watch(menuItems, (newMenu) => {
-  if (newMenu.length > 0 && !newMenu.some(item => item.action === currentView.value)) {
-    currentView.value = newMenu[0].action;
-  } else if (newMenu.length === 0) {
-    currentView.value = null;
-  }
-}, { immediate: true });
-
-const selectOption = (optionKey) => {
-  currentView.value = optionKey;
-};
-
 // --- LÓGICA DEL SIDEBAR ---
-const isSidebarCollapsed = ref(window.innerWidth < 992);
 watch(isSidebarCollapsed, (newValue) => localStorage.setItem("sidebarCollapsed", JSON.stringify(newValue)));
 const toggleSidebar = () => isSidebarCollapsed.value = !isSidebarCollapsed.value;
 const setSidebarCollapsedState = (state) => isSidebarCollapsed.value = state;
 
 // --- MANEJADORES DE EVENTOS ---
-const submitNoticia = async (noticiaData) => {
-  const success = await saveNoticia(noticiaData, true);
-  if (success) {
-    currentView.value = VIEW_OPTIONS.LISTAR;
-    resetNoticiaForm();
-  }
-};
-const handleSaveDraft = async (draftData) => {
-  const success = await saveNoticia(draftData, false);
-  if (success) {
-    currentView.value = VIEW_OPTIONS.LISTAR;
-    resetNoticiaForm();
-  }
-};
+const submitNoticia = async (noticiaData) => { await saveNoticia(noticiaData, true); };
+const handleSaveDraft = async (draftData) => { await saveNoticia(draftData, false); };
+
 const handleEditNoticiaFromTable = (noticiaToEdit) => {
   selectNoticiaForEdit(noticiaToEdit);
-  currentView.value = VIEW_OPTIONS.PUBLICAR;
+  if (route.name !== 'AdminNoticias') {
+    router.push({ name: 'AdminNoticias' });
+  }
 };
+
 const handleEditNoticiaFromModal = (noticiaToEdit) => {
   if (noticiaParaVer.value) noticiaParaVer.value = null;
   handleEditNoticiaFromTable(noticiaToEdit);
 };
-const handleAddNewNoticiaFromTable = () => {
-  resetNoticiaForm();
-  currentView.value = VIEW_OPTIONS.PUBLICAR;
-};
+
 const confirmDeleteNoticia = (id) => {
-  Swal.fire({
-    title: '¿Estás seguro?', text: "Esta acción no se puede deshacer.", icon: 'warning',
-    showCancelButton: true, confirmButtonColor: '#d33', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, eliminar',
-  }).then((result) => { if (result.isConfirmed) { deleteNoticia(id); } });
+  Swal.fire({ title: '¿Estás seguro?', text: "Esta acción no se puede deshacer.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, eliminar' }).then((result) => { if (result.isConfirmed) { deleteNoticia(id); } });
 };
 
-// *** MÉTODO QUE MANEJA EL EVENTO DE LA TABLA ***
 const confirmDeleteNoticiasMultiples = (ids) => {
-  if (!ids || ids.length === 0) {
-    Swal.fire("Atención", "No hay noticias seleccionadas.", "info");
-    return;
-  }
-  Swal.fire({
-    title: `¿Eliminar ${ids.length} noticias?`,
-    text: "Esta acción no se puede deshacer.",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Sí, eliminar todas',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Llama a la acción del store para eliminar las noticias
-      deleteMultipleNoticias(ids);
-    }
-  });
+  if (!ids || ids.length === 0) return Swal.fire("Atención", "No hay noticias seleccionadas.", "info");
+  Swal.fire({ title: `¿Eliminar ${ids.length} noticias?`, text: "Esta acción no se puede deshacer.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, eliminar todas' }).then((result) => { if (result.isConfirmed) { deleteMultipleNoticias(ids); } });
 };
 
 const confirmPublishDraft = (id) => {
   const noticia = listaNoticias.value.find(n => n.id === id);
-  Swal.fire({
-      title: `¿Publicar "${noticia?.titulo || 'noticia'}"?`, text: "La noticia se hará visible.", icon: 'info',
-      showCancelButton: true, confirmButtonColor: '#28a745', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, publicar',
-  }).then((result) => { if (result.isConfirmed) { publishDraft(id); } });
+  Swal.fire({ title: `¿Publicar "${noticia?.titulo || 'noticia'}"?`, text: "La noticia se hará visible.", icon: 'info', showCancelButton: true, confirmButtonColor: '#28a745', cancelButtonText: 'Cancelar', confirmButtonText: 'Sí, publicar' }).then((result) => { if (result.isConfirmed) { publishDraft(id); } });
 };
-const handleImageUpload = (url) => {
-  setEditingNewsImageUrl(url);
-};
-const handleViewNoticiaModal = (noticia) => {
-    noticiaParaVer.value = noticia;
-};
+
+const handleImageUpload = (url) => setEditingNewsImageUrl(url);
+const handleViewNoticiaModal = (noticia) => noticiaParaVer.value = noticia;
 
 // --- UTILIDADES ---
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });

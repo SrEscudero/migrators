@@ -1,80 +1,76 @@
-// src/router/index.js (VERSIÓN FINAL CORREGIDA)
-
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 
-// --- Vistas de Carga Rápida ---
+// --- Vistas de Carga Rápida (Públicas y de Autenticación) ---
 import Inicio from '@/views/inicio.vue';
 import SobreNosotros from '@/views/sobre-nosotros.vue';
 import Noticias from '@/views/noticias.vue';
-import LoginView from '@/views/LoginView.vue'; // MEJORA: Importado con alias @
-import RegisterView from '@/views/RegisterView.vue'; // MEJORA: Importado con alias @
+import LoginView from '@/views/LoginView.vue';
+import RegisterView from '@/views/RegisterView.vue';
+
+// --- Componente Principal del Dashboard (el "cascarón") ---
+import AdminDashboard from '@/views/AdminDashboard.vue';
+
+// --- Componentes de las Secciones del Dashboard (para la definición de rutas) ---
+import Estadisticas from '@/components/AdminDashboard/Estadisticas.vue';
+import GestionClientes from '@/views/AdminDashboard/GestionClientes.vue';
+import GestionFuncionarios from '@/views/AdminDashboard/GestionFuncionarios.vue';
+import GestionVisitantes from '@/views/AdminDashboard/GestionVisitantes.vue';
+import NoticiasWrapper from '@/views/AdminDashboard/NoticiasWrapper.vue';
 
 const routes = [
   // --- Rutas Públicas Principales ---
-  {
-    path: '/',
-    name: 'Inicio',
-    component: Inicio,
-  },
-  {
-    path: '/sobre-nosotros',
-    name: 'SobreNosotros',
-    component: SobreNosotros,
-  },
-  {
-    path: '/noticias',
-    name: 'Noticias',
-    component: Noticias,
-  },
+  { path: '/', name: 'Inicio', component: Inicio },
+  { path: '/sobre-nosotros', name: 'SobreNosotros', component: SobreNosotros },
+  { path: '/noticias', name: 'Noticias', component: Noticias },
 
   // --- Rutas de Autenticación ---
-  {
-    path: "/acceder",
-    name: "Acceder",
-    component: LoginView,
-  },
-  {
-    path: "/cadastro",
-    name: "Cadastro",
-    component: RegisterView,
-  },
+  { path: "/acceder", name: "Acceder", component: LoginView },
+  { path: "/cadastro", name: "Cadastro", component: RegisterView },
 
-  // --- Rutas Protegidas (Tipo Aplicación, sin Header/Footer) ---
+  // --- RUTA PRINCIPAL DEL DASHBOARD CON RUTAS ANIDADAS ---
   {
     path: '/admin',
-    name: 'AdminDashboard',
-    component: () => import('@/views/AdminDashboard.vue'),
-    meta: { requiresAuth: true, hideLayout: true } // MEJORA: Añadida meta para ocultar layout
+    component: AdminDashboard,
+    meta: { requiresAuth: true, hideLayout: true }, 
+    redirect: '/admin/estadisticas',
+    children: [
+      { path: 'estadisticas', name: 'AdminEstadisticas', component: Estadisticas },
+      { path: 'clientes', name: 'AdminClientes', component: GestionClientes },
+      { path: 'funcionarios', name: 'AdminFuncionarios', component: GestionFuncionarios },
+      { path: 'visitantes', name: 'AdminVisitantes', component: GestionVisitantes },
+      { path: 'noticias', name: 'AdminNoticias', component: NoticiasWrapper }
+    ]
   },
 
+  // --- Rutas Protegidas Adicionales (se mantienen como estaban) ---
   {
     path: '/perfil',
     name: 'ProfileView',
     component: () => import('@/views/AdminDashboard/ProfileView.vue'),
-    meta: { requiresAuth: true, hideLayout: true } // MEJORA: Añadida meta para ocultar layout
+    // La meta 'hideLayout' ya no es necesaria si este componente no usa el layout del dashboard
+    meta: { requiresAuth: true } 
   },
 
-  // --- Rutas del Módulo de Foro ---
+  // --- Rutas del Módulo de Foro (se mantienen como estaban) ---
   {
     path: '/foro',
     name: 'Foro',
     component: () => import('@/views/Foro/ForumIndex.vue'),
-    meta: { requiresAuth: true, hideLayout: true } // MEJORA: Añadida meta para ocultar layout
+    meta: { requiresAuth: true }
   },
   {
-    // CORRECCIÓN: Ruta duplicada eliminada. Esta es la única definición necesaria.
     path: '/foro/:forumId',
     name: 'ThreadList',
     component: () => import('@/views/Foro/ThreadList.vue'),
-    meta: { requiresAuth: true, hideLayout: true }, // MEJORA: Añadida meta para ocultar layout
+    meta: { requiresAuth: true },
     props: true
   },
   {
     path: '/threads/:id',
     name: 'ThreadView',
     component: () => import('@/views/Foro/ThreadView.vue'),
-    meta: { requiresAuth: true, hideLayout: true }, // MEJORA: Añadida meta para ocultar layout
+    meta: { requiresAuth: true },
     props: true
   },
 ];
@@ -84,7 +80,7 @@ const router = createRouter({
   routes,
 });
 
-// --- GUARDIA DE NAVEGACIÓN MEJORADO ---
+// --- GUARDIA DE NAVEGACIÓN MEJORADO (se mantiene tu lógica) ---
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
@@ -95,12 +91,8 @@ router.beforeEach((to, from, next) => {
   } 
   // Si el usuario está logueado e intenta ir a la página de login o registro
   else if (['Acceder', 'Cadastro'].includes(to.name) && authStore.isAuthenticated) {
-    // Lo redirigimos a su panel correspondiente
-    if (authStore.isAdmin) {
-      next({ name: 'AdminDashboard' });
-    } else {
-      next({ name: 'ClienteDashboard' }); // CORRECCIÓN: Redirige al panel del cliente
-    }
+    // Lo redirigimos al panel de administración (la ruta base /admin se encargará de redirigir a /admin/estadisticas)
+    next({ path: '/admin' });
   } 
   // En cualquier otro caso, permite la navegación
   else {

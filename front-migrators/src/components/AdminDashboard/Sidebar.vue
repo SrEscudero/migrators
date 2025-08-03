@@ -1,124 +1,57 @@
 <template>
   <aside :class="['sidebar', { collapsed: isCollapsed }]" aria-label="Menú principal de navegación">
     <div class="sidebar-header">
-      <router-link to="/" :aria-label="isCollapsed && windowWidth >= 768 ? 'Logo pequeño' : 'Logo completo'"
-        class="logo-link">
+      <router-link to="/" class="logo-link">
         <transition name="fade" mode="out-in">
-          <img v-if="isCollapsed && windowWidth >= 768" src="@/assets/midia/icons/logo.png" alt="Logo pequeño"
-            class="collapsed-logo" key="collapsed" />
-          <img v-else src="@/assets/midia/icons/logo_trans.png" alt="Logo completo" class="logo-image" key="expanded" />
+          <img v-if="isCollapsed" src="@/assets/midia/icons/logo.png" alt="Logo Migrators Pequeño" class="collapsed-logo" key="collapsed" />
+          <img v-else src="@/assets/midia/icons/logo_trans.png" alt="Logo Migrators Completo" class="logo-image" key="expanded" />
         </transition>
       </router-link>
     </div>
 
     <nav aria-label="Menú de navegación principal" class="menu-wrapper">
       <ul class="menu-items">
-        <li v-for="(item, index) in menuItems" :key="index"
-          :class="{ active: item.action === selectedOptionInternal && !item.isRoute }">
-          <router-link v-if="item.isRoute" :to="item.route" class="menu-button"
-            :aria-label="isCollapsed && windowWidth >= 768 ? item.text : null"
-            :title="isCollapsed && windowWidth >= 768 ? item.text : null">
+        <li v-for="(item, index) in menuItems" :key="item.text || index">
+          
+          <router-link
+            v-if="item.routeName"
+            :to="{ name: item.routeName }"
+            class="menu-button"
+            :title="isCollapsed ? item.text : null"
+          >
             <i :class="['menu-icon', item.icon]"></i>
-            <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
-            <span v-if="item.badge" class="badge">{{ item.badge }}</span>
+            <span class="menu-text">{{ item.text }}</span>
           </router-link>
 
-          <button v-else @click="handleSelectOption(item.action)" class="menu-button"
-            :aria-current="item.action === selectedOptionInternal ? 'page' : null"
-            :aria-label="isCollapsed && windowWidth >= 768 ? item.text : null"
-            :title="isCollapsed && windowWidth >= 768 ? item.text : null">
+          <router-link
+            v-else-if="item.isRoute"
+            :to="item.route"
+            class="menu-button"
+            :title="isCollapsed ? item.text : null"
+          >
             <i :class="['menu-icon', item.icon]"></i>
-            <span v-if="!(isCollapsed && windowWidth >= 768)" class="menu-text">{{ item.text }}</span>
-            <span v-if="item.badge" class="badge">{{ item.badge }}</span>
-          </button>
+            <span class="menu-text">{{ item.text }}</span>
+          </router-link>
         </li>
       </ul>
     </nav>
 
-    <div class="sidebar-footer">
-      <button @click="handleToggleSidebar" class="collapse-btn" :aria-expanded="!isCollapsed"
-        :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'">
-        <i :class="isCollapsed && windowWidth >=768 ? 'fas fa-bars' : 'fas fa-chevron-left'"></i>
-      </button>
-    </div>
+     <div class="sidebar-footer">
+        <button @click="$emit('toggle-sidebar')" class="collapse-btn" :aria-expanded="!isCollapsed"
+            :aria-label="isCollapsed ? 'Expandir menú' : 'Contraer menú'">
+            <i :class="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+        </button>
+     </div>
   </aside>
 </template>
 
-<script>
-import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { debounce } from 'lodash';
+<script setup>
+defineProps({
+  menuItems: { type: Array, required: true },
+  isCollapsed: { type: Boolean, default: false }
+});
 
-export default {
-  name: "Sidebar",
-  props: {
-    menuItems: {
-      type: Array,
-      required: true,
-      validator: (items) => items.every(item => {
-        const hasBaseProps = 'text' in item && 'icon' in item;
-        const isActionItem = 'action' in item;
-        const isRouteItem = 'isRoute' in item && 'route' in item;
-        return hasBaseProps && (isActionItem || isRouteItem);
-      })
-    },
-    isCollapsed: {
-      type: Boolean,
-      required: true,
-    }
-  },
-  emits: ["select-option", "toggle-sidebar", "set-sidebar-collapsed"],
-  setup(props, { emit }) {
-    const selectedOptionInternal = ref(null);
-    const windowWidth = ref(window.innerWidth);
-
-    const shouldAutoCollapse = () => {
-      return windowWidth.value < 768;
-    };
-
-    const handleSelectOption = (option) => {
-      selectedOptionInternal.value = option;
-      emit("select-option", option);
-      if (shouldAutoCollapse() && !props.isCollapsed) {
-        emit("set-sidebar-collapsed", true);
-      }
-    };
-
-    const handleToggleSidebar = () => {
-      emit("toggle-sidebar");
-    };
-
-    const handleResize = debounce(() => {
-      const oldWidth = windowWidth.value;
-      windowWidth.value = window.innerWidth;
-      if (oldWidth >= 768 && windowWidth.value < 768 && !props.isCollapsed) {
-         emit("set-sidebar-collapsed", true);
-      }
-    }, 150);
-
-    onMounted(() => {
-      window.addEventListener('resize', handleResize);
-      handleResize();
-      if (shouldAutoCollapse() && !props.isCollapsed) {
-        nextTick(() => {
-            if (shouldAutoCollapse() && !props.isCollapsed) {
-                 emit("set-sidebar-collapsed", true);
-            }
-        });
-      }
-    });
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', handleResize);
-    });
-
-    return {
-      selectedOptionInternal,
-      windowWidth,
-      handleSelectOption,
-      handleToggleSidebar,
-    };
-  }
-};
+defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
 </script>
 
 <style scoped>
@@ -230,6 +163,7 @@ export default {
   border-radius: 0.5rem;
   font-size: 0.925rem;
   position: relative;
+  text-decoration: none;
 }
 
 .menu-button:hover {

@@ -44,3 +44,78 @@
 2025-06-22 14:00:05:05 [[31merror[39m]: [31m❌ Error al conectar con SQL Server: %s[39m
 2025-06-29 18:59:55:5955 [[31merror[39m]: [31mError de verificación de token: %s[39m
 2025-07-10 14:02:25:225 [[31merror[39m]: [31mError de verificación de token: %s[39m
+2025-08-03 09:48:59:4859 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/track-visit - GET - 192.168.3.30[39m
+2025-08-03 09:48:59:4859 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 09:49:10:4910 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/exit - POST - 192.168.3.30[39m
+2025-08-03 09:49:10:4910 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 09:49:13:4913 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/track-visit - GET - 192.168.3.30[39m
+2025-08-03 09:49:13:4913 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 10:03:59:359 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - OPTIONS - 192.168.3.30[39m
+2025-08-03 10:03:59:359 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 10:04:05:45 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - OPTIONS - 192.168.3.30[39m
+2025-08-03 10:04:05:45 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 10:04:56:456 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/exit - POST - 192.168.3.30[39m
+2025-08-03 10:04:56:456 [[31merror[39m]: [31mError: Not allowed by CORS[39m
+[31m    at origin (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/server.js:66:16)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:219:13[39m
+[31m    at optionsCallback (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:199:9)[39m
+[31m    at corsMiddleware (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\cors\lib\index.js:204:7)[39m
+[31m    at Layer.handle [as handle_request] (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\layer.js:95:5)[39m
+[31m    at trim_prefix (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:328:13)[39m
+[31m    at C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:286:9[39m
+[31m    at Function.process_params (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:346:12)[39m
+[31m    at next (C:\Users\Kelvis\Documents\migrators\backend-migrators\node_modules\express\lib\router\index.js:280:10)[39m
+[31m    at internalNext (file:///C:/Users/Kelvis/Documents/migrators/backend-migrators/node_modules/helmet/index.mjs:527:6)[39m
+2025-08-03 11:43:08:438 [[31merror[39m]: [31mError al registrar visita: %s[39m
+2025-08-03 11:47:27:4727 [[31merror[39m]: [31mError al registrar visita: %s[39m
+2025-08-03 11:47:31:4731 [[31merror[39m]: [31mError al obtener el historial de visitantes: %s[39m

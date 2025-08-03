@@ -1,0 +1,13 @@
+CREATE TABLE Visitantes (
+    id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    ip_address NVARCHAR(45) NOT NULL,
+    fecha_visita DATETIMEOFFSET NOT NULL DEFAULT SYSDATETIMEOFFSET(),
+    pais NVARCHAR(100) NULL,
+    ciudad NVARCHAR(100) NULL,
+    isp NVARCHAR(255) NULL,
+    is_proxy BIT NOT NULL DEFAULT 0,
+    is_vpn BIT NOT NULL DEFAULT 0,
+    is_tor BIT NOT NULL DEFAULT 0,
+    fraud_score INT NULL,
+    user_agent NVARCHAR(500) NULL
+);

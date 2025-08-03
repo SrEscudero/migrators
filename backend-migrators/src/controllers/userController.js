@@ -3,80 +3,60 @@ import jwt from 'jsonwebtoken';
 import { connectDB, sql } from '../config/db.js';
 import { syncHubspotContact } from '../services/hubspotService.js';
 import logger from '../config/logger.js';
+import { usuarioRepository, clienteRepository } from '../repositories/usuarioRepository.js'; // Usamos el repositorio
 
-// La función de registro no necesita cambios
+// --- Registro de un nuevo usuario/cliente ---
 export const registerUser = async (req, res) => {
     const { nombre, email, password, celular, nacionalidad } = req.body;
-    const transaction = new sql.Transaction(await connectDB());
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ message: 'Nombre, email y contraseña son obligatorios.' });
+    }
+
+    const pool = await connectDB();
+    const transaction = new sql.Transaction(pool);
     try {
         await transaction.begin();
-        const request = new sql.Request(transaction);
-        request.input('email', sql.VarChar, email);
-        const userExistsResult = await request.query('SELECT Id FROM Usuarios WHERE Email = @email');
+
+        const userExistsRequest = new sql.Request(transaction);
+        userExistsRequest.input('email', sql.VarChar, email);
+        const userExistsResult = await userExistsRequest.query('SELECT Id FROM Usuarios WHERE Email = @email');
+
         if (userExistsResult.recordset.length > 0) {
             await transaction.rollback();
             return res.status(409).json({ message: 'El correo electrónico ya está registrado.' });
         }
+
         const salt = await bcrypt.genSalt(10);
         const password_hash = await bcrypt.hash(password, salt);
-        const insertUserResult = await new sql.Request(transaction)
-            .input('nombre', sql.NVarChar, nombre)
-            .input('email', sql.VarChar, email)
-            .input('password_hash', sql.NVarChar, password_hash)
-            .input('celular', sql.VarChar, celular)
-            .query('INSERT INTO Usuarios (Nombre, Email, password_hash, Celular, rol) OUTPUT INSERTED.Id VALUES (@nombre, @email, @password_hash, @celular, \'cliente\');');
-        const nuevoUsuarioId = insertUserResult.recordset[0].Id;
-        await new sql.Request(transaction)
-            .input('usuario_id', sql.Int, nuevoUsuarioId)
-            .input('nacionalidad', sql.NVarChar, nacionalidad)
-            .query('INSERT INTO Clientes (usuario_id, Nacionalidad, estatus_documentos) VALUES (@usuario_id, @nacionalidad, \'Pendiente\');');
+
+        const newUserId = await usuarioRepository.createCliente({ nombre, email, password_hash, celular }, transaction);
+
+        await clienteRepository.create({
+            usuario_id: newUserId,
+            nacionalidad: nacionalidad,
+            estatus_documentos: 'Registro Inicial'
+        }, transaction);
+
         await transaction.commit();
-        logger.info(`Usuario cliente registrado con éxito. ID: ${nuevoUsuarioId}`);
-        try {
-            await syncHubspotContact({ email, firstname: nombre, phone: celular });
-            logger.info(`Contacto ${email} sincronizado con HubSpot.`);
-        } catch (hubspotError) {
-            logger.error(`Error al sincronizar con HubSpot para ${email}: ${hubspotError.message}`);
-        }
-        res.status(201).json({ message: 'Usuario registrado con éxito. Ahora puedes iniciar sesión.' });
+
+        syncHubspotContact({ email, firstname: nombre, phone: celular });
+
+        res.status(201).json({ message: 'Usuario registrado con éxito!' });
     } catch (error) {
-        if (transaction.rolledBack === false) {
-          await transaction.rollback();
-        }
-        logger.error('Error durante el registro de usuario: %s', error.message);
-        res.status(500).json({ message: 'Error en el servidor durante el registro.' });
+        if (transaction) await transaction.rollback();
+        logger.error('Error al registrar usuario: %s', error.message);
+        res.status(500).json({ message: 'Error en el servidor al registrar el usuario.' });
     }
 };
 
+// --- Inicio de sesión ---
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const pool = await connectDB();
-        const result = await pool.request()
-            .input('email', sql.VarChar, email)
-            .query('SELECT * FROM Usuarios WHERE Email = @email');
-
-        const user = result.recordset[0];
-
+        const user = await usuarioRepository.findByEmail(email);
         if (user && (await bcrypt.compare(password, user.password_hash))) {
-            const userPayload = {
-                id: user.id, // ¡LA CORRECCIÓN MÁS IMPORTANTE ESTÁ AQUÍ!
-                nombre: user.Nombre,
-                rol: user.rol,
-                perm_gestionar_clientes: user.perm_gestionar_clientes,
-                perm_publicar_noticias: user.perm_publicar_noticias,
-                perm_ver_estadisticas: user.perm_ver_estadisticas,
-            };
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
             
-            const token = jwt.sign(userPayload, process.env.JWT_SECRET, { expiresIn: '1d' });
-
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                path: '/',
-            });
-
             const userResponse = {
                 id: user.id,
                 nombre: user.Nombre,
@@ -87,25 +67,47 @@ export const loginUser = async (req, res) => {
                 perm_ver_estadisticas: user.perm_ver_estadisticas,
             };
 
-            res.status(200).json({
-                message: 'Login exitoso!',
-                user: userResponse
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000 // 1 día
             });
+
+            res.json({ user: userResponse });
         } else {
             res.status(401).json({ message: 'Credenciales inválidas.' });
         }
     } catch (error) {
         logger.error('Error en el login: %s', error.message);
-        res.status(500).json({ message: 'Error del servidor al intentar iniciar sesión.' });
+        res.status(500).json({ message: 'Error en el servidor durante el login.' });
     }
 };
 
-// Añade esta función a tu userController.js
-export const updateUserProfile = async (req, res) => {
-    const { nombre, password } = req.body;
-    const userId = req.user.id; // Obtenido del middleware 'protect'
+// --- Obtener perfil del usuario autenticado ---
+export const getMe = async (req, res) => {
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: 'No autenticado.' });
+    }
+    try {
+        const user = await usuarioRepository.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        res.json(user);
+    } catch (error) {
+        logger.error('Error en getMe para usuario ID %s: %s', req.user.id, error.message);
+        res.status(500).json({ message: 'Error del servidor.' });
+    }
+};
 
-    if (!nombre) {
+// --- FUNCIÓN QUE FALTABA ---
+// Actualizar el perfil del usuario autenticado
+export const updateUserProfile = async (req, res) => {
+    const { id: userId } = req.user;
+    const { nombre, password } = req.body;
+
+    if (!nombre || nombre.trim() === '') {
         return res.status(400).json({ message: 'El nombre no puede estar vacío.' });
     }
 
@@ -115,20 +117,23 @@ export const updateUserProfile = async (req, res) => {
         const request = pool.request().input('nombre', sql.NVarChar, nombre).input('userId', sql.Int, userId);
 
         if (password) {
+            if (password.length < 8) {
+                return res.status(400).json({ message: 'La nueva contraseña debe tener al menos 8 caracteres.' });
+            }
             const salt = await bcrypt.genSalt(10);
             const password_hash = await bcrypt.hash(password, salt);
             request.input('password_hash', sql.NVarChar, password_hash);
-            query = 'UPDATE Usuarios SET Nombre = @nombre, password_hash = @password_hash WHERE Id = @userId';
+            query = 'UPDATE Usuarios SET Nombre = @nombre, password_hash = @password_hash, fecha_actualizacion = SYSDATETIMEOFFSET() WHERE Id = @userId';
         } else {
-            query = 'UPDATE Usuarios SET Nombre = @nombre WHERE Id = @userId';
+            query = 'UPDATE Usuarios SET Nombre = @nombre, fecha_actualizacion = SYSDATETIMEOFFSET() WHERE Id = @userId';
         }
 
         await request.query(query);
 
-        // Devolvemos el usuario actualizado para actualizar el estado del frontend
-        const result = await pool.request().input('id', sql.Int, userId).query('SELECT Id, Nombre, Email, rol FROM Usuarios WHERE Id = @id');
+        // Devolvemos el usuario actualizado para que el frontend pueda actualizar su estado en Pinia
+        const updatedUser = await usuarioRepository.findById(userId);
         
-        res.status(200).json({ message: 'Perfil actualizado con éxito.', user: result.recordset[0] });
+        res.status(200).json({ message: 'Perfil actualizado con éxito.', user: updatedUser });
 
     } catch (error) {
         logger.error(`Error al actualizar perfil para usuario ${userId}: ${error.message}`);
@@ -136,10 +141,11 @@ export const updateUserProfile = async (req, res) => {
     }
 };
 
+// --- Cerrar sesión ---
 export const logoutUser = (req, res) => {
-  res.cookie('token', '', {
-    httpOnly: true,
-    expires: new Date(0)
-  });
-  res.status(200).json({ message: 'Logout exitoso.' });
+    res.cookie('token', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.status(200).json({ message: 'Logout exitoso.' });
 };

@@ -33,6 +33,37 @@
       </template>
     </BaseModal>
 
+    <div v-if="isAssignModalOpen" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Asignar Funcionario</h5>
+            <button type="button" class="btn-close" @click="closeAssignModal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <p v-if="clienteParaAsignar">Asignando a: <strong>{{ clienteParaAsignar.Nombre }}</strong></p>
+            <div v-if="isLoadingFuncionarios" class="text-center">Cargando funcionarios...</div>
+            <div v-else>
+              <label for="funcionarioSelect" class="form-label">Seleccione un funcionario:</label>
+              <select id="funcionarioSelect" class="form-select" v-model="selectedFuncionarioId">
+                <option :value="null" disabled>-- Elige un funcionario --</option>
+                <option v-for="func in listaFuncionarios" :key="func.id" :value="func.id">
+                  {{ func.nombre }} ({{ func.email }})
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeAssignModal">Cancelar</button>
+            <button type="button" class="btn btn-primary" @click="handleAssign" :disabled="!selectedFuncionarioId || isAssigning">
+              <span v-if="isAssigning" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              {{ isAssigning ? 'Asignando...' : 'Asignar' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="content-card">
       <div class="content-card-header">
         <h3 class="content-card-title">Listado de Clientes</h3>
@@ -50,13 +81,13 @@
       <div class="content-card-body">
         <StatePlaceholder
           :loading="isLoading"
-          :error="errorState"
+          :error="error"
           :empty="!isLoading && filteredClientes.length === 0"
           loading-title="Cargando clientes..."
           error-title="Error de Red"
-          error-text="No se pudieron cargar los datos de los clientes."
-          :show-retry-button="!!errorState"
-          @retry="fetchClientes"
+          :error-text="error"
+          :show-retry-button="!!error"
+          @retry="clienteStore.fetchClientes"
           empty-icon="fas fa-user-slash"
           :empty-title="searchQuery ? 'Sin resultados' : 'No hay clientes'"
           :empty-text="searchQuery ? 'No se encontraron clientes que coincidan.' : 'Puedes registrar el primer cliente usando el botón de arriba.'"
@@ -108,7 +139,7 @@
                         tooltip="Eliminar Cliente"
                         variant="danger"
                         class="ms-2"
-                        @click="confirmDeleteCliente(cliente)"
+                        @click="clienteStore.deleteClienteById(cliente)"
                       />
                   </td>
                 </tr>
@@ -123,105 +154,67 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import Swal from 'sweetalert2';
+import { storeToRefs } from 'pinia';
+import { useClienteStore } from '@/stores/clienteStore.js';
+import { obtenerFuncionarios } from '@/services/adminService.js'; 
 
-// ====> ¡AQUÍ ESTÁ LA CORRECCIÓN! <====
-// La ruta ahora apunta a la carpeta correcta `components/shared/`
 import BaseModal from '@/components/shared/BaseModal.vue';
 import StatePlaceholder from '@/components/shared/StatePlaceholder.vue';
 import ActionButton from '@/components/shared/ActionButton.vue';
-
 import ClienteRegistro from '@/components/AdminDashboard/ClienteRegistro.vue';
-import {
-  getClientes,
-  deleteCliente,
-  createClienteAdmin,
-  updateClienteAdmin,
-  asignarCliente
-} from '@/services/adminService.js';
 
-// --- El resto del script no cambia ---
-const listaClientes = ref([]);
-const isLoading = ref(false);
-const errorState = ref(null);
+// --- STORES ---
+const clienteStore = useClienteStore();
+const { clientes, isLoading, error } = storeToRefs(clienteStore);
+
+// --- ESTADO LOCAL DE LA VISTA ---
 const isSaving = ref(false);
-
 const searchQuery = ref('');
+const mostrarFormulario = ref(false);
+const esEdicion = ref(false);
+const clienteSeleccionado = ref(null);
+const clienteFormRef = ref(null);
+
+// Estado para el modal de asignación
+const isAssignModalOpen = ref(false);
+const isLoadingFuncionarios = ref(false);
+const isAssigning = ref(false);
+const listaFuncionarios = ref([]);
+const clienteParaAsignar = ref(null);
+const selectedFuncionarioId = ref(null);
+
+// --- COMPUTED ---
 const filteredClientes = computed(() => {
-  if (!searchQuery.value) return listaClientes.value;
+  if (!searchQuery.value) return clientes.value;
   const queryLower = searchQuery.value.toLowerCase();
-  return listaClientes.value.filter(c =>
+  return clientes.value.filter(c =>
     (c.Nombre?.toLowerCase().includes(queryLower)) ||
     (c.Email?.toLowerCase().includes(queryLower)) ||
     (c.funcionario_nombre?.toLowerCase().includes(queryLower))
   );
 });
 
-const mostrarFormulario = ref(false);
-const esEdicion = ref(false);
-const clienteSeleccionado = ref(null);
-const clienteFormRef = ref(null);
-
-const fetchClientes = async () => {
-  isLoading.value = true;
-  errorState.value = null;
-  try {
-    listaClientes.value = await getClientes();
-  } catch (error) {
-    errorState.value = error.message || 'Error desconocido';
-  } finally {
-    isLoading.value = false;
-  }
-};
-
+// --- MÉTODOS PARA CRUD DE CLIENTES ---
 const handleGuardarCliente = async (clienteData) => {
   isSaving.value = true;
   try {
-    if (esEdicion.value) {
-      await updateClienteAdmin(clienteSeleccionado.value.cliente_id, clienteData);
-      Swal.fire('Actualizado', 'El cliente ha sido actualizado.', 'success');
-    } else {
-      await createClienteAdmin(clienteData);
-      Swal.fire('Creado', 'El nuevo cliente ha sido registrado.', 'success');
+    const success = await clienteStore.saveCliente(
+      clienteData,
+      esEdicion.value,
+      clienteSeleccionado.value?.cliente_id
+    );
+    if (success) {
+      handleCerrarFormulario();
     }
-    handleCerrarFormulario();
-    await fetchClientes();
-  } catch (error) {
-    Swal.fire('Error', error.response?.data?.message || 'No se pudo guardar el cliente.', 'error');
+  } catch (err) {
   } finally {
     isSaving.value = false;
   }
 };
 
-const confirmDeleteCliente = (cliente) => {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    html: `Se eliminará al cliente <strong>${cliente.Nombre}</strong>.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    confirmButtonText: 'Sí, eliminar'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await deleteCliente(cliente.cliente_id);
-        await fetchClientes();
-        Swal.fire('Eliminado', 'El cliente ha sido eliminado.', 'success');
-      } catch (error) {
-        Swal.fire('Error', error.response?.data?.message || 'No se pudo eliminar el cliente.', 'error');
-      }
-    }
-  });
-};
-
 const handleAbrirFormulario = (cliente) => {
-  if (cliente) {
-    esEdicion.value = true;
-    clienteSeleccionado.value = { ...cliente };
-  } else {
-    esEdicion.value = false;
-    clienteSeleccionado.value = null;
-  }
+  esEdicion.value = !!cliente;
+  clienteSeleccionado.value = cliente ? { ...cliente } : null;
   mostrarFormulario.value = true;
 };
 
@@ -235,7 +228,48 @@ const submitFormulario = () => {
   }
 };
 
-onMounted(fetchClientes);
+// --- MÉTODOS PARA MODAL DE ASIGNACIÓN ---
+const openAssignModal = async (cliente) => {
+  clienteParaAsignar.value = cliente;
+  selectedFuncionarioId.value = cliente.funcionario_asignado_id || null;
+  isAssignModalOpen.value = true;
+  
+  if (listaFuncionarios.value.length === 0) {
+    isLoadingFuncionarios.value = true;
+    try {
+      listaFuncionarios.value = await obtenerFuncionarios();
+    } catch (err) {
+      closeAssignModal();
+    } finally {
+      isLoadingFuncionarios.value = false;
+    }
+  }
+};
+
+const closeAssignModal = () => {
+  isAssignModalOpen.value = false;
+  clienteParaAsignar.value = null;
+  selectedFuncionarioId.value = null;
+};
+
+const handleAssign = async () => {
+  if (!clienteParaAsignar.value || !selectedFuncionarioId.value) return;
+  isAssigning.value = true;
+  try {
+    const success = await clienteStore.assignCliente(clienteParaAsignar.value.cliente_id, selectedFuncionarioId.value);
+    if (success) {
+      closeAssignModal();
+    }
+  } catch (err) {
+  } finally {
+    isAssigning.value = false;
+  }
+};
+
+// --- CICLO DE VIDA ---
+onMounted(() => {
+  clienteStore.fetchClientes();
+});
 </script>
 
 <style scoped>

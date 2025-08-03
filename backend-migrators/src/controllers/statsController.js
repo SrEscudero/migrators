@@ -1,71 +1,34 @@
-// src/controllers/statsController.js
+import { statsRepository } from '../repositories/statsRepository.js';
+import logger from '../config/logger.js';
 
-import { sql, connectDB } from '../config/db.js';
-
-// Obtiene el conteo de noticias por estado
-export const getStatsPorEstado = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request().query(`
-      SELECT estado, COUNT(*) as total_noticias
-      FROM Noticias 
-      GROUP BY estado
-    `);
-    res.json(result.recordset);
-  } catch (error) {
-    console.error("Error al obtener estadísticas por estado:", error.message);
-    res.status(500).json({ message: "Error al obtener estadísticas por estado", details: error.message });
-  }
+/**
+ * Función helper para manejar la lógica repetitiva de try/catch y respuesta.
+ * @param {Function} repoMethod - El método del repositorio a ejecutar.
+ * @param {Object} res - El objeto de respuesta de Express.
+ * @param {string} errorMessage - Mensaje de error para el log y la respuesta.
+ */
+const handleStatsRequest = async (repoMethod, res, errorMessage) => {
+    try {
+        const data = await repoMethod();
+        res.json(data);
+    } catch (error) {
+        logger.error(`${errorMessage}: %s`, error.message);
+        res.status(500).json({ message: errorMessage, details: error.message });
+    }
 };
 
-// Obtiene el conteo de noticias destacadas
-export const getStatsDestacadas = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request().query(`
-      SELECT destacada, COUNT(*) as total_noticias
-      FROM Noticias 
-      GROUP BY destacada
-    `);
-    res.json(result.recordset);
-  } catch (error) {
-    console.error("Error al obtener estadísticas de destacadas:", error.message);
-    res.status(500).json({ message: "Error al obtener estadísticas de destacadas", details: error.message });
-  }
+export const getStatsPorEstado = (req, res) => {
+    handleStatsRequest(statsRepository.getStatsPorEstado, res, 'Error al obtener estadísticas por estado');
 };
 
-// Obtiene el conteo de noticias publicadas por mes
-export const getStatsPublicadasPorFecha = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    // Usamos FORMAT para obtener 'YYYY-MM' que es más fácil de ordenar y mostrar
-    const result = await pool.request().query(`
-      SELECT FORMAT(fecha_publicacion, 'yyyy-MM') as mes, COUNT(*) as total_noticias
-      FROM Noticias 
-      WHERE fecha_publicacion IS NOT NULL 
-      GROUP BY FORMAT(fecha_publicacion, 'yyyy-MM')
-      ORDER BY mes ASC
-    `);
-    res.json(result.recordset);
-  } catch (error) {
-    console.error("Error al obtener estadísticas por fecha:", error.message);
-    res.status(500).json({ message: "Error al obtener estadísticas por fecha", details: error.message });
-  }
+export const getStatsDestacadas = (req, res) => {
+    handleStatsRequest(statsRepository.getStatsDestacadas, res, 'Error al obtener estadísticas de noticias destacadas');
 };
 
-// Obtiene el conteo de noticias por autor
-export const getStatsPorAutor = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request().query(`
-      SELECT autor, COUNT(*) as total_noticias
-      FROM Noticias 
-      GROUP BY autor 
-      ORDER BY total_noticias DESC
-    `);
-    res.json(result.recordset);
-  } catch (error) {
-    console.error("Error al obtener estadísticas por autor:", error.message);
-    res.status(500).json({ message: "Error al obtener estadísticas por autor", details: error.message });
-  }
+export const getStatsPublicadasPorFecha = (req, res) => {
+    handleStatsRequest(statsRepository.getStatsPublicadasPorFecha, res, 'Error al obtener estadísticas de publicaciones por fecha');
+};
+
+export const getStatsPorAutor = (req, res) => {
+    handleStatsRequest(statsRepository.getStatsPorAutor, res, 'Error al obtener estadísticas por autor');
 };
