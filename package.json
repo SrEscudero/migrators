@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@vueuse/head": "^2.0.0"
+    "@vueuse/head": "^2.0.0",
+    "express-session": "^1.18.2"
   }
 }

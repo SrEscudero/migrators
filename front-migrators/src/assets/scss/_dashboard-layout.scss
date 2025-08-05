@@ -1,5 +1,6 @@
 /* =============================================== */
 /* == ESTILOS ESTANDARIZADOS PARA VISTAS DEL DASHBOARD == */
+/* (VERSIÓN REFACTORIZADA) */
 /* =============================================== */
 
 .page-content-container {
@@ -23,13 +24,15 @@
 
 .page-icon {
   font-size: 1.75rem;
-  color: #4f46e5; /* Color primario consistente */
+  /* ANTES: color: #4f46e5; */
+  color: var(--color-primary); /* AHORA: Variable global */
 }
 
 .page-title {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #1e293b;
+  /* ANTES: color: #1e293b; */
+  color: var(--color-primary); /* AHORA: Variable global */
   margin: 0;
 }
 
@@ -38,24 +41,29 @@
 }
 
 .form-container {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
+  /* ANTES: background-color: #ffffff; */
+  background-color: var(--color-surface); /* AHORA: Variable global */
+  border-radius: var(--border-radius-md); /* AHORA: Variable global */
   padding: 1.5rem;
-  border: 1px solid #e2e8f0;
+  /* ANTES: border: 1px solid #e2e8f0; */
+  border: 1px solid var(--color-border); /* AHORA: Variable global */
   margin-bottom: 2rem;
 }
 
 .content-card {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  border: 1px solid #e2e8f0;
-  overflow: hidden; /* Para que los bordes de la tabla no sobresalgan */
+  /* ANTES: background-color: #ffffff; */
+  background-color: var(--color-surface); /* AHORA: Variable global */
+  border-radius: var(--border-radius-md); /* AHORA: Variable global */
+  box-shadow: var(--shadow-soft); /* AHORA: Variable global */
+  /* ANTES: border: 1px solid #e2e8f0; */
+  border: 1px solid var(--color-border); /* AHORA: Variable global */
+  overflow: hidden;
 }
 
 .content-card-header {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  /* ANTES: border-bottom: 1px solid #e2e8f0; */
+  border-bottom: 1px solid var(--color-border); /* AHORA: Variable global */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -67,6 +75,7 @@
   font-size: 1.125rem;
   font-weight: 600;
   margin: 0;
+  color: var(--color-text); /* AHORA: Variable global */
 }
 
 .search-box-wrapper {
@@ -78,19 +87,15 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af;
+  /* ANTES: color: #9ca3af; */
+  color: var(--color-text-muted); /* AHORA: Variable global */
 }
 .search-box-wrapper .form-control {
   padding-left: 2.5rem;
 }
 
 .content-card-body {
-  padding: 0; /* Quitamos el padding para que la tabla o el placeholder ocupe todo */
-}
-
-/* Estilos para la tabla dentro de la tarjeta */
-.table-responsive {
-    /* Opcional: añade un borde si lo deseas, aunque ya está en la card */
+  padding: 0;
 }
 
 .table {
@@ -99,9 +104,11 @@
 
 .table thead th {
   font-weight: 600;
-  background-color: #f8fafc;
-  color: #475569;
-  border-top: none; /* La tarjeta ya tiene el borde superior */
+  /* ANTES: background-color: #f8fafc; */
+  background-color: var(--color-background); /* AHORA: Variable global */
+  /* ANTES: color: #475569; */
+  color: var(--color-text); /* AHORA: Variable global */
+  border-top: none;
   border-bottom-width: 1px;
 }
 

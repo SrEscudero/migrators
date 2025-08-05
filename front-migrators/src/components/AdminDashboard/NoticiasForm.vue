@@ -646,84 +646,88 @@ export default {
 </script>
 
 <style scoped>
-/* Tus estilos existentes... */
 .noticia-form {
-  background: #fff;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--border-radius-md);
   padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, .05)
 }
 
 .form-label {
-  font-weight: 600;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px
+  margin-bottom: 8px;
 }
 
 .form-label span.text-danger {
-  margin-left: 4px
+  margin-left: 4px;
 }
 
 .form-control,
 .form-select {
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   padding: 10px 15px;
-  transition: all .3s ease;
-  font-size: .95rem
+  transition: all var(--transition-speed) ease;
+  font-size: .95rem;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-color: var(--color-border);
 }
 
 .form-control:focus,
 .form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25)
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 .25rem rgba(29, 53, 87, 0.15);
+  background-color: var(--color-surface);
 }
 
 .form-control.is-invalid,
 .form-select.is-invalid {
-  border-color: #dc3545
+  border-color: var(--color-danger);
 }
 
 .form-control.is-invalid:focus,
 .form-select.is-invalid:focus {
-  box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25)
+  box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25);
 }
 
 .form-control-plaintext {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--color-border);
   padding: 10px 15px;
-  background-color: #f8f9fa !important
+  background-color: var(--color-background) !important;
 }
 
 .preview-img {
   max-width: 100%;
   height: auto;
   max-height: 200px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   transition: transform .3s ease, opacity .4s ease;
   object-fit: cover;
-  border: 1px solid #eee
+  border: 1px solid var(--color-border);
 }
 
 .preview-img:hover {
-  transform: scale(1.03)
+  transform: scale(1.03);
 }
 
 .content-preview {
   min-height: 150px;
   max-height: 400px;
   overflow-y: auto;
-  background-color: #f8f9fa;
-  font-size: .9rem
+  background-color: var(--color-background);
+  border-color: var(--color-border);
+  font-size: .9rem;
 }
 
-.content-preview>div>:first-child {
-  margin-top: 0
+.content-preview > div > :first-child {
+  margin-top: 0;
 }
 
-.content-preview>div>:last-child {
-  margin-bottom: 0
+.content-preview > div > :last-child {
+  margin-bottom: 0;
 }
 
 .btn {
@@ -732,57 +736,10 @@ export default {
   justify-content: center;
   gap: 8px;
   padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: var(--border-radius-md);
+  font-weight: var(--font-weight-medium);
   transition: all .2s ease;
-  letter-spacing: .5px
-}
-
-.btn:active {
-  transform: scale(.97);
-  transition: transform .1s ease
-}
-
-.btn-primary {
-  min-width: 180px
-}
-
-.btn-outline-success {
-  border-color: #198754;
-  color: #198754
-}
-
-.btn-outline-success:hover {
-  background-color: #198754;
-  color: #fff
-}
-
-.btn-info {
-  background-color: #0dcaf0;
-  border-color: #0dcaf0
-}
-
-.btn-info:hover {
-  background-color: #0aa8c2;
-  border-color: #0aa8c2
-}
-
-.btn-close {
-  font-size: .8rem;
-  padding: .5rem
-}
-
-.form-text {
-  margin-top: 4px;
-  font-size: .8rem
-}
-
-.modal-body .form-label {
-  font-size: .9rem
-}
-
-.progress {
-  height: 1rem
+  letter-spacing: .5px;
 }
 
 .fade-enter-active,
@@ -796,110 +753,68 @@ export default {
   transform: translateY(-10px)
 }
 
-@media (max-width:768px) {
-  .noticia-form {
-    padding: 16px
-  }
-
-  .col-12.d-flex.flex-column {
-    align-items: stretch !important
-  }
-
-  .btn {
-    width: 100%;
-    margin-bottom: 10px
-  }
-
-  .btn:last-child {
-    margin-bottom: 0
-  }
-
-  .preview-img {
-    max-height: 150px
-  }
-}
-
-/* ########################################## */
-/* ### NUEVOS ESTILOS PARA EL MODAL MEJORADO ### */
-/* ########################################## */
+/* Estilos para el Modal de Subida de Archivos */
 .media-modal-content {
-  border-radius: 12px;
+  border-radius: var(--border-radius-md);
   border: none;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-medium);
+  background-color: var(--color-surface);
 }
 
 .media-modal-content .modal-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  color: #343a40;
-}
-
-.media-modal-content .modal-header .btn-close {
-  filter: none;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
 }
 
 .media-modal-content .nav-link {
-  color: #6c757d;
-  font-weight: 500;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
   border-bottom: 3px solid transparent;
   transition: all 0.2s ease-in-out;
 }
 
 .media-modal-content .nav-link.active {
-  color: #0d6efd;
+  color: var(--color-primary);
   background-color: transparent !important;
-  border-bottom-color: #0d6efd;
+  border-bottom-color: var(--color-primary);
 }
 
 .media-modal-content .nav-link:hover {
-  color: #0d6efd;
-  border-bottom-color: #0d6efd80;
+  color: var(--color-primary);
+  border-bottom-color: rgba(29, 53, 87, 0.5);
 }
 
 .drop-zone {
-  border: 2px dashed #adb5bd;
-  border-radius: 12px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--border-radius-md);
   padding: 40px;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
-.drop-zone:hover {
-  background-color: #f8f9fa;
-  border-color: #0d6efd;
+.drop-zone:hover, .drop-zone.is-drag-over {
+  background-color: var(--color-background);
+  border-color: var(--color-primary);
 }
 
 .drop-zone.is-drag-over {
-  background-color: #e9ecef;
-  border-color: #0d6efd;
   border-style: solid;
 }
 
-.drop-zone .drop-zone-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 .preview-zone {
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius-md);
   padding: 20px;
-}
-
-.image-preview-container {
-  position: relative;
-  display: inline-block;
 }
 
 .preview-img-modal {
   max-width: 100%;
   max-height: 250px;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   object-fit: contain;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
 }
 
 .remove-preview-btn {

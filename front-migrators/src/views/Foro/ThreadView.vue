@@ -40,7 +40,7 @@
 // El script no necesita cambios, ya obtiene los nuevos datos
 import { ref, onMounted } from 'vue';
 import { fetchThreadById } from '@/services/forumService';
-import CreatePostForm from '@/components/Foro/CreatePostForm.vue';
+import CreatePostForm from '../Foro/CreatePostForm.vue';
 
 const props = defineProps({ id: { type: [String, Number], required: true } });
 const thread = ref(null);
@@ -53,34 +53,41 @@ const handleNewPost = (newPost) => { posts.value.push(newPost); };
 
 <style scoped>
 .post-card {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 .original-post {
-    border-left: 4px solid var(--bs-primary);
+    border-left: 4px solid var(--color-primary);
 }
 .post-author {
   display: flex;
   align-items: center;
   padding: 1rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
 }
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--bs-secondary);
-  color: white;
+  background-color: var(--color-primary-light);
+  color: var(--color-surface);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   margin-right: 1rem;
 }
-.author-info strong { display: block; }
+.author-info strong {
+    display: block;
+    color: var(--color-text);
+}
 .post-content {
   padding: 1.5rem;
+  color: var(--color-text);
+}
+.text-muted {
+    color: var(--color-text-muted) !important;
 }
 </style>

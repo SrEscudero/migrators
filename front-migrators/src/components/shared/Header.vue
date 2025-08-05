@@ -81,6 +81,7 @@
 
 <script setup>
 // 1. IMPORTACIONES ADICIONALES DE VUE Y BOOTSTRAP
+import { useRouter } from 'vue-router';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Collapse } from 'bootstrap'; // Importa la clase Collapse de Bootstrap
 
@@ -90,6 +91,8 @@ import Swal from 'sweetalert2';
 import logo from '@/assets/midia/icons/logo_trans.png';
 
 const hoverLogo = ref(false);
+
+const router = useRouter();
 
 const authStore = useAuthStore();
 const { isAuthenticated, user, isAdmin } = storeToRefs(authStore);
@@ -142,115 +145,112 @@ const handleLogout = () => {
     cancelButtonColor: '#6c757d',
     confirmButtonText: 'Sí, salir',
     cancelButtonText: 'Cancelar'
-  }).then((result) => {
+  }).then(async (result) => { // La función ahora es async
     if (result.isConfirmed) {
-      closeNavbar(); // Cierra el menú si estuviera abierto
-      logout();
+      closeNavbar(); 
+      await logout(); // Espera a que el store se limpie
+      router.push('/acceder'); // El componente redirige al usuario
     }
   });
 };
 </script>
 
 <style scoped>
-/* Variables (las mantenemos para consistencia local) */
-:root {
-  --nav-link-padding-x: 1rem;
-  --nav-link-padding-y: 0.5rem;
-  --nav-link-transition: all 0.3s ease;
-  --active-indicator-height: 3px;
-}
-
 .navbar {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow var(--transition-speed);
+  background-color: var(--color-surface); /* Estandarizado */
+  box-shadow: var(--shadow-soft);
 }
 
 .logo {
   width: 150px;
   height: auto;
   max-height: 40px;
-  transition: var(--nav-link-transition);
+  transition: all var(--transition-speed);
 }
 .logo.logo-hover {
   transform: scale(1.05);
 }
 
 .nav-link {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 550;
-  padding: var(--nav-link-padding-y) var(--nav-link-padding-x);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  padding: 0.5rem 1rem;
   margin: 0 0.25rem;
-  color: var(--bs-gray-700);
+  color: var(--color-text-muted); /* Estandarizado */
   position: relative;
-  transition: var(--nav-link-transition);
+  transition: all var(--transition-speed);
   border-radius: 0.25rem;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-  color: var(--bs-primary);
+  color: var(--color-primary); /* Estandarizado */
 }
 
 .nav-link .active-indicator {
   position: absolute;
   bottom: 0;
-  left: var(--nav-link-padding-x);
-  right: var(--nav-link-padding-x);
-  height: var(--active-indicator-height);
+  left: 1rem;
+  right: 1rem;
+  height: 3px;
   background-color: transparent;
-  border-radius: var(--active-indicator-height) var(--active-indicator-height) 0 0;
+  border-radius: 3px 3px 0 0;
   transform-origin: center;
-  transition: var(--nav-link-transition);
+  transition: all var(--transition-speed);
   opacity: 0;
   transform: scaleX(0);
 }
 
 .nav-link.router-link-exact-active {
-  color: #1D3557 !important; /* Azul oscuro para el activo */
-  font-weight: 600;
+  color: var(--color-primary) !important; /* Estandarizado */
+  font-weight: var(--font-weight-bold);
 }
 
 .nav-link.router-link-exact-active .active-indicator {
-  background-color: #1D3557; /* Azul oscuro para el indicador */
+  background-color: var(--color-primary); /* Estandarizado */
   opacity: 1;
   transform: scaleX(1);
 }
 
 .nav-link:not(.router-link-exact-active):hover .active-indicator {
-  background-color: var(--bs-primary);
+  background-color: var(--color-primary); /* Estandarizado */
   transform: scaleX(0.5);
   opacity: 0.5;
 }
 
 .btn {
-  font-weight: 500;
-  transition: var(--nav-link-transition);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-speed);
 }
 .btn-primary {
-  background-color: #1D3557;
-  border-color: #1D3557;
+  background-color: var(--color-primary); /* Estandarizado */
+  border-color: var(--color-primary); /* Estandarizado */
   box-shadow: 0 4px 12px rgba(29, 53, 87, 0.25);
 }
 .btn-primary:hover {
-  background-color: #457B9D;
-  border-color: #457B9D;
+  background-color: var(--color-primary-light); /* Estandarizado */
+  border-color: var(--color-primary-light); /* Estandarizado */
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(69, 123, 157, 0.3);
 }
 
 .user-menu .dropdown-toggle {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 .user-name-display {
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-text); /* Estandarizado */
 }
 .dropdown-item {
     display: flex;
     align-items: center;
+    color: var(--color-text); /* Estandarizado */
 }
 .dropdown-item .fa-fw {
   width: 20px;
@@ -259,7 +259,13 @@ const handleLogout = () => {
 .dropdown-menu {
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
   border: none;
+  background-color: var(--color-surface); /* Estandarizado */
 }
+.dropdown-item:hover {
+    background-color: var(--color-background); /* Estandarizado */
+    color: var(--color-primary);
+}
+
 
 @media (max-width: 991.98px) {
   .navbar-collapse {

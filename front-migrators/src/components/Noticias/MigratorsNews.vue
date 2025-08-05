@@ -267,15 +267,14 @@ export default {
 </script>
 
 <style scoped>
-/* Tus estilos existentes se mantienen aquí */
 .migrators-news-section {
   padding: 3rem 0;
 }
 
 .section-title {
-  color: var(--pg-noticias-secondary-color, #276678);
+  color: var(--color-primary);
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 3rem;
   position: relative;
   display: inline-block;
@@ -289,16 +288,16 @@ export default {
   display: block;
   width: 60px;
   height: 4px;
-  background-color: var(--pg-noticias-primary-accent, #007bff);
+  background-color: var(--color-accent);
   margin: 0.75rem auto 0;
   border-radius: 2px;
 }
 
 .news-card {
-  border: 1px solid #e9ecef;
-  border-radius: 0.75rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background-color: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  background-color: var(--color-surface);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -306,15 +305,15 @@ export default {
 
 .news-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-medium);
 }
 
 .card-img-container {
   width: 100%;
   height: 200px;
   overflow: hidden;
-  border-top-left-radius: 0.75rem;
-  border-top-right-radius: 0.75rem;
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
   position: relative;
 }
 
@@ -333,8 +332,6 @@ export default {
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.3em 0.6em;
-  border-radius: 0.25rem;
-  z-index: 10;
 }
 
 .card-body {
@@ -347,7 +344,7 @@ export default {
 .card-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--pg-noticias-title-color, #2c3e50);
+  color: var(--color-text);
   margin-bottom: 0.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -360,7 +357,7 @@ export default {
 .card-text {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: var(--pg-noticias-text-color, #495057);
+  color: var(--color-text-muted);
   margin-bottom: 1rem;
   flex-grow: 1;
   display: -webkit-box;
@@ -374,116 +371,64 @@ export default {
 .card-meta {
   font-size: 0.8rem;
   margin-bottom: 1rem;
-  color: var(--pg-noticias-text-muted-color, #6c757d);
+  color: var(--color-text-muted);
 }
 
 .meta-icon {
-  color: var(--pg-noticias-primary-accent, #007bff);
+  color: var(--color-primary-light);
 }
 
 .read-more-btn {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: 0.85rem;
   padding: 0.5rem 1rem;
-  border-color: var(--pg-noticias-primary-accent, #007bff);
-  color: var(--pg-noticias-primary-accent, #007bff);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
   margin-top: auto;
 }
 
 .read-more-btn:hover {
-  background-color: var(--pg-noticias-primary-accent, #007bff);
+  background-color: var(--color-primary);
   color: white;
 }
 
-/* Ajustes para que los enlaces se vean bien */
 .news-card-link-internal, .title-link {
   text-decoration: none;
   color: inherit;
 }
 .title-link:hover {
-  color: var(--pg-noticias-primary-accent, #007bff);
+  color: var(--color-primary);
 }
 
-.read-more-btn i.fa-external-link-alt {
-  font-size: 0.8em;
-  vertical-align: middle;
-}
-
-/* Estilos de paginación */
 .pagination .page-item .page-link {
-  border-radius: 0.5rem !important; /* Bordes ligeramente redondeados para todos los botones */
-  margin: 0 0.25rem; /* Espacio entre botones */
-  min-width: 40px; /* Ancho mínimo para que los números no se amontonen */
+  border-radius: 0.5rem !important;
+  margin: 0 0.25rem;
+  min-width: 40px;
   text-align: center;
-  color: var(--pg-noticias-primary-accent, #007bff);
-  border: 1px solid #dee2e6;
-  transition: all 0.3s ease;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-speed) ease;
 }
 
 .pagination .page-item.active .page-link {
-  background-color: var(--pg-noticias-primary-accent, #007bff);
-  border-color: var(--pg-noticias-primary-accent, #007bff);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
   color: white;
-  z-index: 2; /* Para que quede por encima de los bordes adyacentes */
-  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Sutil sombra en el activo */
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(29, 53, 87, 0.2);
 }
 
 .pagination .page-item .page-link:hover:not(.active) {
-  background-color: #e9ecef;
-  color: var(--pg-noticias-primary-dark, #0056b3);
-  border-color: #ced4da;
+  background-color: var(--color-background);
+  color: var(--color-primary-light);
+  border-color: var(--color-border);
 }
 
 .pagination .page-item.disabled .page-link {
-  color: #6c757d;
+  color: var(--color-text-muted);
   pointer-events: none;
-  background-color: #fff;
-  border-color: #dee2e6;
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
   opacity: 0.6;
-}
-
-/* Para los botones de flecha (anterior/siguiente) */
-.pagination .page-item:first-child .page-link,
-.pagination .page-item:last-child .page-link {
-  border-radius: 0.5rem !important; /* Asegurar que las flechas también tienen el redondeo */
-}
-
-
-/* Responsividad mejorada */
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
-  }
-  .card-img-container {
-    height: 180px;
-  }
-  .card-title {
-    font-size: 1.05rem;
-    min-height: 3.15em;
-  }
-  .card-text {
-    font-size: 0.85rem;
-    min-height: 5.44em;
-  }
-  .card-body {
-    padding: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .section-title {
-    font-size: 1.8rem;
-  }
-  .card-img-container {
-    height: 160px;
-  }
-  .pagination .page-item .page-link {
-    min-width: 32px; /* Reducir ancho para pantallas muy pequeñas */
-    padding: 0.4rem 0.6rem;
-    font-size: 0.8rem;
-  }
-  .pagination {
-    gap: 0.15rem; /* Reducir espacio entre botones en móviles */
-  }
 }
 </style>

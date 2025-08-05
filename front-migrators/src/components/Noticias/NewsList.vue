@@ -189,71 +189,53 @@ export default {
 </script>
 
 <style scoped>
-
 .loading-indicator, .alert, .no-results-message {
     min-height: 250px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 8px; /* Bordes redondeados para los mensajes */
-}
-.alert { /* Estilo específico para alertas */
-    background-color: #fff3cd; /* Amarillo claro de Bootstrap warning */
-    color: #664d03;
-    border-color: #ffecb5;
+    border-radius: var(--border-radius-md);
 }
 
-/* Estilos para la paginación (Bootstrap-like pero personalizable) */
-.custom-pagination {
-    padding-left: 0;
-    list-style: none;
-}
-.custom-pagination .page-item .page-link {
+.pagination .page-item .page-link {
     position: relative;
     display: block;
     padding: 0.5rem 0.75rem;
     margin-left: -1px;
     line-height: 1.25;
-    color: var(--pg-noticias-primary-accent, #007bff); /* Usar variable si está disponible */
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: var(--color-primary);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-speed);
     cursor: pointer;
-    min-width: 42px; /* Ancho mínimo */
+    min-width: 42px;
     text-align: center;
 }
-.custom-pagination .page-item:first-child .page-link {
+.pagination .page-item:first-child .page-link {
     border-top-left-radius: 0.35rem;
     border-bottom-left-radius: 0.35rem;
 }
-.custom-pagination .page-item:last-child .page-link {
+.pagination .page-item:last-child .page-link {
     border-top-right-radius: 0.35rem;
     border-bottom-right-radius: 0.35rem;
 }
-.custom-pagination .page-item.active .page-link {
+.pagination .page-item.active .page-link {
     z-index: 3;
-    color: #fff;
-    background-color: var(--pg-noticias-primary-accent, #007bff);
-    border-color: var(--pg-noticias-primary-accent, #007bff);
+    color: var(--color-surface);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
-.custom-pagination .page-item.disabled .page-link {
-    color: #6c757d;
+.pagination .page-item.disabled .page-link {
+    color: var(--color-text-muted);
     pointer-events: none;
-    background-color: #fff;
-    border-color: #dee2e6;
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
 }
-.custom-pagination .page-item.ellipsis .page-link { /* Para los '...' */
-    color: #6c757d;
-    pointer-events: none;
-}
-.custom-pagination .page-item .page-link:hover {
+.pagination .page-item .page-link:hover {
     z-index: 2;
-    color: #0056b3;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-}
-.custom-pagination .page-link i {
-    font-size: 0.8em; /* Iconos un poco más pequeños */
+    color: var(--color-primary-light);
+    background-color: var(--color-background);
+    border-color: var(--color-border);
 }
 </style>

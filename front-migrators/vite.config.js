@@ -11,7 +11,7 @@ export default ({ mode }) => {
   return {
     plugins: [
       vue(),
-      basicSsl(), 
+      basicSsl(),
       visualizer({ open: true })
     ],
     server: {
@@ -24,8 +24,11 @@ export default ({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
+        build: {
+          sourcemap: false, // Desactiva la generación de source maps
+        },
         '/uploads': {
-          target: env.VITE_API_URL, // Apunta al mismo backend: http://localhost:5000
+          target: env.VITE_API_URL,
           changeOrigin: true,
           secure: false,
         }
@@ -38,8 +41,8 @@ export default ({ mode }) => {
     },
     test: {
       globals: true,
-      environment: 'jsdom', 
-      setupFiles: ['./src/setupTests.js'], 
+      environment: 'jsdom',
+      setupFiles: ['./src/setupTests.js'],
       deps: {
         inline: ['@vue', '@vueuse'],
       },

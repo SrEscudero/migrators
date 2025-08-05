@@ -69,7 +69,51 @@ export const forumRepository = {
             .input('thread_id', sql.Int, thread_id)
             .query(`INSERT INTO Posts (contenido, autor_id, thread_id) OUTPUT INSERTED.* VALUES (@contenido, @autor_id, @thread_id)`);
         return result.recordset[0];
-    }
+    },
     
-    // Aquí podrías añadir los métodos para update y delete que siguen un patrón similar
+    async findPostById(postId) {
+        const pool = await connectDB();
+        const result = await pool.request()
+            .input('postId', sql.Int, postId)
+            .query('SELECT * FROM Posts WHERE id = @postId');
+        return result.recordset[0];
+    },
+    
+    async updatePost(postId, contenido) {
+        const pool = await connectDB();
+        const result = await pool.request()
+            .input('postId', sql.Int, postId)
+            .input('contenido', sql.NText, contenido)
+            .query('UPDATE Posts SET contenido = @contenido, fecha_edicion = GETDATE() WHERE id = @postId');
+        return result.rowsAffected[0];
+    },
+
+    async deletePost(postId) {
+        const pool = await connectDB();
+        const result = await pool.request()
+            .input('postId', sql.Int, postId)
+            .query('DELETE FROM Posts WHERE id = @postId');
+        return result.rowsAffected[0];
+    },
+
+    // --- NUEVO MÉTODO AÑADIDO ---
+    async deleteThread(threadId) {
+        const pool = await connectDB();
+        const transaction = new sql.Transaction(pool);
+        try {
+            await transaction.begin();
+            const request = new sql.Request(transaction);
+
+            await request.input('threadIdForPosts', sql.Int, threadId).query('DELETE FROM Posts WHERE thread_id = @threadIdForPosts');
+            
+            const result = await request.input('threadIdForThread', sql.Int, threadId).query('DELETE FROM Threads WHERE id = @threadIdForThread');
+            
+            await transaction.commit();
+            return result.rowsAffected[0];
+        } catch (error) {
+            await transaction.rollback();
+            // Propagamos el error para que el controlador lo maneje
+            throw error;
+        }
+    }
 };

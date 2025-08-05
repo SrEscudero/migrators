@@ -119,3 +119,9 @@
 2025-08-03 11:43:08:438 [[31merror[39m]: [31mError al registrar visita: %s[39m
 2025-08-03 11:47:27:4727 [[31merror[39m]: [31mError al registrar visita: %s[39m
 2025-08-03 11:47:31:4731 [[31merror[39m]: [31mError al obtener el historial de visitantes: %s[39m
+2025-08-03 15:04:54:454 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/track-visit - POST - 192.168.3.81[39m
+2025-08-03 15:05:03:53 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - OPTIONS - 192.168.3.81[39m
+2025-08-03 15:05:53:553 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - OPTIONS - 192.168.3.81[39m
+2025-08-03 15:05:55:555 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/exit - POST - 192.168.3.81[39m
+2025-08-03 15:05:56:556 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/track-visit - POST - 192.168.3.81[39m
+2025-08-03 15:06:04:64 [[31merror[39m]: [31m500 - Not allowed by CORS - /api/usuarios/login - OPTIONS - 192.168.3.81[39m

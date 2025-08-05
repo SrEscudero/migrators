@@ -1,50 +1,23 @@
-import jwt from 'jsonwebtoken';
-import { connectDB, sql } from '../config/db.js';
 import logger from '../config/logger.js';
 
-export const protect = async (req, res, next) => {
-    let token;
-
-    if (req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-
-    if (!token) {
-        return res.status(401).json({ message: 'No autorizado, no se proporcionó token.' });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const pool = await connectDB();
-        const result = await pool.request()
-            .input('id', sql.Int, decoded.id)
-            .query('SELECT id, Nombre, Email, rol, perm_gestionar_clientes, perm_publicar_noticias, perm_ver_estadisticas FROM Usuarios WHERE id = @id');
-        
-        const user = result.recordset[0];
-        
-        if (!user) {
-            res.clearCookie('token');
-            return res.status(401).json({ message: 'No autorizado, el usuario del token ya no existe.' });
-        }
-        
-        req.user = user;
+export const protect = (req, res, next) => {
+    // La lógica ahora es mucho más simple:
+    // ¿Existe una sesión y esa sesión tiene un objeto de usuario?
+    if (req.session && req.session.user) {
+        // Si es así, adjuntamos el usuario de la sesión al objeto de la petición
+        req.user = req.session.user;
+        // Y continuamos a la siguiente función (el controlador de la ruta)
         next();
-
-    } catch (error) {
-        logger.error('Error de autenticación en middleware protect:', error.message);
-        res.clearCookie('token');
-        
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'La sesión ha expirado. Por favor, inicia sesión de nuevo.' });
-        }
-        
-        return res.status(401).json({ message: 'No autorizado, el token no es válido.' });
+    } else {
+        // Si no hay sesión o no hay usuario en la sesión, no está autorizado.
+        logger.warn(`Intento de acceso no autorizado sin sesión válida a: ${req.originalUrl}`);
+        res.status(401).json({ message: 'No autorizado. Por favor, inicia sesión.' });
     }
 };
 
 export const authorize = (...allowedRolesAndPermissions) => {
     return (req, res, next) => {
+        // Esta función ya es compatible con la sesión, no necesita cambios.
         if (!req.user) {
             return res.status(401).json({ message: 'No autenticado.' });
         }

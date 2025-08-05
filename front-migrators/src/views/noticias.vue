@@ -84,55 +84,49 @@ export default {
 
 <style scoped>
 .page-noticias {
-  --pg-noticias-font-family: 'Poppins', sans-serif;
-  --pg-noticias-title-color: #2c3e50; /* Azul oscuro corporativo */
-  --pg-noticias-text-color: #495057;
-  --pg-noticias-primary-accent: #007bff; /* Un azul brillante para acentos */
-  --pg-noticias-light-bg: #f8f9fa;
-  --pg-noticias-border-color: #e0e6ed;
-  --pg-noticias-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-  font-family: var(--pg-noticias-font-family);
-  background-color: var(--pg-noticias-light-bg); /* Fondo general de la página de noticias */
+  /* Eliminamos las variables locales --pg-noticias-* */
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
 }
 
 .main-content-area {
-  padding-top: 2rem; /* Espacio desde el header si existe */
+  padding-top: 2rem;
   padding-bottom: 3rem;
 }
 
 .section-block {
-  background-color: #ffffff; /* Fondo blanco para las secciones dentro del bg general */
+  background-color: var(--color-surface);
   padding: 2.5rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: var(--pg-noticias-shadow);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-soft);
 }
+
 .section-block:not(:last-child) {
     margin-bottom: 3rem;
 }
 
-
 .section-title {
-  font-family: var(--pg-noticias-font-family);
-  font-weight: 700;
-  color: var(--pg-noticias-title-color);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   margin-bottom: 0.75rem !important;
   position: relative;
   padding-bottom: 0.5rem;
 }
+
 .section-title::after {
   content: '';
   display: block;
   width: 60px;
   height: 3px;
-  background-color: var(--pg-noticias-primary-accent);
+  background-color: var(--color-accent);
   margin: 0.5rem auto 0;
   border-radius: 2px;
 }
 .section-description {
   font-size: clamp(1rem, 2.5vw, 1.1rem);
-  color: var(--pg-noticias-text-muted-color, #6c757d);
+  color: var(--color-text-muted);
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
@@ -141,7 +135,7 @@ export default {
 .custom-separator {
   border: 0;
   height: 1px;
-  background-image: linear-gradient(to right, transparent, var(--pg-noticias-border-color), transparent);
+  background-image: linear-gradient(to right, transparent, var(--color-border), transparent);
   margin-top: 2rem;
   margin-bottom: 3rem;
 }
@@ -150,41 +144,41 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background-color: var(--pg-noticias-form-bg, #ffffff);
-  border: 1px solid var(--pg-noticias-border-color);
-  padding: 1.5rem; /* Más padding */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
 }
 
 .filter-input-group .input-group-text {
-    background-color: #eef2f7; /* Fondo más suave para el icono */
-    border-color: var(--pg-noticias-border-color);
+    background-color: var(--color-background);
+    border-color: var(--color-border);
     border-right: none;
-    color: var(--pg-noticias-primary-accent);
+    color: var(--color-primary-light);
 }
-.filter-input-group .form-control, 
+.filter-input-group .form-control,
 .filter-input-group .form-select {
     border-left: none;
-    border-color: var(--pg-noticias-border-color);
+    border-color: var(--color-border);
 }
-.filter-input-group .form-control:focus, 
+.filter-input-group .form-control:focus,
 .filter-input-group .form-select:focus {
-    border-color: var(--pg-noticias-primary-accent);
-    box-shadow: 0 0 0 0.2rem rgba(0,123,253,.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(29, 53, 87, 0.15);
 }
 .filter-submit-btn {
-    background-color: var(--pg-noticias-primary-accent);
-    border-color: var(--pg-noticias-primary-accent);
-    font-weight: 500;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
 }
 .filter-submit-btn:hover {
-    background-color: #0056b3; /* Un azul más oscuro */
-    border-color: #0056b3;
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary-light);
 }
 
 @media (min-width: 768px) {
   .filters-form {
     flex-direction: row;
-    align-items: center; /* Alinear verticalmente */
+    align-items: center;
   }
   .filters-form > .filter-input-group {
     flex: 1;

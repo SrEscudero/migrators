@@ -392,50 +392,56 @@ export default {
 };
 </script>
 
-<style scoped>
-.theme-modern {
-  --brand-blue: #007bff;
-  --brand-blue-dark: #005bb5;
-  --brand-blue-light: #e5f2ff;
-  --brand-red: #ff3b30;
-  
-  --text-primary: #2c3e50;
-  --text-secondary: #8a99a8;
-  --text-on-brand-color: #ffffff;
-
-  --surface-background: #ffffff;
-  --app-background: #f8f9fa;
-  --border-color: #e1e7ec;
-
-  --shadow-color: rgba(44, 62, 80, 0.1);
-  --focus-ring-color: rgba(0, 122, 255, 0.25);
-  
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
-  --transition-speed: 0.2s;
+<style>
+/* Estilos para los marcadores personalizados de Leaflet (deben ser globales, no 'scoped') */
+.custom-leaflet-div-icon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
+.marker-icon {
+  width: 1em;
+  height: 1em;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+.marker-shadow {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30%;
+  border-radius: 50%;
+  background-color: black;
+  filter: blur(4px);
+  z-index: 0;
+}
+</style>
 
+<style scoped>
+/* AHORA USAMOS LAS VARIABLES GLOBALES DE App.vue */
 .map-component-wrapper {
   display: grid;
   grid-template-columns: minmax(320px, 400px) 1fr;
   gap: 1.5rem;
   height: 90vh;
   max-height: 800px;
-  border-radius: 25px;
+  border-radius: var(--border-radius-lg);
   padding: 1.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--app-background);
+  font-family: var(--font-family-base);
+  background-color: var(--color-background); /* AHORA: Global */
 }
 
 .search-controls-panel {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  background: var(--surface-background);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 8px 24px var(--shadow-color);
+  background: var(--color-surface); /* AHORA: Global */
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-soft); /* AHORA: Global */
   padding: 1.5rem;
   overflow: hidden;
+  border: 1px solid var(--color-border);
 }
 
 .panel-section {
@@ -445,8 +451,8 @@ export default {
 
 .panel-title {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text); /* AHORA: Global */
   margin: 0 0 1rem 0;
 }
 
@@ -459,7 +465,7 @@ export default {
 .search-icon {
   position: absolute;
   left: 14px;
-  color: var(--text-secondary);
+  color: var(--color-text-muted); /* AHORA: Global */
   font-size: 0.9rem;
   z-index: 2;
 }
@@ -467,26 +473,27 @@ export default {
 .search-input {
   width: 100%;
   padding: 12px 14px 12px 40px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-border); /* AHORA: Global */
   border-radius: var(--border-radius-md);
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--color-text); /* AHORA: Global */
   transition: all var(--transition-speed) ease;
+  background-color: var(--color-background); /* AHORA: Global */
 }
 
-.search-input::placeholder { color: var(--text-secondary); }
+.search-input::placeholder { color: var(--color-text-muted); }
 
 .search-input:focus {
   outline: none;
-  border-color: var(--brand-blue);
-  box-shadow: 0 0 0 3px var(--focus-ring-color);
+  border-color: var(--color-primary); /* AHORA: Global */
+  box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.15);
 }
 
 .reset-button, .locate-button, .search-action-button {
   position: absolute;
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: var(--color-text-muted); /* AHORA: Global */
   cursor: pointer;
   padding: 4px;
   transition: all var(--transition-speed);
@@ -498,21 +505,12 @@ export default {
 
 .reset-button:hover, .locate-button:hover, .search-action-button:hover {
   opacity: 1;
-  color: var(--brand-blue);
+  color: var(--color-primary); /* AHORA: Global */
 }
 
-.reset-button {
-  right: 10px;
-}
-
-.search-action-button {
-  right: 40px;
-}
-
-.locate-button {
-  right: 10px;
-}
-
+.reset-button { right: 10px; }
+.search-action-button { right: 40px; }
+.locate-button { right: 10px; }
 .search-input:not(:placeholder-shown) ~ .locate-button {
     right: 70px;
 }
@@ -533,14 +531,14 @@ export default {
 .results-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text); /* AHORA: Global */
 }
 
 .results-count {
   font-size: 0.8rem;
-  font-weight: 700;
-  background-color: var(--brand-blue-light);
-  color: var(--brand-blue);
+  font-weight: var(--font-weight-bold);
+  background-color: rgba(29, 53, 87, 0.1); /* Color primario con opacidad */
+  color: var(--color-primary); /* AHORA: Global */
   padding: 2px 8px;
   border-radius: 1rem;
 }
@@ -555,8 +553,8 @@ export default {
 
 .results-list::-webkit-scrollbar { width: 6px; }
 .results-list::-webkit-scrollbar-track { background: transparent; }
-.results-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-.results-list::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+.results-list::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+.results-list::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
 
 .results-list li {
   display: flex;
@@ -566,26 +564,26 @@ export default {
   border-radius: var(--border-radius-md);
   cursor: pointer;
   transition: background-color var(--transition-speed) ease-out;
-  border-bottom: 1px solid var(--app-background);
+  border-bottom: 1px solid var(--color-background);
 }
 .results-list li:last-child {
     border-bottom: none;
 }
-.results-list li:hover { background-color: var(--app-background); }
+.results-list li:hover { background-color: var(--color-background); }
 .results-list li.selected {
-  background-color: var(--brand-blue);
-  color: var(--text-on-brand-color);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+  background-color: var(--color-primary); /* AHORA: Global */
+  color: var(--color-surface); /* AHORA: Global */
+  box-shadow: 0 4px 12px rgba(29, 53, 87, 0.2);
 }
 
 .point-icon-wrapper {
-    color: var(--brand-blue);
+    color: var(--color-primary-light); /* AHORA: Global */
     font-size: 1.1rem;
     padding-top: 0.2rem;
     flex-shrink: 0;
 }
 .results-list li.selected .point-icon-wrapper {
-    color: var(--text-on-brand-color);
+    color: var(--color-surface);
 }
 
 .point-details {
@@ -596,12 +594,12 @@ export default {
 .point-details strong {
   font-weight: 600;
   display: block;
-  color: var(--text-primary);
+  color: var(--color-text); /* AHORA: Global */
   margin-bottom: 0.35rem;
 }
 
 .point-details small { 
-    color: var(--text-secondary);
+    color: var(--color-text-muted); /* AHORA: Global */
     font-size: 0.9em;
     line-height: 1.5;
     display: block;
@@ -609,14 +607,14 @@ export default {
 
 .point-details .point-distance {
   font-size: 0.8em;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   margin-top: 0.5rem;
-  color: var(--brand-blue-dark);
+  color: var(--color-primary); /* AHORA: Global */
 }
 
 .results-list li.selected .point-details strong,
 .results-list li.selected .point-details small {
-    color: var(--text-on-brand-color);
+    color: var(--color-surface); /* AHORA: Global */
 }
 
 .results-list li.selected .point-distance {
@@ -630,8 +628,8 @@ export default {
   justify-content: center;
   text-align: center;
   padding: 2rem 1rem;
-  color: var(--text-secondary);
-  background-color: var(--app-background);
+  color: var(--color-text-muted); /* AHORA: Global */
+  background-color: var(--color-background); /* AHORA: Global */
   border-radius: var(--border-radius-md);
   flex-grow: 1;
   height: 100%;
@@ -640,14 +638,14 @@ export default {
 .no-results-message .icon {
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: var(--border-color);
+    color: var(--color-border); /* AHORA: Global */
 }
 
 .map-main-container {
   position: relative;
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 24px var(--shadow-color);
+  box-shadow: var(--shadow-soft); /* AHORA: Global */
 }
 
 #map { width: 100%; height: 100%; background-color: #eaf2f8; }
@@ -663,16 +661,16 @@ export default {
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(4px);
   z-index: 1001;
-  color: var(--text-primary);
-  font-weight: 500;
+  color: var(--color-text); /* AHORA: Global */
+  font-weight: var(--font-weight-medium);
 }
 
 .spinner {
-  border: 4px solid var(--brand-blue-light);
+  border: 4px solid rgba(29, 53, 87, 0.1);
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border-left-color: var(--brand-blue);
+  border-left-color: var(--color-primary); /* AHORA: Global */
   animation: spin 0.8s linear infinite;
 }
 

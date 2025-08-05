@@ -45,34 +45,34 @@ export default {
 
 <style scoped>
 .news-card-item {
-  border: 1px solid #e9ecef;
-  border-radius: 0.75rem; /* Consistencia */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-  background-color: #fff;
-  overflow: hidden; /* Para el overlay de imagen y bordes redondeados */
+  background-color: var(--color-surface);
+  overflow: hidden;
 }
 .news-card-item:hover {
   transform: translateY(-7px);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.08); /* Sombra más pronunciada */
+  box-shadow: var(--shadow-medium);
 }
 
 .news-card-link {
   text-decoration: none;
-  color: inherit; /* Heredar color de texto */
+  color: inherit;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 .news-card-link:hover .card-title {
-    color: var(--pg-noticias-primary-accent, #007bff); /* Color primario al hacer hover en el título */
+    color: var(--color-primary);
 }
 
 
 .card-img-container {
   width: 100%;
-  height: 200px; /* Altura fija y consistente */
+  height: 200px;
   position: relative;
-  background-color: #f0f0f0; /* Color de fondo mientras carga la imagen */
+  background-color: var(--color-background);
 }
 .card-img-top {
   width: 100%;
@@ -81,28 +81,27 @@ export default {
   transition: transform 0.35s ease-out;
 }
 .news-card-item:hover .card-img-top {
-  transform: scale(1.08); /* Zoom más notable */
+  transform: scale(1.08);
 }
 .img-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,0.25) 100%);
-  opacity: 1; /* Siempre visible para dar profundidad */
-  pointer-events: none; /* Para que no interfiera con el enlace */
+  opacity: 1;
+  pointer-events: none;
 }
 
 .card-body {
-  padding: 1rem 1.25rem; /* Padding ajustado */
-  flex-grow: 1; /* Para que el cuerpo crezca y empuje el footer */
+  padding: 1rem 1.25rem;
+  flex-grow: 1;
 }
 .card-title {
-  font-size: 1rem; /* Reducido ligeramente para noticias externas */
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--pg-noticias-title-color, #2c3e50);
+  color: var(--color-text);
   margin-bottom: 0.5rem;
   line-height: 1.3;
-  /* Truncado de título a 2 líneas */
-  height: 2.6em; /* Aprox. 2 líneas basado en line-height */
+  height: 2.6em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;  
@@ -112,12 +111,11 @@ export default {
 .card-text {
   font-size: 0.85rem;
   line-height: 1.5;
-  color: var(--pg-noticias-text-color, #495057);
+  color: var(--color-text-muted);
   margin-bottom: 0.75rem;
-  /* Truncado de descripción a 3-4 líneas */
-  height: 5.1em; /* Aprox. 3 líneas basado en line-height (0.85rem * 1.5 * 3) */
+  height: 5.1em;
   display: -webkit-box;
-  -webkit-line-clamp: 4; /* Aumentado a 4 líneas */
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;  
   overflow: hidden;
   text-overflow: ellipsis;
@@ -125,23 +123,23 @@ export default {
 
 .news-card-footer {
   padding: 0.75rem 1.25rem;
-  background-color: transparent; /* O un color muy sutil #fcfcfc */
-  border-top: 1px solid #f0f0f0;
+  background-color: transparent;
+  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .news-source {
-  font-size: 0.78rem; /* Más pequeño */
-  color: var(--pg-noticias-text-muted-color, #6c757d);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
   font-style: italic;
 }
 .external-link-indicator {
     font-size: 0.8rem;
-    color: var(--pg-noticias-primary-accent, #007bff);
-    font-weight: 500;
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
 }
 .external-link-indicator i {
-    font-size: 0.7rem; /* Ícono más pequeño */
+    font-size: 0.7rem;
 }
 </style>

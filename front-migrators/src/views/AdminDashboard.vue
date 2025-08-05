@@ -1,71 +1,72 @@
 <template>
-  <div class="dashboard-container d-flex flex-column h-100">
-    <Topbar :is-collapsed="isSidebarCollapsed" @toggle-sidebar="toggleSidebar" />
+  <div class="dashboard-container">
+    <Topbar
+      :is-collapsed="isSidebarCollapsed"
+      @toggle-sidebar="toggleSidebar"
+    />
+    <Sidebar
+      :menu-items="menuItems"
+      :is-collapsed="isSidebarCollapsed"
+      @toggle-sidebar="toggleSidebar"
+      @set-sidebar-collapsed="setSidebarCollapsedState"
+    />
 
-    <div class="dashboard-body d-flex flex-grow-1">
-      <Sidebar
-        :menu-items="menuItems"
-        :is-collapsed="isSidebarCollapsed"
-        @toggle-sidebar="toggleSidebar"
-        @set-sidebar-collapsed="setSidebarCollapsedState"
-      />
-      <main ref="mainContentRef" :class="['main-content', { collapsed: isSidebarCollapsed }]">
-        <div class="content-wrapper">
-          
-          <div v-if="$route.name === 'AdminNoticias'" class="content-section-container">
-             <section class="content-section card-style">
-                <h3 class="section-header">
-                  <i :class="noticiaEnEdicion.id ? 'fas fa-edit me-2' : 'fas fa-plus-circle me-2'"></i>
-                  {{ noticiaEnEdicion.id ? 'Editar Noticia' : 'Crear Nueva Noticia' }}
-                </h3>
-                <NoticiaForm
-                    :noticia="noticiaEnEdicion"
-                    @submit="submitNoticia"
-                    @save-draft="handleSaveDraft"
-                    @reset="resetNoticiaForm"
-                    @update:imageUrl="handleImageUpload"
-                />
-              </section>
+    <main ref="mainContentRef" :class="['main-content', { collapsed: isSidebarCollapsed }]">
+      <div class="content-wrapper">
 
-              <section class="content-section card-style mt-4">
-                <NoticiasTable
-                    :noticias="listaNoticias"
-                    :loading="isLoadingNoticias"
-                    @edit="handleEditNoticiaFromTable"
-                    @delete="confirmDeleteNoticia"
-                    @bulk-delete="confirmDeleteNoticiasMultiples"
-                    @publish-draft="confirmPublishDraft"
-                    @feature="toggleNewsFeature"
-                    @view="handleViewNoticiaModal"
-                />
-              </section>
-          </div>
+        <div v-if="$route.name === 'AdminNoticias'" class="content-section-container">
+          <section class="content-section card-style">
+            <h3 class="section-header">
+              <i :class="noticiaEnEdicion.id ? 'fas fa-edit me-2' : 'fas fa-plus-circle me-2'"></i>
+              {{ noticiaEnEdicion.id ? 'Editar Noticia' : 'Crear Nueva Noticia' }}
+            </h3>
+            <NoticiaForm
+              :noticia="noticiaEnEdicion"
+              @submit="submitNoticia"
+              @save-draft="handleSaveDraft"
+              @reset="resetNoticiaForm"
+              @update:imageUrl="handleImageUpload"
+            />
+          </section>
 
-          <router-view v-else v-slot="{ Component }">
-            <transition name="section-fade" mode="out-in">
-              <component :is="Component" />
-            </transition>
-          </router-view>
+          <section class="content-section card-style mt-4">
+            <NoticiasTable
+              :noticias="listaNoticias"
+              :loading="isLoadingNoticias"
+              @edit="handleEditNoticiaFromTable"
+              @delete="confirmDeleteNoticia"
+              @bulk-delete="confirmDeleteNoticiasMultiples"
+              @publish-draft="confirmPublishDraft"
+              @feature="toggleNewsFeature"
+              @view="handleViewNoticiaModal"
+            />
+          </section>
+        </div>
 
-          <div v-if="noticiaParaVer" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>{{ noticiaParaVer.titulo }}</h5>
-                  <button type="button" class="btn-close" @click="noticiaParaVer = null" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" v-html="sanitizeHTML(renderMarkdown(noticiaParaVer.contenido))"></div>
-                <div class="modal-footer bg-light-subtle">
-                  <button type="button" class="btn btn-outline-secondary" @click="noticiaParaVer = null"><i class="fas fa-times me-2"></i>Cerrar</button>
-                  <button type="button" class="btn btn-primary" @click="handleEditNoticiaFromModal(noticiaParaVer)"><i class="fas fa-edit me-2"></i>Editar Noticia</button>
-                </div>
+        <router-view v-else v-slot="{ Component }">
+          <transition name="section-fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+
+        <div v-if="noticiaParaVer" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
+          <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title fw-bold"><i class="fas fa-eye me-2"></i>{{ noticiaParaVer.titulo }}</h5>
+                <button type="button" class="btn-close" @click="noticiaParaVer = null" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" v-html="sanitizeHTML(renderMarkdown(noticiaParaVer.contenido))"></div>
+              <div class="modal-footer bg-light-subtle">
+                <button type="button" class="btn btn-outline-secondary" @click="noticiaParaVer = null"><i class="fas fa-times me-2"></i>Cerrar</button>
+                <button type="button" class="btn btn-primary" @click="handleEditNoticiaFromModal(noticiaParaVer)"><i class="fas fa-edit me-2"></i>Editar Noticia</button>
               </div>
             </div>
           </div>
-
         </div>
-      </main>
-    </div>
+
+      </div>
+    </main>
   </div>
 </template>
 
@@ -168,65 +169,48 @@ onMounted(() => {
 
 <style scoped>
 .dashboard-container {
-  height: 100vh;
-  overflow: hidden;
-  background-color: #f8f9fa; /* Color de fondo general para el área del dashboard */
+  background-color: var(--color-background);
+  /* Ya no necesita ser un contenedor flexbox */
 }
 
-.dashboard-body {
-  overflow: hidden;
-  position: relative;
-}
-
+/* El estilo clave para el contenido principal */
 .main-content {
-  flex-grow: 1;
-  /* La altura ahora será 100% del contenedor .dashboard-body */
-  height: 100%; 
-  overflow-y: auto; /* Mantenemos el scroll interno */
-  transition: margin-left 0.3s ease-in-out;
-  /* Añadimos padding-top para dejar espacio para el Topbar */
-  padding: calc(var(--topbar-height) + 1.5rem) 1.5rem 1.5rem 1.5rem;
+  /* Separación para dejar espacio al Topbar y Sidebar fijos */
+  margin-top: var(--topbar-height);
+  margin-left: var(--sidebar-width);
+  
+  /* Calculamos el alto y ancho para que ocupe exactamente el espacio restante */
+  height: calc(100vh - var(--topbar-height));
+  width: calc(100% - var(--sidebar-width));
+
+  overflow-y: auto; /* Habilitamos el scroll solo para el área de contenido */
+  padding: 1.5rem;
+  transition: margin-left 0.3s ease, width 0.3s ease; /* Añadimos width a la transición */
 }
 
-@media (min-width: 768px) {
-  .main-content {
-    margin-left: 260px;
-  }
-  .main-content.collapsed {
-    margin-left: 80px;
-  }
+/* Ajustes cuando el sidebar está colapsado */
+.main-content.collapsed {
+  margin-left: var(--sidebar-collapsed-width);
+  width: calc(100% - var(--sidebar-collapsed-width));
 }
 
+.content-wrapper {
+  margin: 0 auto;
+}
+
+/* Estilos para móvil donde el sidebar se oculta */
 @media (max-width: 767.98px) {
   .main-content,
   .main-content.collapsed {
     margin-left: 0;
+    width: 100%;
     padding: 1rem;
+    padding-top: calc(var(--topbar-height) + 1rem); /* En móvil, el topbar sigue fijo pero el sidebar no */
+    height: calc(100vh - var(--topbar-height));
   }
 }
 
-.content-wrapper {
-  max-width: 1400px; /* Ancho máximo para el contenido para que no se estire demasiado */
-  margin: 0 auto;
-}
-
-.content-section {
-  padding: 1.5rem;
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.section-header {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #343a40;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-/* Transiciones */
+/* ... Estilos para transiciones y modales (se mantienen igual) ... */
 .section-fade-enter-active,
 .section-fade-leave-active {
   transition: opacity 0.2s ease;
@@ -235,27 +219,4 @@ onMounted(() => {
 .section-fade-leave-to {
   opacity: 0;
 }
-
-/* Estilos para el modal y placeholders */
-.modal-content {
-  border-radius: 0.5rem;
-  border: none;
-}
-.modal-header {
-  border-bottom: none;
-}
-.modal-body {
-  line-height: 1.7;
-}
-.loading-placeholder {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #6c757d;
-}
-
-
-
 </style>

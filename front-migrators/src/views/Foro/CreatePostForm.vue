@@ -86,6 +86,7 @@ const handleSubmit = async () => {
 
 <style scoped>
 .card {
-  background-color: var(--surface-section);
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
 }
 </style>

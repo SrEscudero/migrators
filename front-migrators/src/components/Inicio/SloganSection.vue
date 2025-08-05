@@ -37,31 +37,21 @@ export default {
 </script>
 
 <style scoped>
-/* Variables CSS definidas en el contenedor principal del componente */
 .slogan-container {
-  --primary-color: #1a202c;
-  --secondary-color: #2f855a;
-  --accent-color: #33c8f5;
-  --text-color: #4a5568;
-  --light-text: #718096;
-  --bg-color: #ffffff;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --transition-duration: 0.3s; /* Renombrado de --transition-time y estandarizado a 0.3s */
-  --font-family: 'Poppins', sans-serif; /* Asegúrate que Poppins esté cargada globalmente */
-
-  font-family: var(--font-family);
-  border-radius: 25px;
+  /* Ya no se definen variables locales, se usan las globales de App.vue */
+  font-family: var(--font-family-base);
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 3rem;
-  background-color: var(--bg-color);
+  background-color: var(--color-surface);
   overflow: hidden;
   position: relative;
   margin: 2rem auto;
   max-width: 1200px;
   animation: fadeInUp 0.8s ease-out forwards;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-medium);
 }
 
 @keyframes fadeInUp {
@@ -83,18 +73,18 @@ export default {
 
 .slogan {
   font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 1.5rem;
-  color: var(--primary-color);
+  color: var(--color-primary); /* Variable global */
   line-height: 1.3;
   letter-spacing: -0.02em;
 }
 
 .slogan-highlight {
-  color: var(--accent-color);
+  color: var(--color-accent); /* Variable global */
   position: relative;
   display: inline-block;
-  transition: transform var(--transition-duration) ease, color var(--transition-duration) ease;
+  transition: transform var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 .slogan-highlight::after {
@@ -104,9 +94,9 @@ export default {
   left: 0;
   width: 100%;
   height: 8px;
-  background-color: rgba(63, 193, 216, 0.3); /* Color celeste/turquesa suave */
+  background-color: rgba(51, 200, 245, 0.25); /* Color de acento con opacidad */
   z-index: -1;
-  transition: height var(--transition-duration) ease;
+  transition: height var(--transition-speed) ease;
 }
 
 .slogan:hover .slogan-highlight::after {
@@ -116,78 +106,60 @@ export default {
 .slogan-description {
   font-size: clamp(1rem, 2vw, 1.2rem);
   line-height: 1.8;
-  color: var(--text-color);
+  color: var(--color-text); /* Variable global */
   margin-bottom: 2rem;
   letter-spacing: 0.01em;
 }
 
 .brand-name {
-  color: var(--secondary-color);
-  font-weight: 800; /* Un poco más de peso para destacar */
+  color: var(--color-secondary); /* Variable global */
+  font-weight: 800;
 }
 
-/* Estilos para la imagen */
 .slogan-image {
   position: relative;
   width: 40%;
-  perspective: 1000px; /* Útil si añades transformaciones 3D a la imagen */
+  perspective: 1000px;
 }
 
 .slogan-image img {
   width: 100%;
-  max-width: 400px; /* Limita el tamaño máximo de la imagen si es necesario */
-  height: auto; /* Mantiene la proporción */
+  max-width: 400px;
+  height: auto;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  /* transform-style: preserve-3d; */ /* Solo necesario si el img tiene hijos 3D, no para el img mismo */
-  transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
-/* Ejemplo de efecto 3D sutil en la imagen al pasar el cursor (opcional) */
-/*
-.slogan-image img:hover {
-  transform: rotateY(5deg) rotateX(2deg) scale(1.05);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-}
-*/
-
-/* Botón CTA */
 .cta-button {
-  background-color: rgba(66, 185, 131, 0.6); /* Un verde de Bootstrap con transparencia */
-  color: rgba(0, 91, 52, 0.856); /* Texto más oscuro para contraste */
+  background-color: var(--color-secondary); /* Variable global */
+  color: var(--color-surface); /* Variable global */
   border: none;
   padding: clamp(0.7rem, 1vw, 1rem) clamp(1.5rem, 2vw, 2.5rem);
   font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-  border-radius: 50px; /* Botón píldora */
+  border-radius: 50px;
   cursor: pointer;
-  transition: all var(--transition-duration) ease;
-  box-shadow: 0 4px 6px var(--shadow-color);
-  font-weight: 600;
-  text-decoration: none; /* Si usas <a> */
-  display: inline-block; /* Si usas <a> */
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  display: inline-block;
 }
 
-.cta-button:hover, .cta-button:focus { /* Combinado hover y focus para consistencia */
-  background-color: var(--secondary-color); /* Usando la variable --secondary-color */
-  color: var(--bg-color); /* Texto blanco para contraste */
+.cta-button:hover, .cta-button:focus {
+  background-color: var(--color-primary); /* Variable global */
+  color: var(--color-surface); /* Variable global */
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-medium);
 }
 
 .cta-button:active {
   transform: translateY(0);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-soft);
 }
-
-/* Quitado :focus separado si el :hover ya lo cubre, a menos que necesites estilos de focus muy específicos
-.cta-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(47, 136, 96, 0.6), 0 0 8px rgba(0, 0, 0, 0.2);
-}
-*/
 
 /* Diseño responsivo */
-@media (max-width: 992px) { /* Tablets y pantallas medianas */
+@media (max-width: 992px) {
   .slogan {
     font-size: clamp(1.5rem, 2.5vw, 2rem);
   }
@@ -196,55 +168,48 @@ export default {
   }
 }
 
-@media (max-width: 768px) { /* Móviles grandes y tablets en vertical */
+@media (max-width: 768px) {
   .slogan-container {
-    flex-direction: column-reverse; /* Imagen arriba, texto abajo */
+    flex-direction: column-reverse;
     text-align: center;
     padding: 2rem 1.5rem;
   }
-
   .slogan-text, .slogan-image {
     max-width: 100%;
     width: 100%;
   }
-
   .slogan-image {
-    /* margin-top: 2rem; */ /* Eliminado porque column-reverse ya la pone arriba */
-    margin-bottom: 2rem; /* Añadido espacio debajo de la imagen */
-    max-width: 80%; /* Hacer la imagen un poco más pequeña que el contenedor */
+    margin-bottom: 2rem;
+    max-width: 80%;
     margin-left: auto;
     margin-right: auto;
   }
-  
   .slogan-image img {
-    max-width: 100%; /* La imagen se ajusta a su contenedor .slogan-image */
+    max-width: 100%;
   }
-
   .slogan {
-    /* margin-top: 2rem; */ /* Eliminado, el espaciado lo da el margin-bottom de la imagen */
-    font-size: clamp(1.4rem, 4vw, 1.8rem); /* Ajustado clamp para mejor lectura en móviles */
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
   }
-
   .slogan-description {
-    font-size: clamp(0.9rem, 2.5vw, 1rem); /* Ajustado clamp */
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
   }
 }
 
-@media (max-width: 480px) { /* Móviles pequeños */
+@media (max-width: 480px) {
   .slogan-container {
     padding: 1.5rem 1rem;
   }
   .slogan {
-    font-size: clamp(1.2rem, 5vw, 1.6rem); /* Ajustado clamp */
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
   }
   .slogan-description {
-    font-size: clamp(0.85rem, 3vw, 0.95rem); /* Ajustado clamp */
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
   }
   .cta-button {
     padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 4vw, 1.5rem);
-    font-size: clamp(0.85rem, 2.5vw, 1rem); /* Ajustado clamp */
-    width: 100%; /* Botón ocupa todo el ancho en móviles muy pequeños */
-    max-width: 300px; /* Pero con un máximo para no ser excesivo */
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    width: 100%;
+    max-width: 300px;
     margin-left: auto;
     margin-right: auto;
   }

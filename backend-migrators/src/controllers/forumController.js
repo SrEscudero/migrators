@@ -1,7 +1,8 @@
+// Archivo completo: src/controllers/forumController.js
+
 import { forumRepository } from '../repositories/forumRepository.js';
 import { usuarioRepository } from '../repositories/usuarioRepository.js';
 import logger from '../config/logger.js';
-import { connectDB, sql } from '../config/db.js';
 
 export const getAllForums = async (req, res) => {
     try {
@@ -28,7 +29,7 @@ export const getThreadAndPosts = async (req, res) => {
     const { threadId } = req.params;
     try {
         // Ejecutamos las operaciones en paralelo para mayor eficiencia
-        const [thread, posts, _] = await Promise.all([
+        const [thread, posts] = await Promise.all([
             forumRepository.getThreadById(threadId),
             forumRepository.getPostsByThreadId(threadId),
             forumRepository.incrementThreadView(threadId)
@@ -53,10 +54,12 @@ export const createThread = async (req, res) => {
         return res.status(400).json({ message: 'El título y el contenido son obligatorios.' });
     }
     try {
-        const newThread = await forumRepository.createThread({
+        const newThreadData = await forumRepository.createThread({
             titulo, contenido, autor_id, forum_id: forumId
         });
-        res.status(201).json(newThread);
+        const author = await usuarioRepository.findById(autor_id);
+        const responseThread = { ...newThreadData, autorNombre: author.Nombre, replyCount: 0 };
+        res.status(201).json(responseThread);
     } catch (error) {
         logger.error('Error al crear el hilo: %s', error.message);
         res.status(500).json({ message: 'Error del servidor al crear el hilo.' });
@@ -74,7 +77,6 @@ export const createPost = async (req, res) => {
         const newPost = await forumRepository.createPost({
             contenido, autor_id, thread_id: threadId
         });
-        // Podríamos enriquecer el objeto devuelto con el nombre del autor
         const author = await usuarioRepository.findById(autor_id);
         const responsePost = { ...newPost, autorNombre: author.Nombre };
 
@@ -85,19 +87,85 @@ export const createPost = async (req, res) => {
     }
 };
 
-// --- PENDIENTE ---
-// Los métodos de update y delete para hilos y posts seguirían un patrón similar,
-// llamando a los métodos correspondientes del repositorio y añadiendo lógica de permisos.
-// Por brevedad, no los incluyo aquí, pero la estructura sería idéntica a los demás.
 export const updatePost = async (req, res) => {
-    // Implementación futura usando forumRepository.updatePost(postId, contenido)...
-    res.status(501).json({ message: 'No implementado' });
-}
+    const { postId } = req.params;
+    const { contenido } = req.body;
+    const currentUser = req.user;
+
+    if (!contenido) {
+        return res.status(400).json({ message: 'El contenido no puede estar vacío.' });
+    }
+
+    try {
+        const post = await forumRepository.findPostById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Publicación no encontrada.' });
+        }
+
+        // --- ¡VERIFICACIÓN DE SEGURIDAD CLAVE! ---
+        if (post.autor_id !== currentUser.id && currentUser.rol !== 'ceo') {
+            logger.warn(`Intento de edición no autorizado del post ${postId} por el usuario ${currentUser.id}`);
+            return res.status(403).json({ message: 'No tienes permiso para editar esta publicación.' });
+        }
+
+        await forumRepository.updatePost(postId, contenido);
+        res.status(200).json({ message: 'Publicación actualizada correctamente.' });
+
+    } catch (error) {
+        logger.error('Error al actualizar el post %s: %s', postId, error.message);
+        res.status(500).json({ message: 'Error del servidor al actualizar la publicación.' });
+    }
+};
+
 export const deleteThread = async (req, res) => {
-    // Implementación futura usando forumRepository.deleteThread(threadId)...
-    res.status(501).json({ message: 'No implementado' });
-}
+    const { threadId } = req.params;
+    const currentUser = req.user;
+
+    try {
+        const thread = await forumRepository.getThreadById(threadId);
+
+        if (!thread) {
+            return res.status(404).json({ message: 'Hilo no encontrado.' });
+        }
+
+        // --- ¡VERIFICACIÓN DE SEGURIDAD CLAVE! ---
+        if (thread.autor_id !== currentUser.id && currentUser.rol !== 'ceo') {
+            logger.warn(`Intento de borrado no autorizado del hilo ${threadId} por el usuario ${currentUser.id}`);
+            return res.status(403).json({ message: 'No tienes permiso para borrar este hilo.' });
+        }
+        
+        await forumRepository.deleteThread(threadId);
+        res.status(200).json({ message: 'Hilo eliminado correctamente.' });
+
+    } catch (error) {
+        logger.error('Error al eliminar el hilo %s: %s', threadId, error.message);
+        res.status(500).json({ message: 'Error del servidor al eliminar el hilo.' });
+    }
+};
+
 export const deletePost = async (req, res) => {
-    // Implementación futura usando forumRepository.deletePost(postId)...
-    res.status(501).json({ message: 'No implementado' });
-}
+    const { postId } = req.params;
+    const currentUser = req.user;
+
+    try {
+        const post = await forumRepository.findPostById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Publicación no encontrada.' });
+        }
+
+        // --- ¡VERIFICACIÓN DE SEGURIDAD CLAVE! ---
+        if (post.autor_id !== currentUser.id && currentUser.rol !== 'ceo') {
+            logger.warn(`Intento de borrado no autorizado del post ${postId} por el usuario ${currentUser.id}`);
+            return res.status(403).json({ message: 'No tienes permiso para borrar esta publicación.' });
+        }
+        
+        await forumRepository.deletePost(postId);
+        res.status(200).json({ message: 'Publicación eliminada correctamente.' });
+
+    } catch (error) {
+        logger.error('Error al eliminar el post %s: %s', postId, error.message);
+        res.status(500).json({ message: 'Error del servidor al eliminar la publicación.' });
+    }
+};

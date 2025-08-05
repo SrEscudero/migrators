@@ -8,7 +8,8 @@ import {
     loginUser, 
     registerUser, 
     logoutUser, 
-    updateUserProfile 
+    updateUserProfile,
+    getMe 
 } from '../controllers/userController.js';
 // --- FIN DE LA CORRECCIÓN ---
 
@@ -56,5 +57,9 @@ router.post('/logout', logoutUser);
 // --- RUTA PROTEGIDA PARA EL PERFIL ---
 // Ruta para que el usuario logueado actualice su propio perfil.
 router.put('/me', protect, updateUserProfile);
+
+// --- NUEVA RUTA PROTEGIDA ---
+// Ruta para que el usuario logueado obtenga sus propios datos.
+router.get('/me', protect, getMe);
 
 export default router;

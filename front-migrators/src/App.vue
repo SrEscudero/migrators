@@ -1,26 +1,18 @@
 <template>
   <div id="app">
-    <!-- Encabezado (no se muestra en /admin) -->
     <Header v-if="!$route.meta.hideLayout" />
 
-    <!-- Contenido principal -->
     <main>
       <template v-if="$route.path === '/'">
-        <!-- Sección del eslogan -->
         <SloganSection />
-        <!-- Carrusel de servicios -->
         <ServicesCarousel />
-        <!-- Mapa interactivo -->
         <MapSection />
-        <!-- Preguntas frecuentes -->
         <FaqSection />
       </template>
 
-      <!-- Vista de las rutas -->
       <router-view v-else />
     </main>
 
-    <!-- Pie de página (no se muestra en /admin) -->
     <Footer v-if="!$route.meta.hideLayout" />
   </div>
 </template>
@@ -28,8 +20,7 @@
 <script>
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useRoute } from 'vue-router';
-
-// Importa los componentes
+import { useAuthStore } from '@/stores/authStore';
 import Header from './components/shared/Header.vue';
 import SloganSection from './components/Inicio/SloganSection.vue';
 import ServicesCarousel from './components/Inicio/ServicesCarousel.vue';
@@ -47,12 +38,11 @@ export default {
     Footer,
   },
   setup() {
-    const route = useRoute(); // Obtiene la ruta actual
+    const route = useRoute();
+    const authStore = useAuthStore(); 
 
-    // Función para registrar la visita
     const trackVisit = async () => {
       try {
-        // AÑADIMOS la configuración para que sea un método POST
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/track-visit`, {
           method: 'POST'
         });
@@ -64,24 +54,23 @@ export default {
       }
     };
 
-    // Función para registrar la salida
     const trackExit = () => {
       try {
         const exitUrl = `${import.meta.env.VITE_API_URL}/api/exit`;
-        navigator.sendBeacon(exitUrl); // Usa sendBeacon para registrar la salida
+        navigator.sendBeacon(exitUrl); 
         console.log('📌 Salida registrada.');
       } catch (error) {
         console.error('❌ Error registrando salida:', error.message || 'Error desconocido');
       }
     };
 
-    // Llama a la función cuando la app se monta
     onMounted(() => {
-      trackVisit(); // Registra la visita al cargar la página
-      window.addEventListener('beforeunload', trackExit); // Registra la salida al cerrar la pestaña
+      authStore.fetchUser();
+
+      trackVisit(); 
+      window.addEventListener('beforeunload', trackExit); 
     });
 
-    // Elimina el listener cuando el componente se desmonta
     onBeforeUnmount(() => {
       window.removeEventListener('beforeunload', trackExit);
     });
@@ -92,116 +81,75 @@ export default {
 </script>
 
 <style>
-
 :root {
-  --topbar-height: 70px;
-  --sidebar-width: 250px;
-  --sidebar-collapsed-width: 80px;
+  --color-primary: #1D3557; /* Azul marino profundo (usado en Login/Header) */
+  --color-primary-light: #457B9D; /* Azul acero (usado en Login/Header) */
+  --color-secondary: #42b983; /* Verde Migrators (usado en sobre-nosotros) */
+  --color-accent: #33c8f5; /* Celeste/Turquesa (usado en SloganSection) */
+  --color-danger: #E63946; /* Rojo para alertas o acciones destructivas */
+
+  /* Paleta Neutral */
+  --color-text: #2c3e50; /* Gris oscuro para texto principal */
+  --color-text-muted: #6c757d; /* Gris más claro para texto secundario */
+  --color-background: #f8f9fa; /* Fondo general de la app (gris muy claro) */
+  --color-surface: #ffffff; /* Fondo para tarjetas, modales, etc. (blanco) */
+  --color-border: #e0e6ed; /* Color para bordes sutiles */
+
+  /* Tipografía */
+  --font-family-base: 'Poppins', sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Otros tokens de diseño */
+  --border-radius-md: 0.75rem; /* 12px */
+  --border-radius-lg: 1.25rem; /* 20px */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
   --transition-speed: 0.3s;
-
-  /* Colores base de tu dashboard (ejemplos) */
-  --hover-color: #f0f7ff;
-  --text-color-dark: #333333;
-  --text-color-light: #f8f9fa;
-  --icon-color: #6c757d;
-  --border-color: #e0e0e0;
-  --background-light: #ffffff;
-  --background-grey: #f8f9fa;
+  
+  /* Variables de Layout del Dashboard */
+  --topbar-height: 70px;
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
 }
-
-/* Estilos globales */
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
-}
-
-@media (max-width: 767.98px) { /* Breakpoint para móvil */
-  :root {
-    --topbar-height: 60px;
-    /* En móvil, el sidebar puede tener un ancho diferente cuando es overlay */
-    --sidebar-overlay-width: 280px;
-  }
-}
-
-h1, h2, h3 {
-  font-weight: 600;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Pega esto dentro de la etiqueta <style> en App.vue */
 
 /* Estilos para el modo oscuro */
 body.dark-mode {
-  --topbar-height: 70px;
-  --sidebar-width: 250px;
-  --sidebar-collapsed-width: 80px;
-  --transition-speed: 0.3s;
-
-  /* Colores oscuros */
-  --bs-body-bg: #1a1a2e; /* Fondo principal oscuro */
-  --bs-body-color: #e0e0e0; /* Color de texto principal claro */
-  
-  --hover-color: #2e2e4f;
-  --text-color-dark: #f8f9fa; /* Texto claro */
-  --text-color-light: #a0a0a0; /* Texto gris claro */
-  --icon-color: #a0a0a0;
-  --border-color: #3a3a5a; /* Bordes más oscuros */
-  
-  --background-light: #21213a; /* Fondo de las tarjetas y componentes */
-  --background-grey: #1a1a2e;
+  --color-text: #e0e0e0;
+  --color-text-muted: #a0a0a0;
+  --color-background: #1a1a2e;
+  --color-surface: #21213a;
+  --color-border: #3a3a5a;
 }
 
-/* Ajustes adicionales para componentes en modo oscuro */
-.dark-mode .bg-white {
-  background-color: var(--background-light) !important;
+/* Estilos globales básicos */
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
 }
 
-.dark-mode .text-dark {
-  color: var(--text-color-dark) !important;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
 }
 
-.dark-mode .text-muted {
-  color: var(--text-color-light) !important;
+/* --- LA CORRECCIÓN ESTÁ AQUÍ --- */
+/*
+ANTES:
+main {
+  padding: 1.5rem;
 }
+*/
 
-.dark-mode .table {
-  color: var(--bs-body-color);
-}
-
-.dark-mode .table-light {
-    --bs-table-bg: #2e2e4f;
-    --bs-table-border-color: var(--border-color);
-}
-
-.dark-mode .modal-content {
-  background-color: var(--background-light);
-  border-color: var(--border-color);
-}
-
-.dark-mode .dropdown-menu {
-  background-color: #2e2e4f;
-  border-color: var(--border-color);
-}
-
-.dark-mode .dropdown-item {
-  color: var(--text-color-dark);
-}
-
-.dark-mode .dropdown-item:hover {
-  background-color: #3a3a5a;
+/* AHORA:
+   Esta regla ahora SOLO se aplica al <main> que es hijo directo de #app,
+   ignorando el <main> del dashboard y resolviendo el conflicto.
+*/
+div#app > main {
+  padding: 1.5rem;
 }
 </style>

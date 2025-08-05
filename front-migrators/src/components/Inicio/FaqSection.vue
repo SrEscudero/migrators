@@ -113,108 +113,86 @@ export default {
 </script>
 
 <style scoped>
-/* Asegúrate de que la fuente Poppins esté cargada globalmente o impórtala aquí si es necesario */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'); */
-
 .faq-section {
-  /* Variables CSS locales para este componente */
-  --faq-primary-color: #2c3e50; /* Un azul oscuro para títulos y elementos primarios */
-  --faq-secondary-color: #3498db; /* Un azul más brillante para acentos y enlaces */
-  --faq-accent-color: #42b983; /* Un verde para toques de acento, como el subrayado del título */
-  --faq-background-color: #f4f7f6; /* Un fondo muy claro, casi blanco pero más suave */
-  --faq-card-background-color: #ffffff; /* Fondo de las tarjetas FAQ */
-  --faq-text-color: #34495e; /* Color principal para texto de párrafos */
-  --faq-light-text-color: #7f8c8d; /* Para subtítulos o texto menos importante */
-  --faq-border-color: #e0e6ed; /* Un color de borde suave */
-  --faq-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Sombra suave para tarjetas */
-  --faq-strong-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  --faq-transition-duration: 0.35s; /* Duración de transición unificada */
-  --faq-font-family: 'Poppins', sans-serif; /* Fuente principal */
-
+  /* Eliminamos las variables locales --faq-* */
+  --faq-transition-duration: 0.35s; /* Mantenemos esta para una transición específica si se desea */
   padding: 4rem 0;
-  background-color: var(--faq-background-color);
-  font-family: var(--faq-font-family);
-  color: var(--faq-text-color);
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background-color: var(--color-background); /* Fondo estandarizado */
 }
 
 .container {
-  max-width: 850px; /* Un poco más de ancho para el contenido */
+  max-width: 850px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 3rem; /* Más espacio antes de los FAQs */
+  margin-bottom: 3rem;
 }
 
 .section-title {
-  font-size: clamp(2rem, 4vw, 2.6rem); /* Ligeramente más grande */
-  font-weight: 700;
-  color: var(--faq-primary-color);
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
   margin-bottom: 0.75rem;
   position: relative;
-  display: inline-block; /* Para que el after se ajuste al texto */
+  display: inline-block;
 }
 
-.title-decoration { /* El span ya está, no se necesita clase extra si el ::after va en .section-title */
-  position: relative;
-}
-
-.section-title::after { /* Aplicado directamente al título para simplificar */
+.section-title::after {
   content: '';
   position: absolute;
-  bottom: -8px; /* Un poco más abajo */
+  bottom: -8px;
   left: 50%;
-  transform: translateX(-50%); /* Centrado perfecto */
-  width: 70px; /* Ancho fijo o porcentual */
+  transform: translateX(-50%);
+  width: 70px;
   height: 4px;
-  background-color: var(--faq-accent-color);
-  border-radius: 2px; /* Bordes redondeados */
-  z-index: 0; /* Detrás del texto si el texto tuviera fondo */
+  background-color: var(--color-accent);
+  border-radius: 2px;
 }
 
 .section-subtitle {
-  color: var(--faq-light-text-color);
+  color: var(--color-text-muted);
   font-size: clamp(1rem, 2vw, 1.15rem);
-  max-width: 650px; /* Ligeramente más ancho */
-  margin: 0 auto; /* Centrado */
+  max-width: 650px;
+  margin: 0 auto;
   line-height: 1.6;
 }
 
-/* Items FAQ */
 .faq-container {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; /* Un poco más de espacio entre items */
+  gap: 1.25rem;
 }
 
 .faq-item {
-  background-color: var(--faq-card-background-color);
-  border-radius: 10px; /* Bordes un poco más grandes */
-  box-shadow: var(--faq-shadow);
-  border: 1px solid var(--faq-border-color); /* Borde sutil */
-  overflow: hidden; /* Mantenido para la animación de max-height */
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
   transition: box-shadow var(--faq-transition-duration) ease-in-out;
 }
 
 .faq-item:hover {
-  box-shadow: var(--faq-strong-shadow);
-  border-color: var(--faq-secondary-color); /* Cambio de color de borde en hover */
+  box-shadow: var(--shadow-medium);
+  border-color: var(--color-primary-light);
 }
 
 .faq-item.active {
-  border-color: var(--faq-secondary-color);
+  border-color: var(--color-primary-light);
 }
-
 
 .faq-question {
   width: 100%;
-  padding: 1.5rem; /* Padding consistente */
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: transparent; /* Hereda de .faq-item */
+  background-color: transparent;
   border: none;
   text-align: left;
   cursor: pointer;
@@ -222,31 +200,29 @@ export default {
 }
 
 .faq-item.active .faq-question {
-  background-color: rgba(var(--faq-secondary-color), 0.05); /* Fondo muy sutil para el activo */
-  /* border-bottom: 1px solid var(--faq-border-color); */ /* Opcional: separador */
+  background-color: rgba(69, 123, 157, 0.05); /* Usando color-primary-light con opacidad */
 }
 
-
 .faq-question:hover, .faq-question:focus {
-  background-color: rgba(0,0,0,0.03); /* Ligero hover/focus */
+  background-color: rgba(0,0,0,0.03);
   outline: none;
 }
 
 .question-text {
   font-weight: 600;
-  color: var(--faq-primary-color);
+  color: var(--color-primary);
   font-size: clamp(1.05rem, 2.5vw, 1.15rem);
   flex: 1;
-  padding-right: 1rem; /* Espacio para el ícono */
+  padding-right: 1rem;
 }
 
 .toggle-icon {
   transition: transform var(--faq-transition-duration) ease-in-out;
-  color: var(--faq-secondary-color); /* Usar color secundario para el ícono */
-  flex-shrink: 0; /* Evitar que el ícono se encoja */
+  color: var(--color-primary-light);
+  flex-shrink: 0;
 }
 .toggle-icon .icon-svg {
-    width: 20px; /* Tamaño del SVG */
+    width: 20px;
     height: 20px;
 }
 
@@ -257,20 +233,20 @@ export default {
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--faq-transition-duration) ease-in-out, 
-              padding var(--faq-transition-duration) ease-in-out; /* Animar padding también */
-  padding: 0 1.5rem; /* Padding horizontal inicial para que no salte el texto */
-  background-color: var(--faq-card-background-color); /* Para que no sea transparente durante la animación */
+  transition: max-height var(--faq-transition-duration) ease-in-out,
+              padding var(--faq-transition-duration) ease-in-out;
+  padding: 0 1.5rem;
+  background-color: var(--color-surface);
 }
 
 .faq-item.active .faq-answer {
-  max-height: 600px; /* Aumentado por si hay respuestas largas */
-  padding: 0.5rem 1.5rem 1.5rem 1.5rem; /* Padding cuando está abierto */
+  max-height: 600px;
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
 }
 
 .answer-content p {
-  color: var(--faq-text-color);
-  line-height: 1.7; /* Mejor legibilidad */
+  color: var(--color-text);
+  line-height: 1.7;
   white-space: pre-line;
   margin-bottom: 1.25rem;
   font-size: clamp(0.9rem, 2vw, 1rem);
@@ -282,20 +258,20 @@ export default {
 .faq-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem; /* Espacio entre botones de enlace */
+  gap: 0.75rem;
   margin-top: 1.25rem;
 }
 
 .link-button {
-  display: inline-flex; /* Para alinear ícono y texto */
+  display: inline-flex;
   align-items: center;
   padding: 0.6rem 1.2rem;
-  background-color: var(--faq-accent-color);
-  color: var(--faq-card-background-color); /* Texto blanco o muy claro para contraste */
+  background-color: var(--color-secondary);
+  color: var(--color-surface);
   border-radius: 6px;
   text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   transition: background-color var(--faq-transition-duration) ease, transform var(--faq-transition-duration) ease;
 }
 .link-button .link-icon {
@@ -304,64 +280,34 @@ export default {
 }
 
 .link-button:hover, .link-button:focus {
-  background-color: darken(var(--faq-accent-color), 10%); /* Oscurecer un poco el color de acento */
-  color: var(--faq-card-background-color);
+  background-color: #369669; /* Un verde secundario ligeramente más oscuro */
+  color: var(--color-surface);
   transform: translateY(-2px);
   outline: none;
 }
-
-/* Footer de la sección (si decides usarlo) */
-/*
-.faq-section-footer {
-  text-align: center;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--faq-border-color);
-}
-.faq-section-footer p {
-  color: var(--faq-text-color);
-  margin-bottom: 1rem;
-}
-.contact-button-inline {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--faq-secondary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color var(--faq-transition-duration) ease, transform var(--faq-transition-duration) ease;
-  text-decoration: none;
-}
-.contact-button-inline:hover, .contact-button-inline:focus {
-  background-color: darken(var(--faq-secondary-color), 10%);
-  transform: translateY(-2px);
-  outline: none;
-}
-*/
 
 /* Responsive */
 @media (max-width: 768px) {
   .faq-section {
-    padding: 3rem 0; /* Reducido padding general */
+    padding: 3rem 0;
   }
   .container {
-    padding: 0 1rem; /* Menos padding lateral en el contenedor */
+    padding: 0 1rem;
   }
   .section-header {
     margin-bottom: 2rem;
   }
   .section-title {
-    font-size: clamp(1.6rem, 5vw, 2rem); /* Ajustado */
+    font-size: clamp(1.6rem, 5vw, 2rem);
   }
   .section-subtitle {
-    font-size: clamp(0.95rem, 2.5vw, 1.05rem); /* Ajustado */
+    font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   }
   .faq-container {
     gap: 1rem;
   }
   .faq-question {
-    padding: 1.25rem; /* Un poco menos de padding */
+    padding: 1.25rem;
   }
   .question-text {
     font-size: clamp(1rem, 3vw, 1.1rem);
@@ -375,32 +321,6 @@ export default {
   .link-button {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
-  }
-}
-
-/* Accesibilidad - Preferencia de movimiento reducido */
-@media (prefers-reduced-motion: reduce) {
-  .faq-item,
-  .faq-question,
-  .toggle-icon,
-  .faq-answer,
-  .link-button,
-  /* .contact-button-inline, */ /* Si se usa el footer */
-  .title-decoration::after {
-    transition-duration: 0.001s !important; /* Prácticamente sin transición */
-    animation: none !important; /* Sin animaciones de keyframes */
-  }
-  
-  .faq-item.active .faq-answer {
-    max-height: none; /* Mostrar contenido directamente */
-    overflow: visible; /* Asegurar visibilidad */
-    padding-bottom: 1.5rem; /* Asegurar padding inferior */
-  }
-  
-  .link-button:hover, .link-button:focus,
-  /* .contact-button-inline:hover, .contact-button-inline:focus, */ /* Si se usa */
-  .faq-item:hover {
-    transform: none; /* Sin transformaciones en hover/focus */
   }
 }
 </style>

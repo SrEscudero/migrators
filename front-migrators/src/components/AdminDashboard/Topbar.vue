@@ -12,49 +12,47 @@
     </div>
 
     <div class="topbar-right">
-      <div class="user-menu" ref="userMenuRef">
+      <div class="dropdown user-menu">
         <button 
-          class="user-btn" 
-          :class="{ 'active': isDropdownOpen }" 
-          @click="toggleDropdown"
-          aria-haspopup="true"
-          :aria-expanded="isDropdownOpen"
+          class="btn user-btn dropdown-toggle" 
+          type="button"
+          id="userMenuButton"
+          data-bs-toggle="dropdown" 
+          aria-expanded="false"
         >
           <div class="user-avatar">
             <i class="fas fa-user-circle"></i>
           </div>
-          <span class="user-name">{{ user?.Nombre || 'Usuario' }}</span>
-          <i class="fas fa-caret-down dropdown-arrow"></i>
+          <span class="user-name">{{ user?.nombre || 'Usuario' }}</span>
         </button>
 
-        <transition name="dropdown-animation">
-          <ul v-show="isDropdownOpen" class="dropdown-menu">
-            <li>
-              <router-link to="/perfil" class="dropdown-item" @click="closeDropdown">
-                <i class="fas fa-user-cog fa-fw me-2"></i> Mi Perfil
-              </router-link>
-            </li>
-            <li>
-              <button class="dropdown-item" @click="handleThemeToggle">
-                <i class="fas fa-fw me-2" :class="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
-                <span>Tema: {{ theme === 'light' ? 'Oscuro' : 'Claro' }}</span>
-              </button>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <button class="dropdown-item text-danger" @click="handleLogout">
-                <i class="fas fa-sign-out-alt fa-fw me-2"></i> Cerrar sesión
-              </button>
-            </li>
-          </ul>
-        </transition>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+          <li>
+            <router-link to="/perfil" class="dropdown-item">
+              <i class="fas fa-user-cog fa-fw me-2"></i> Mi Perfil
+            </router-link>
+          </li>
+          <li>
+            <button class="dropdown-item" @click="handleThemeToggle">
+              <i class="fas fa-fw me-2" :class="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
+              <span>Tema: {{ theme === 'light' ? 'Oscuro' : 'Claro' }}</span>
+            </button>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <button class="dropdown-item text-danger" @click="handleLogout">
+              <i class="fas fa-sign-out-alt fa-fw me-2"></i> Cerrar sesión
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+// AJUSTE: Se eliminaron refs y watchers innecesarios (isDropdownOpen, etc.)
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import { useTheme } from '@/composables/useTheme';
 import Swal from 'sweetalert2';
@@ -63,50 +61,21 @@ import { storeToRefs } from 'pinia';
 defineProps({
   isCollapsed: { type: Boolean, required: true },
 });
-const emit = defineEmits(['toggle-sidebar']);
+defineEmits(['toggle-sidebar']);
 
 // --- ESTADO REACTIVO ---
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore); // Se asegura que 'user' sea reactivo
+const { user } = storeToRefs(authStore);
 const { theme, toggleTheme } = useTheme();
 
-const isDropdownOpen = ref(false);
 const windowWidth = ref(window.innerWidth);
-const userMenuRef = ref(null); // Ref para el contenedor del menú
-
-// --- MANEJO DEL MENÚ DESPLEGABLE ---
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
-
-const closeDropdown = () => {
-  isDropdownOpen.value = false;
-};
-
-const handleClickOutside = (event) => {
-  // Si el menú está abierto y el clic fue fuera de su contenedor, se cierra
-  if (isDropdownOpen.value && userMenuRef.value && !userMenuRef.value.contains(event.target)) {
-    closeDropdown();
-  }
-};
-
-// Se vigila el estado del menú para añadir/quitar el listener de clic fuera
-watch(isDropdownOpen, (isOpen) => {
-  if (isOpen) {
-    document.addEventListener('click', handleClickOutside, true);
-  } else {
-    document.removeEventListener('click', handleClickOutside, true);
-  }
-});
 
 // --- ACCIONES ---
 const handleThemeToggle = () => {
   toggleTheme();
-  closeDropdown();
 };
 
 const handleLogout = async () => {
-  closeDropdown();
   const result = await Swal.fire({
     title: '¿Cerrar sesión?',
     icon: 'question',
@@ -130,21 +99,18 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
-  // Limpia el listener si el componente se destruye con el menú abierto
-  document.removeEventListener('click', handleClickOutside, true);
 });
 </script>
 
 <style scoped>
-/* Tus estilos existentes se mantienen aquí */
 .topbar {
   position: fixed;
   top: 0;
-  left: var(--sidebar-width);
-  width: calc(100% - var(--sidebar-width));
-  height: var(--topbar-height);
-  background-color: #ffffff;
-  color: var(--text-color-dark);
+  left: var(--sidebar-width); /* Variable del componente Sidebar */
+  width: calc(100% - var(--sidebar-width)); /* Variable del componente Sidebar */
+  height: var(--topbar-height); /* Variable global de App.vue */
+  background-color: var(--color-surface); /* AHORA: Variable global */
+  color: var(--color-text); /* AHORA: Variable global */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -152,11 +118,11 @@ onUnmounted(() => {
   z-index: 999;
   transition: all var(--transition-speed) ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--color-border); /* AHORA: Variable global */
 }
 .topbar.collapsed {
-  left: var(--sidebar-collapsed-width);
-  width: calc(100% - var(--sidebar-collapsed-width));
+  left: var(--sidebar-collapsed-width); /* Variable del componente Sidebar */
+  width: calc(100% - var(--sidebar-collapsed-width)); /* Variable del componente Sidebar */
 }
 .topbar-left, .topbar-right {
   display: flex;
@@ -164,7 +130,7 @@ onUnmounted(() => {
   gap: 1rem;
 }
 .sidebar-toggle-btn {
-  color: var(--icon-color);
+  color: var(--color-text-muted); /* AHORA: Variable global */
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -181,27 +147,29 @@ onUnmounted(() => {
   font-size: 1.25rem;
   white-space: nowrap;
 }
-.user-menu {
-  position: relative;
-}
-.user-btn {
+
+.user-btn.dropdown-toggle {
   display: flex;
   align-items: center;
   background: none;
   border: none;
-  color: var(--text-color-dark);
+  color: var(--color-text); /* AHORA: Variable global */
   cursor: pointer;
   padding: 0.5rem 0.75rem;
   border-radius: 9999px;
   transition: background-color var(--transition-speed) ease;
   gap: 0.75rem;
 }
-.user-btn:hover, .user-btn.active {
-  background-color: var(--hover-color);
+.user-btn.dropdown-toggle:hover, .user-btn.dropdown-toggle.show {
+  background-color: var(--color-background); /* AHORA: Variable global */
+}
+
+.user-btn.dropdown-toggle::after {
+  display: none;
 }
 .user-avatar i {
   font-size: 1.75rem;
-  color: var(--primary-color);
+  color: var(--color-primary); /* AHORA: Variable global */
 }
 .user-name {
   font-size: 0.925rem;
@@ -210,26 +178,19 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.dropdown-arrow {
-  font-size: 0.9rem;
-  transition: transform var(--transition-speed) ease;
-}
-.user-btn.active .dropdown-arrow {
-  transform: rotate(180deg);
-}
 .dropdown-menu {
   position: absolute;
   right: 0;
   top: calc(100% + 0.5rem);
   min-width: 200px;
-  background-color: #ffffff;
+  background-color: var(--color-surface); /* AHORA: Variable global */
   border-radius: 0.5rem;
-  box-shadow: var(--dropdown-shadow);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
   list-style: none;
   padding: 0.5rem 0;
   margin: 0;
   z-index: 1000;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-border); /* AHORA: Variable global */
 }
 .dropdown-item {
   display: flex;
@@ -238,7 +199,7 @@ onUnmounted(() => {
   padding: 0.75rem 1.25rem;
   background: none;
   border: none;
-  color: var(--text-color-dark);
+  color: var(--color-text); /* AHORA: Variable global */
   cursor: pointer;
   text-align: left;
   font-size: 0.925rem;
@@ -246,8 +207,8 @@ onUnmounted(() => {
   text-decoration: none;
 }
 .dropdown-item:hover {
-  background-color: var(--hover-color);
-  color: var(--primary-color);
+  background-color: var(--color-background); /* AHORA: Variable global */
+  color: var(--color-primary); /* AHORA: Variable global */
 }
 .dropdown-item i {
   width: 20px;
@@ -255,18 +216,9 @@ onUnmounted(() => {
 }
 .dropdown-divider {
   margin: 0.5rem 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--color-border); /* AHORA: Variable global */
 }
-.dropdown-animation-enter-active,
-.dropdown-animation-leave-active {
-  transition: all 0.2s ease;
-  transform-origin: top right;
-}
-.dropdown-animation-enter-from,
-.dropdown-animation-leave-to {
-  opacity: 0;
-  transform: scale(0.95) translateY(-10px);
-}
+
 @media (max-width: 767.98px) {
   .topbar, .topbar.collapsed {
     left: 0;

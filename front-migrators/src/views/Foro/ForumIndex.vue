@@ -50,17 +50,29 @@ onMounted(async () => {
 <style scoped>
 .forum-card {
   transition: all 0.2s ease-in-out;
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
 }
 .forum-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-medium);
 }
 .stat-value {
   font-size: 1.5rem;
   font-weight: 600;
+  color: var(--color-text);
 }
 .stat-label {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--color-text-muted);
+}
+.card-title a {
+    color: var(--color-primary);
+}
+.card-title a:hover {
+    color: var(--color-primary-light);
+}
+.card-text {
+    color: var(--color-text-muted);
 }
 </style>

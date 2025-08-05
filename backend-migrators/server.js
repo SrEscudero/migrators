@@ -13,6 +13,7 @@ import fs from 'fs';
 import helmet from 'helmet'; 
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import session from 'express-session'; // <-- 1. IMPORTA express-session
 
 // --- Import de la configuración de DB ---
 import { connectDB, sql } from './src/config/db.js';
@@ -35,7 +36,7 @@ import { visitanteRepository } from './src/repositories/visitanteRepository.js';
 // =================================================================
 // CONFIGURACIÓN INICIAL
 // =================================================================
-dotenv.config(); // Carga las variables de entorno del archivo .env
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,34 +51,36 @@ const PORT = process.env.PORT || 5000;
 app.use(compression());
 app.use(helmet());
 
-// --- Configuración CORS ---
-const allowedOrigins = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://192.168.56.1:5173',
-    'http://192.168.3.30:5173',
-    'http://192.168.18.76:5173',
-    'http://192.168.3.83:5173',
-];
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
+  origin: frontendURL,
+  credentials: true, 
 }));
 
-// --- Middlewares para parsear el body y servir archivos estáticos ---
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); // cookieParser debe ir ANTES de session
 app.use(express.urlencoded({ extended: true }));
+
+// =================================================================
+// --- 2. AÑADE ESTE BLOQUE DE CÓDIGO AQUÍ ---
+// =================================================================
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true, 
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 10 * 60 * 1000, 
+        sameSite: 'strict'
+    }
+}));
+// =================================================================
+
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
-// --- Logging de solicitudes con Winston ---
 app.use((req, res, next) => {
     logger.http(`Request: ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
     next();
@@ -129,25 +132,17 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 });
 
 // --- NUEVA RUTA DE TRACKING DE VISITAS ---
-// Esta ruta reemplaza a las anteriores /api/track-visit y /api/stats
 app.post('/api/track-visit', async (req, res) => {
     try {
         const ip = req.ip;
         const userAgent = req.headers['user-agent'];
-        
-        // 1. Llama al servicio para obtener datos de la IP
         const enrichedData = await enrichIpData(ip);
-
-        // 2. Prepara el objeto completo para guardar
         const visitorData = {
             ip_address: ip,
             user_agent: userAgent,
-            ...enrichedData // Fusiona los datos de ipquery.io (pais, ciudad, is_vpn, etc.)
+            ...enrichedData
         };
-        
-        // 3. Guarda en la base de datos a través del repositorio
         await visitanteRepository.create(visitorData);
-        
         res.status(200).json({ message: 'Visita registrada con éxito.' });
     } catch (error) {
         logger.error('Error al registrar visita: %s', error.message);

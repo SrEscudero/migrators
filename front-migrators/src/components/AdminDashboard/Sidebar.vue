@@ -55,38 +55,24 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
 </script>
 
 <style scoped>
-:root {
+/* Las variables de dimensionamiento se quedan, pero las de color se van */
+.sidebar {
   --sidebar-width: 280px;
   --sidebar-collapsed-width: 80px;
-  --topbar-height: 70px;
-  --footer-height: 70px;
-  --transition-speed: 0.3s;
-  --primary-color: #4f46e5;
-  --primary-hover: #4338ca;
-  --hover-color: #f1f5f9;
-  --active-color: #e0e7ff;
-  --text-color-dark: #1e293b;
-  --text-color-light: #64748b;
-  --icon-color: #64748b;
-  --border-color: #e2e8f0;
-  --notification-color: #ef4444;
-  --sidebar-bg: #ffffff;
   --sidebar-overlay-width: 280px;
-}
 
-.sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: var(--sidebar-bg);
-  color: var(--text-color-dark);
+  background-color: var(--color-surface); /* AHORA: Variable global */
+  color: var(--color-text); /* AHORA: Variable global */
   transition: all var(--transition-speed) ease;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--color-border); /* AHORA: Variable global */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -98,9 +84,9 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: var(--topbar-height);
+  height: var(--topbar-height); /* Variable global de App.vue */
   padding: 0 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--color-border); /* AHORA: Variable global */
 }
 
 .logo-link {
@@ -156,7 +142,7 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
   padding: 0.75rem 1rem;
   background: transparent;
   border: none;
-  color: var(--text-color-dark);
+  color: var(--color-text); /* AHORA: Variable global */
   cursor: pointer;
   text-align: left;
   transition: all var(--transition-speed) ease;
@@ -167,29 +153,30 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
 }
 
 .menu-button:hover {
-  background-color: var(--hover-color);
-  color: var(--primary-color);
+  background-color: var(--color-background); /* AHORA: Variable global */
+  color: var(--color-primary); /* AHORA: Variable global */
 }
 
 .menu-button:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid var(--color-primary); /* AHORA: Variable global */
   outline-offset: -2px;
 }
 
-.menu-items li.active .menu-button {
-  background-color: var(--active-color);
-  color: var(--primary-color);
+/* Para el router-link-active de Vue Router */
+.menu-button.router-link-active {
+  background-color: rgba(29, 53, 87, 0.1); /* Color primario con opacidad */
+  color: var(--color-primary); /* AHORA: Variable global */
   font-weight: 500;
 }
 
-.menu-items li.active .menu-icon {
-  color: var(--primary-color);
+.menu-button.router-link-active .menu-icon {
+  color: var(--color-primary); /* AHORA: Variable global */
 }
 
 .menu-icon {
   font-size: 1.1rem;
   margin-right: 1rem;
-  color: var(--icon-color);
+  color: var(--color-text-muted); /* AHORA: Variable global */
   transition: color var(--transition-speed) ease;
   flex-shrink: 0;
   width: 24px;
@@ -212,18 +199,7 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
   flex-grow: 1;
 }
 
-.badge {
-  background-color: var(--notification-color);
-  color: white;
-  border-radius: 9999px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-left: auto;
-}
-
-.sidebar.collapsed .menu-text,
-.sidebar.collapsed .badge {
+.sidebar.collapsed .menu-text {
   display: none;
 }
 
@@ -231,15 +207,15 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: var(--footer-height);
-  border-top: 1px solid var(--border-color);
+  height: var(--footer-height, 70px); /* Usamos un fallback por si no está global */
+  border-top: 1px solid var(--color-border);
   padding: 0 1rem;
 }
 
 .collapse-btn {
   background: none;
   border: none;
-  color: var(--icon-color);
+  color: var(--color-text-muted);
   font-size: 1.1rem;
   cursor: pointer;
   padding: 0.5rem;
@@ -253,13 +229,13 @@ defineEmits(['toggle-sidebar', 'set-sidebar-collapsed']);
 }
 
 .collapse-btn:hover {
-  background-color: var(--hover-color);
-  color: var(--primary-color);
+  background-color: var(--color-background);
+  color: var(--color-primary);
   transform: scale(1.05);
 }
 
 .collapse-btn:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid var(--color-primary);
 }
 
 /* Mobile styles */

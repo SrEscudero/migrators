@@ -80,24 +80,11 @@ export default {
 </script>
 
 <style scoped>
-/* Importación de fuentes (idealmente en un CSS global o en index.html) */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'); */
-
-/* Variables CSS definidas en el contenedor principal del componente */
 .services-section {
-  --primary-color-services: #2c3e50; /* Renombradas para evitar colisiones si son locales */
-  --secondary-color-services: #42b983;
-  --text-color-services: #34495e;
-  --light-text-services: #7f8c8d;
-  --bg-color-services: #ffffff;
-  --card-bg-services: #f8f9fa;
-  --shadow-color-services: rgba(0, 0, 0, 0.1);
-  --transition-duration-services: 0.4s;
-  --font-family-services: 'Poppins', sans-serif; /* Asegúrate que Poppins esté cargada globalmente */
-
+  /* Eliminamos las variables locales --*-services */
   padding: 4rem 0;
-  background-color: var(--bg-color-services);
-  font-family: var(--font-family-services);
+  font-family: var(--font-family-base);
+  background-color: var(--color-surface); /* Fondo blanco para esta sección */
 }
 
 .container {
@@ -108,8 +95,8 @@ export default {
 
 .section-title {
   font-size: clamp(2rem, 3vw, 2.5rem);
-  font-weight: 700;
-  color: var(--primary-color-services);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
   text-align: center;
   margin-bottom: 1rem;
   position: relative;
@@ -123,51 +110,49 @@ export default {
 .title-decoration::after {
   content: '';
   position: absolute;
-  bottom: 8px; /* Ajustado para que no esté tan pegado */
-  left: 5%; /* Centrado ligero */
-  width: 90%; /* Ligeramente menos ancho que el texto */
-  height: 10px; /* Un poco menos alto */
-  background-color: rgba(66, 185, 131, 0.25); /* Más suave el color */
+  bottom: 8px;
+  left: 5%;
+  width: 90%;
+  height: 10px;
+  background-color: rgba(66, 185, 131, 0.25);
   z-index: -1;
   transition: height 0.3s ease, background-color 0.3s ease;
-  border-radius: 3px; /* Bordes redondeados para el subrayado */
+  border-radius: 3px;
 }
 
 .section-title:hover .title-decoration::after {
-  height: 14px; /* Crece un poco más */
+  height: 14px;
   background-color: rgba(66, 185, 131, 0.4);
 }
 
 .section-subtitle {
   font-size: clamp(1rem, 1.5vw, 1.2rem);
-  color: var(--light-text-services);
+  color: var(--color-text-muted);
   text-align: center;
   margin-bottom: 3rem;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.7; /* Mejorado para legibilidad */
+  line-height: 1.7;
 }
 
-/* Grid de servicios */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem; /* Un poco más de espacio */
+  gap: 2.5rem;
   margin-top: 2rem;
 }
 
-/* Tarjetas de servicio */
 .service-card {
-  background-color: var(--card-bg-services);
-  border-radius: 20px;
+  background-color: var(--color-background); /* Fondo gris claro para las tarjetas */
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 25px var(--shadow-color-services); /* Sombra más suave y difusa */
-  transition: transform var(--transition-duration-services) ease, box-shadow var(--transition-duration-services) ease;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   position: relative;
   z-index: 1;
-  display: flex; /* Para mejor control del contenido interno */
-  flex-direction: column; /* Apilar contenido verticalmente */
+  display: flex;
+  flex-direction: column;
 }
 
 .service-card::before {
@@ -176,22 +161,21 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 6px; /* Un poco más grueso */
-  background-color: var(--dynamic-accent-color, var(--secondary-color-services)); /* Usa el color dinámico o uno por defecto */
+  height: 6px;
+  background-color: var(--dynamic-accent-color, var(--color-secondary));
   z-index: 2;
   transition: height 0.3s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-12px); /* Efecto de elevación más pronunciado */
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-medium);
 }
+
 .service-card:hover::before {
-    height: 8px; /* La barra de color crece un poco */
+    height: 8px;
 }
 
-
-/* Contenedor de imagen */
 .card-image-container {
   position: relative;
   width: 100%;
@@ -203,7 +187,7 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición más suave */
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .image-overlay {
@@ -212,88 +196,86 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%); /* Gradiente más sutil */
-  opacity: 0.8; /* Ligeramente menos opaco */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%);
+  opacity: 0.8;
   transition: opacity 0.5s ease;
 }
 
 .service-card:hover .card-image {
-  transform: scale(1.1); /* Efecto de zoom más pronunciado */
+  transform: scale(1.1);
 }
+
 .service-card:hover .image-overlay {
-  opacity: 0.6; /* El overlay se hace más transparente al hacer hover */
+  opacity: 0.6;
 }
 
-
-/* Contenido de la tarjeta */
 .card-content {
-  padding: 1.8rem; /* Un poco más de padding */
+  padding: 1.8rem;
   position: relative;
-  flex-grow: 1; /* Permite que esta sección crezca para alinear botones */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  text-align: center; /* Centrar contenido de texto */
+  text-align: center;
 }
 
 .service-icon {
   width: 60px;
   height: 60px;
-  background-color: var(--dynamic-accent-color, var(--secondary-color-services));
+  background-color: var(--dynamic-accent-color, var(--color-secondary));
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -45px auto 1rem auto; /* Ajustado para mejor superposición y espacio */
+  margin: -45px auto 1rem auto;
   position: relative;
   z-index: 3;
   box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-  font-size: 1.6rem; /* Tamaño del ícono */
-  border: 3px solid var(--bg-color-services); /* Borde para destacar sobre la imagen */
+  font-size: 1.6rem;
+  border: 3px solid var(--color-background);
 }
 
 .card-title {
   font-size: clamp(1.2rem, 1.5vw, 1.4rem);
   font-weight: 600;
-  color: var(--primary-color-services);
-  margin-bottom: 0.8rem; /* Menos espacio si el subtítulo es corto */
+  color: var(--color-primary);
+  margin-bottom: 0.8rem;
 }
 
 .card-description {
   font-size: clamp(0.9rem, 1vw, 1rem);
-  line-height: 1.7; /* Mejorado para legibilidad */
-  color: var(--text-color-services);
+  line-height: 1.7;
+  color: var(--color-text);
   margin-bottom: 1.5rem;
-  flex-grow: 1; /* Empuja el botón hacia abajo */
+  flex-grow: 1;
 }
 
-/* Botón */
 .card-button {
-  display: inline-block; /* Cambiado para que funcione con margin auto */
-  width: auto; /* Ajuste de ancho automático */
-  max-width: 200px; /* Ancho máximo para el botón */
-  margin: 0 auto; /* Centrar el botón si es más angosto que el contenido */
-  padding: 0.75rem 1.8rem; /* Un poco más de padding */
-  background-color: var(--dynamic-accent-color, var(--secondary-color-services));
+  display: inline-block;
+  width: auto;
+  max-width: 200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.8rem;
+  background-color: var(--dynamic-accent-color, var(--color-secondary));
   color: white;
   border: none;
   border-radius: 50px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  text-decoration: none; /* Para <router-link> */
+  text-decoration: none;
 }
 
 .card-button:hover, .card-button:focus {
-  background-color: var(--primary-color-services); /* Color primario al hacer hover */
-  transform: translateY(-3px) scale(1.03); /* Efecto más sutil */
+  background-color: var(--color-primary);
+  transform: translateY(-3px) scale(1.03);
   box-shadow: 0 7px 15px rgba(0,0,0,0.2);
 }
 
 .button-icon {
   margin-left: 0.5rem;
-  display: inline-block; /* Para que la transformación funcione bien */
+  display: inline-block;
   transition: transform 0.3s ease;
 }
 
@@ -301,35 +283,35 @@ export default {
   transform: translateX(4px);
 }
 
-/* Diseño responsivo */
-@media (max-width: 992px) { /* Tablets */
+/* Responsive */
+@media (max-width: 992px) {
   .services-grid {
-    gap: 2rem; /* Mantener un buen espacio */
+    gap: 2rem;
   }
   .section-title { font-size: clamp(1.8rem, 2.5vw, 2.2rem); }
   .section-subtitle { font-size: clamp(0.9rem, 1.2vw, 1.1rem); }
 }
 
-@media (max-width: 768px) { /* Móviles grandes */
+@media (max-width: 768px) {
   .services-section { padding: 3rem 0; }
   .services-grid {
-    grid-template-columns: 1fr; /* Una columna */
-    max-width: 450px; /* Un poco menos para no ocupar toda la pantalla */
+    grid-template-columns: 1fr;
+    max-width: 450px;
     margin-left: auto;
     margin-right: auto;
-    gap: 2rem; /* Espacio entre tarjetas apiladas */
+    gap: 2rem;
   }
   .section-title { font-size: clamp(1.6rem, 5vw, 2rem); }
   .card-content { padding: 1.5rem; }
 }
 
-@media (max-width: 480px) { /* Móviles pequeños */
+@media (max-width: 480px) {
   .services-section { padding: 2.5rem 0; }
   .container { padding: 0 1rem; }
   .section-title { font-size: clamp(1.4rem, 6vw, 1.8rem); }
   .section-subtitle { font-size: clamp(0.85rem, 3vw, 1rem); margin-bottom: 2rem; }
-  .services-grid { max-width: 100%; gap: 1.5rem; } /* Ocupar más ancho, menos gap */
-  .card-image-container { height: 200px; } /* Imágenes un poco más pequeñas */
+  .services-grid { max-width: 100%; gap: 1.5rem; }
+  .card-image-container { height: 200px; }
   .card-content { padding: 1.2rem; }
   .card-title { font-size: clamp(1.1rem, 4vw, 1.3rem); }
   .card-description { font-size: clamp(0.85rem, 2.5vw, 0.95rem); }

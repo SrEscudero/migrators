@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { connectDB, sql } from '../config/db.js';
 import { syncHubspotContact } from '../services/hubspotService.js';
 import logger from '../config/logger.js';
-import { usuarioRepository, clienteRepository } from '../repositories/usuarioRepository.js'; // Usamos el repositorio
+import { usuarioRepository, clienteRepository } from '../repositories/usuarioRepository.js';
 
 // --- Registro de un nuevo usuario/cliente ---
 export const registerUser = async (req, res) => {
@@ -55,9 +54,8 @@ export const loginUser = async (req, res) => {
     try {
         const user = await usuarioRepository.findByEmail(email);
         if (user && (await bcrypt.compare(password, user.password_hash))) {
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
             
-            const userResponse = {
+            const userPayload = {
                 id: user.id,
                 nombre: user.Nombre,
                 email: user.Email,
@@ -67,14 +65,12 @@ export const loginUser = async (req, res) => {
                 perm_ver_estadisticas: user.perm_ver_estadisticas,
             };
 
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 24 * 60 * 60 * 1000 // 1 día
-            });
+            // La única línea necesaria para el login: guardar el usuario en la sesión.
+            // express-session se encarga de crear la cookie y enviarla al navegador.
+            req.session.user = userPayload;
+            
+            res.json({ user: userPayload });
 
-            res.json({ user: userResponse });
         } else {
             res.status(401).json({ message: 'Credenciales inválidas.' });
         }
@@ -86,6 +82,7 @@ export const loginUser = async (req, res) => {
 
 // --- Obtener perfil del usuario autenticado ---
 export const getMe = async (req, res) => {
+    // Esta función ahora funcionará porque el middleware 'protect' ya ha puesto req.user
     if (!req.user || !req.user.id) {
         return res.status(401).json({ message: 'No autenticado.' });
     }
@@ -101,8 +98,7 @@ export const getMe = async (req, res) => {
     }
 };
 
-// --- FUNCIÓN QUE FALTABA ---
-// Actualizar el perfil del usuario autenticado
+// --- Actualizar el perfil del usuario autenticado ---
 export const updateUserProfile = async (req, res) => {
     const { id: userId } = req.user;
     const { nombre, password } = req.body;
@@ -130,9 +126,11 @@ export const updateUserProfile = async (req, res) => {
 
         await request.query(query);
 
-        // Devolvemos el usuario actualizado para que el frontend pueda actualizar su estado en Pinia
         const updatedUser = await usuarioRepository.findById(userId);
         
+        // Actualizamos también la sesión con los nuevos datos
+        req.session.user = { ...req.session.user, ...updatedUser };
+
         res.status(200).json({ message: 'Perfil actualizado con éxito.', user: updatedUser });
 
     } catch (error) {
@@ -143,9 +141,14 @@ export const updateUserProfile = async (req, res) => {
 
 // --- Cerrar sesión ---
 export const logoutUser = (req, res) => {
-    res.cookie('token', '', {
-        httpOnly: true,
-        expires: new Date(0)
+    // Destruye la sesión del servidor
+    req.session.destroy((err) => {
+        if (err) {
+            logger.error('Error al destruir la sesión:', err);
+            return res.status(500).json({ message: 'No se pudo cerrar la sesión.' });
+        }
+        // Limpia la cookie del navegador (el nombre por defecto de la cookie de express-session es 'connect.sid')
+        res.clearCookie('connect.sid'); 
+        res.status(200).json({ message: 'Logout exitoso.' });
     });
-    res.status(200).json({ message: 'Logout exitoso.' });
 };

@@ -93,36 +93,20 @@ export default {
 </script>
 
 <style scoped>
-/* Asegúrate que la fuente Poppins esté cargada globalmente o impórtala si es necesario */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap'); */
-
 .about-page {
-  /* Variables CSS locales para este componente */
-  --about-primary-color: #2c3e50; /* Azul oscuro/grisáceo */
-  --about-secondary-color: #42b983; /* Verde Migrators */
-  --about-accent-color: #2495ff; /* Rojo/coral para destacar */
-  --about-text-color: #34495e; /* Gris oscuro para texto principal */
-  --about-light-text-color: #7f8c8d; /* Gris más claro para texto secundario */
-  --about-bg-color: #ffffff; /* Blanco */
-  --about-light-bg-color: #f8f9fa; /* Un gris muy claro para fondos alternos */
-  --about-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --about-shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
-  --about-shadow-strong: 0 12px 35px rgba(0, 0, 0, 0.12);
-  --about-transition-duration: 0.4s;
-  --about-font-family: 'Poppins', sans-serif;
-
-  font-family: var(--about-font-family);
-  color: var(--about-text-color);
-  line-height: 1.7; /* Aumentado para mejor legibilidad general */
+  /* Eliminamos todas las variables locales --about-* */
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  line-height: 1.7;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem; /* Padding lateral base */
+  padding: 0 1rem;
 }
 
 /* Estilos generales de sección para consistencia */
 .hero-container, .mission-section, .team-section, .cta-section-about {
-  margin: 4rem 0; /* Espaciado vertical consistente entre secciones */
-  padding: 3rem 1.5rem; /* Padding interno base para secciones */
+  margin: 4rem 0;
+  padding: 3rem 1.5rem;
   animation: fadeIn 0.8s ease-out forwards;
 }
 
@@ -132,23 +116,24 @@ export default {
 }
 
 .section-title {
-  font-size: clamp(1.8rem, 4vw, 2.4rem); /* Uso de clamp para fluidez */
-  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: var(--font-weight-bold);
   margin-bottom: 1.5rem;
-  color: var(--about-primary-color);
+  color: var(--color-primary);
   position: relative;
   line-height: 1.3;
 }
-.section-title.text-center { /* Para asegurar que el ::after también se centre */
-    display: inline-block; /* Necesario para que el ::after se posicione relativo al texto */
+
+.section-title.text-center {
+    display: inline-block;
 }
 .section-title.text-center::after {
     content: '';
     display: block;
     width: 60px;
     height: 4px;
-    background-color: var(--about-secondary-color);
-    margin: 0.75rem auto 0; /* Centrado del subrayado */
+    background-color: var(--color-secondary);
+    margin: 0.75rem auto 0;
     border-radius: 2px;
 }
 
@@ -158,77 +143,77 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--about-light-bg-color); /* Fondo sutil para el hero */
-  border-radius: 20px;
-  box-shadow: var(--about-shadow-medium);
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-medium);
   position: relative;
-  overflow: hidden; /* Para el overlay y efectos */
+  overflow: hidden;
 }
 
 .hero-content {
-  max-width: 58%; /* Un poco más de espacio para el texto */
-  padding-right: 2rem; /* Espacio entre texto e imagen */
+  max-width: 58%;
+  padding-right: 2rem;
   z-index: 2;
 }
 
 .hero-title {
-  font-size: clamp(2rem, 5vw, 3rem); /* Más impacto para el título del hero */
-  font-weight: 800; /* Más peso */
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
   margin-bottom: 1.5rem;
-  color: var(--about-primary-color);
+  color: var(--color-primary);
   line-height: 1.25;
 }
 
 .highlight {
-  color: var(--about-accent-color);
+  color: var(--color-accent);
   position: relative;
-  display: inline-block; /* Para el ::after */
+  display: inline-block;
 }
 
-.highlight::after { /* Subrayado del highlight */
+.highlight::after {
   content: '';
   position: absolute;
-  bottom: 3px; /* Ajustar posición */
+  bottom: 3px;
   left: 0;
   width: 100%;
-  height: 6px; /* Más sutil */
-  background-color: rgba(54, 132, 250, 0.25); /* Color más suave */
+  height: 6px;
+  background-color: rgba(51, 200, 245, 0.25);
   z-index: -1;
   transition: height 0.3s ease, background-color 0.3s ease;
   border-radius: 2px;
 }
 .hero-title:hover .highlight::after {
   height: 10px;
-  background-color: rgba(54, 132, 250, 0.25);
+  background-color: rgba(51, 200, 245, 0.3);
 }
 
 .hero-description {
   font-size: clamp(1rem, 2.5vw, 1.2rem);
   line-height: 1.8;
   margin-bottom: 2rem;
-  color: var(--about-text-color);
+  color: var(--color-text);
 }
 
 .brand {
-  color: var(--about-secondary-color);
-  font-weight: 700; /* Ligeramente más peso */
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-bold);
 }
 
-.hero-image-wrapper { /* Contenedor de imagen */
+.hero-image-wrapper {
   position: relative;
-  width: 42%; /* Ajustado */
-  perspective: 1200px; /* Para efectos 3D */
+  width: 42%;
+  perspective: 1200px;
 }
 
-.hero-img { /* Renombrado para evitar colisión */
+.hero-img {
   width: 100%;
-  max-width: 450px; /* Límite para la imagen */
+  max-width: 450px;
   height: auto;
   border-radius: 15px;
-  box-shadow: var(--about-shadow-strong);
-  transition: transform var(--about-transition-duration) cubic-bezier(0.25, 0.8, 0.25, 1), 
-              box-shadow var(--about-transition-duration) cubic-bezier(0.25, 0.8, 0.25, 1);
-  transform-style: preserve-3d; /* Para que las transformaciones 3D se apliquen bien */
+  box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+  transition: transform var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
+              box-shadow var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-style: preserve-3d;
 }
 
 .hero-image-wrapper:hover .hero-img {
@@ -236,37 +221,28 @@ export default {
   box-shadow: 0 20px 45px rgba(0,0,0,0.2);
 }
 
-.image-overlay { /* Overlay sutil sobre la imagen del hero */
+.image-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(44, 62, 80, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(66, 185, 131, 0.05) 0%, rgba(44, 62, 80, 0.05) 100%);
   border-radius: 15px;
   z-index: 1;
-  pointer-events: none; /* Para que no interfiera con el hover de la imagen */
+  pointer-events: none;
 }
 
 /* Mission Section */
-.mission-section {
-  /* background-color: var(--about-bg-color); Se hereda de .about-page si es el mismo */
-}
-
 .mission-container {
   display: flex;
   align-items: center;
   gap: 3rem;
-  background-color: var(--about-light-bg-color); /* Fondo diferenciado para esta sección */
-  border-radius: 20px;
+  background-color: var(--color-background);
+  border-radius: var(--border-radius-lg);
   padding: 3rem;
-  box-shadow: var(--about-shadow-medium);
+  box-shadow: var(--shadow-medium);
 }
 
-.mission-text { flex: 1.2; /* Dar un poco más de espacio al texto */ }
-.mission-image-wrapper { flex: 0.8; } /* La imagen ocupa un poco menos */
-
-.mission-section .section-title .highlight::after {
-  bottom: 2px; /* Ajuste específico si es necesario */
-  background-color: rgba(var(--about-accent-color-rgb, 231, 76, 60), 0.2); /* Usando variable con fallback */
-}
+.mission-text { flex: 1.2; }
+.mission-image-wrapper { flex: 0.8; }
 
 .mission-content {
   font-size: clamp(1rem, 2vw, 1.1rem);
@@ -276,71 +252,71 @@ export default {
 
 .mission-list {
   margin: 1.5rem 0;
-  padding-left: 0; /* Quitar padding para alinear con íconos */
+  padding-left: 0;
   list-style: none;
 }
 .mission-list li {
-  margin-bottom: 1rem; /* Más espacio entre ítems */
-  display: flex; /* Para alinear ícono y texto */
-  align-items: flex-start; /* Alinear al inicio si el texto es multilínea */
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
 }
-.icon-bullet { /* Clase para los íconos de la lista */
-  color: var(--about-secondary-color);
-  margin-right: 0.8rem; /* Espacio entre ícono y texto */
-  font-size: 1.1em; /* Tamaño del ícono relativo al texto */
-  line-height: inherit; /* Alinear con la primera línea de texto */
-  margin-top: 0.15em; /* Ajuste vertical fino */
+.icon-bullet {
+  color: var(--color-secondary);
+  margin-right: 0.8rem;
+  font-size: 1.1em;
+  line-height: inherit;
+  margin-top: 0.15em;
 }
 
 .mission-image-wrapper img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 15px; /* Redondeado consistente */
-  box-shadow: var(--about-shadow-soft);
+  border-radius: 15px;
+  box-shadow: var(--shadow-soft);
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 .mission-image-wrapper:hover img {
-  transform: scale(1.03) rotate(-1deg); /* Efecto hover más sutil */
-  box-shadow: var(--about-shadow-medium);
+  transform: scale(1.03) rotate(-1deg);
+  box-shadow: var(--shadow-medium);
 }
 
 /* Team Section */
 .team-section { text-align: center; }
-.team-container { max-width: 700px; margin: 2rem auto 0; } /* Contenedor más estrecho para un solo miembro */
+.team-container { max-width: 700px; margin: 2rem auto 0; }
 
 .team-member {
   display: flex;
-  flex-direction: column; /* Apilado por defecto, se cambiará en desktop */
+  flex-direction: column;
   align-items: center;
-  background-color: var(--about-bg-color);
-  border-radius: 20px;
-  padding: 2.5rem; /* Más padding */
-  box-shadow: var(--about-shadow-medium);
-  gap: 1.5rem; /* Espacio entre foto e info si se apilan */
-  text-align: center; /* Centrar texto cuando está apilado */
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-medium);
+  gap: 1.5rem;
+  text-align: center;
 }
 
 .member-photo {
-  width: 180px; /* Ligeramente más pequeño */
+  width: 180px;
   height: 180px;
   border-radius: 50%;
   overflow: hidden;
-  border: 6px solid var(--about-secondary-color);
+  border: 6px solid var(--color-secondary);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-  flex-shrink: 0; /* Evitar que se encoja */
+  flex-shrink: 0;
 }
 .member-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 .member-info { flex: 1; }
-.member-name { /* Renombrado desde h3 para especificidad */
+.member-name {
   font-size: clamp(1.4rem, 3vw, 1.7rem);
-  color: var(--about-primary-color);
+  color: var(--color-primary);
   margin-bottom: 0.25rem;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }
 .member-position {
-  color: var(--about-secondary-color);
+  color: var(--color-secondary);
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -348,72 +324,65 @@ export default {
 .member-bio { line-height: 1.7; font-size: 0.95rem; }
 
 /* Call to Action Section */
-.cta-section-about { text-align: center; } /* Renombrado para evitar colisiones */
+.cta-section-about { text-align: center; }
 .cta-container {
-  background: linear-gradient(135deg, var(--about-secondary-color) 0%, var(--about-primary-color) 100%); /* Gradiente con colores del tema */
-  border-radius: 20px;
-  padding: 3.5rem 2rem; /* Más padding vertical */
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 3.5rem 2rem;
   color: white;
-  box-shadow: var(--about-shadow-strong);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.12);
 }
 .cta-title {
-  color: white; /* Texto blanco sobre fondo oscuro */
+  color: white;
   font-size: clamp(1.8rem, 4vw, 2.2rem);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 1rem;
 }
 .cta-text {
-  color: rgba(255, 255, 255, 0.9); /* Blanco semi-transparente */
+  color: rgba(255, 255, 255, 0.9);
   font-size: clamp(1rem, 2.5vw, 1.15rem);
   margin-bottom: 2.5rem;
   max-width: 600px;
   margin-left: auto; margin-right: auto;
 }
 
-.cta-button-about { /* Renombrado */
-  color: var(--about-secondary-color); /* Color del texto del botón */
+.cta-button-about {
+  color: var(--color-secondary);
   background-color: white;
-  border: 2px solid white; /* Borde sutil */
-  padding: 0.9rem 2.5rem; /* Botón más grande */
+  border: 2px solid white;
+  padding: 0.9rem 2.5rem;
   font-size: clamp(1rem, 2vw, 1.1rem);
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   font-weight: 600;
-  text-decoration: none; /* Para router-link */
+  text-decoration: none;
   display: inline-block;
 }
 .cta-button-about:hover, .cta-button-about:focus {
-  background-color: transparent; /* Transparente al pasar el mouse */
-  color: white; /* Texto blanco */
-  border-color: white; /* Borde blanco */
+  background-color: transparent;
+  color: white;
+  border-color: white;
   transform: translateY(-3px) scale(1.03);
   box-shadow: 0 7px 20px rgba(0,0,0,0.2);
   outline: none;
 }
 
-/* Efectos hover generales para secciones (opcional) */
-.hero-container:hover, .mission-container:hover, .team-member:hover {
-  /* El efecto de elevación ya está en el hover de la imagen del hero */
-  /* Podrías añadir un transform: translateY(-5px); aquí si quieres que toda la tarjeta se eleve */
-}
-
-
 /* Diseño responsivo */
-@media (min-width: 769px) { /* Estilos para desktop primero para la sección de equipo */
+@media (min-width: 769px) {
     .team-member {
-        flex-direction: row; /* Lado a lado en desktop */
-        text-align: left; /* Alinear texto a la izquierda en desktop */
-        gap: 2.5rem; /* Más espacio en desktop */
+        flex-direction: row;
+        text-align: left;
+        gap: 2.5rem;
     }
     .member-info {
         text-align: left;
     }
 }
 
-@media (max-width: 992px) { /* Tablets */
-  .about-page { padding: 0 0.5rem; } /* Menos padding lateral general */
+@media (max-width: 992px) {
+  .about-page { padding: 0 0.5rem; }
   .hero-container, .mission-section, .team-section, .cta-section-about {
     margin: 3rem 0; padding: 2.5rem 1rem;
   }
@@ -422,42 +391,42 @@ export default {
   .hero-description, .mission-content { font-size: clamp(0.95rem, 2vw, 1.05rem); }
 }
 
-@media (max-width: 768px) { /* Móviles grandes */
+@media (max-width: 768px) {
   .hero-container, .mission-container {
     flex-direction: column;
     text-align: center;
-    padding: 2.5rem 1.5rem; /* Consistente con tablet */
+    padding: 2.5rem 1.5rem;
   }
   .hero-content, .mission-text {
     max-width: 100%;
-    padding-right: 0; /* Sin padding extra en móvil */
-    order: 2; /* Texto debajo de la imagen en Hero */
+    padding-right: 0;
+    order: 2;
   }
   .hero-image-wrapper, .mission-image-wrapper {
-    max-width: 90%; /* Imagen un poco más pequeña que el contenedor */
+    max-width: 90%;
     width: 100%;
-    margin: 0 auto 2rem auto; /* Espacio debajo de la imagen, centrado */
-    order: 1; /* Imagen arriba */
+    margin: 0 auto 2rem auto;
+    order: 1;
   }
-   .mission-image-wrapper { /* Misión no necesita invertir orden */
+   .mission-image-wrapper {
     order: initial;
     margin-top: 2rem;
   }
 
   .hero-title, .section-title { font-size: clamp(1.6rem, 5vw, 2rem); }
-  .team-section { padding: 2.5rem 1rem; } /* Menos padding lateral */
-  .team-member { padding: 1.5rem; } /* Menos padding interno */
-  .member-photo { width: 150px; height: 150px; } /* Foto más pequeña */
+  .team-section { padding: 2.5rem 1rem; }
+  .team-member { padding: 1.5rem; }
+  .member-photo { width: 150px; height: 150px; }
   .cta-section-about { padding: 2.5rem 1rem; }
   .cta-container { padding: 2.5rem 1.5rem; }
   .cta-title { font-size: clamp(1.5rem, 4.5vw, 1.8rem); }
   .cta-text { font-size: clamp(0.9rem, 2.8vw, 1.05rem); }
 }
 
-@media (max-width: 480px) { /* Móviles pequeños */
+@media (max-width: 480px) {
   .about-page { padding: 0; }
   .hero-container, .mission-section, .team-section, .cta-section-about {
-    margin: 2rem 0; padding: 2rem 0.8rem; border-radius: 10px; /* Menos redondeo */
+    margin: 2rem 0; padding: 2rem 0.8rem; border-radius: 10px;
   }
   .hero-title { font-size: clamp(1.5rem, 6vw, 1.8rem); }
   .section-title { font-size: clamp(1.4rem, 5vw, 1.7rem); }
